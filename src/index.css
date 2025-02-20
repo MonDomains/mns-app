@@ -1,0 +1,5 @@
+@import '../node_modules/bootstrap/dist/css/bootstrap-grid.min.css';
+@import '../node_modules/bootstrap/dist/css/bootstrap-utilities.min.css';
+@import '../node_modules/bootstrap/dist/css/bootstrap-reboot.min.css';
+
+*{padding: 0;margin: 0;outline: none;}
