@@ -2,7 +2,7 @@ function Banner() {
     return ( 
         <div className="banner w-100 d-flex justify-content-center">
                 <div>
-                    <h2 className="text-center">The First ENS-Based .mon Name Service <br /> Built On <span>Monad</span></h2>
+                    <h2 className="text-center">Create Your Web3 Identity On <span>Monad</span></h2>
                 </div>
         </div>
      );

@@ -20,10 +20,7 @@ class Register extends Component {
     resolver = import.meta.env.VITE_APP_PUBLICRESOLVER;
     data =  [];
     reverseRecord = true;
-
-    minWait = import.meta.env.VITE_APP_MINCOMMITMENTAGE; 
-    maxWait = import.meta.env.VITE_APP_MAXCOMMITMENTAGE;
-
+ 
     constructor(props) {
       super(props);
 
@@ -52,121 +49,11 @@ class Register extends Component {
          countdown: 0
       };
     }
-
-    async makeCommitment() {
  
-        const random =  Math.floor(Math.random() * 1000).toString();
-        const secret = keccak256(ethers.toUtf8Bytes(random))
-           
-        let _commitment = null; 
-
-        this.setState({ isMakingCommitment: true, isCommitted: false, commitment: null, secret: null, isCommiting: false });
-
-        console.log(this.props.duration);
-
-        try {
-            
-            _commitment =  await readContract(wagmiAdapter.wagmiConfig, {
-                abi: monRegisterControllerABI,
-                address: import.meta.env.VITE_APP_MONREGISTERCONTROLLER,
-                functionName: "makeCommitment",
-                args: [ this.props.name, this.props.owner, this.getDuration(), secret, this.resolver, this.data, this.reverseRecord ],
-                account: this.props.owner,
-                chainId: import.meta.env.VITE_APP_NODE_ENV === "production" ? monadTestnet.id: monadTestnet.id
-            });
-
-            console.log("make: "+ _commitment)
-            
-
-        } catch(e) {
-            toast.error(e.message);
-        }
-
-        try {
-  
-            const result =  await readContract(wagmiAdapter.wagmiConfig, {
-                abi: monRegisterControllerABI,
-                address: import.meta.env.VITE_APP_MONREGISTERCONTROLLER,
-                functionName: "commitments",
-                args: [ _commitment ],
-                account: this.props.owner,
-                chainId: import.meta.env.VITE_APP_NODE_ENV === "production" ? monadTestnet.id: monadTestnet.id
-            });
- 
-            console.log("Result: "+ result  );
-            console.log("Min: "+ this.getMinCommitTime(result)  );
-            console.log("Max: "+ this.getMaxCommitTime(result)  );
-            console.log("NOW:"+ this.getUnixTime())
-            console.log("Diff:"+   parseInt(this.getMinCommitTime(result)- this.getUnixTime()) )
-
-            if( result > 0 && this.getMinCommitTime(result) < this.getUnixTime() && this.getMaxCommitTime(result) > this.getUnixTime() ) {
-                console.log("timer completed")
-                this.setState({ commitment: _commitment, secret: secret, isCommitmentExists: true, isTimerCompleted: true });
-            } else if( result > 0 && this.getMinCommitTime(result) >= this.getUnixTime() && this.getMaxCommitTime(result) > this.getUnixTime() ) {
-                console.log("timer uncompleted")
-                const _countdown = parseInt(this.getMinCommitTime(result) - this.getUnixTime() );
-                this.setState({ commitment: _commitment, secret: secret, isCommitmentExists: true, isTimerCompleted: false, countdown: _countdown + 1 });
-            } else {
-                this.setState({ commitment: _commitment, secret: secret, isCommitmentExists: false, isTimerCompleted: false  })
-            } 
-
-        } catch (e) {
-
-            toast.error(e.message);
-
-        }
-    }
-
-    getMinCommitTime (c) {
-        return moment.unix(parseInt(c)).add(this.minWait, "seconds").unix();
-    }
-
-    getMaxCommitTime (c) {
-        return moment.unix(parseInt(c)).add(this.maxWait, "seconds").unix();
-    }
-
     getUnixTime () {
         return moment().utc().unix();
     }
- 
-    async handleCommit () {
-         
-        this.setState({ isCommiting: true, isCommitted: false  });
- 
-        try {
-            console.log("laksjdfjdas")
-            const _hash = await writeContract(wagmiAdapter.wagmiConfig, {
-                abi: monRegisterControllerABI,
-                address: import.meta.env.VITE_APP_MONREGISTERCONTROLLER,
-                functionName: "commit",
-                args: [ this.state.commitment ],
-                account: this.props.owner,
-                chainId: import.meta.env.VITE_APP_NODE_ENV === "production" ? monadTestnet.id: monadTestnet.id
-            });
-
-          
-            toast.success("Your transaction has been sent.");
-
-            console.log(_hash);
- 
-            const recepient = await waitForTransactionReceipt(wagmiAdapter.wagmiConfig, { hash: _hash });
-
-            console.log(recepient);
-
-            toast.success("Your tx has been completed. Please wait for a while...")
- 
-            this.setState({ isCommiting: false, isCommitted: true });
-        } catch(e) {
-            console.log(e);
-            this.setState({ isCommiting: false });
-            toast.error(e.message);
-        }
-         
-        
-        this.setState({ isCommiting: false });
-        
-    }
-
+  
     async handleRegister () { 
          
         try {
@@ -181,7 +68,7 @@ class Register extends Component {
                 abi: monRegisterControllerABI,
                 address: import.meta.env.VITE_APP_MONREGISTERCONTROLLER,
                 functionName: "register",
-                args: [ this.props.name, this.props.owner, this.getDuration(), this.state.secret, this.resolver, this.data, this.reverseRecord ],
+                args: [ this.props.name, this.props.owner, this.getDuration(), this.resolver, this.data, this.reverseRecord ],
                 account: this.props.owner,
                 value: this.state.price,
                 chainId: import.meta.env.VITE_APP_NODE_ENV === "production" ? monadTestnet.id: monadTestnet.id
@@ -314,11 +201,7 @@ class Register extends Component {
             this.handleAvailable();
             this.handleQuery(); 
         }
- 
-        if(this.state.commitment === null && !this.state.isMakingCommitment) {
-            this.makeCommitment(); 
-        }
-
+   
         if(!this.state.available) {
             this.handleQuery(); 
         }
@@ -333,14 +216,14 @@ class Register extends Component {
         
         if(prevProps.name != this.props.name) {
             this.handleAvailable();
-            this.makeCommitment();
+             
             this.handleQuery();
             this.handlePrice();
             this.handleBalance();
         } 
 
         if(prevState.duration != this.state.duration) {
-            this.makeCommitment();
+         
             this.handlePrice();
             this.handleBalance();
         } 
@@ -366,7 +249,7 @@ class Register extends Component {
                                 <span>Total: <span className="fw-bold">{formatEther(  this.state.price.toString()) } {import.meta.env.VITE_APP_NATIVE_TOKEN} </span> + GAS Fee</span>
                             </li>
                         </ul> 
-                        {this.state.commitment == null || this.isFetchingPrice || this.state.isGettingBalance ? 
+                        {this.isFetchingPrice || this.state.isGettingBalance ? 
                             <button className="btn btn-lg btn-primary  align-self-center">
                                 <img width={25} src={spinner} /> Checking...
                             </button>
@@ -377,40 +260,17 @@ class Register extends Component {
                                         Unsufficient Balance {this.state.balance}
                                     </button>
                                     :
-                                    <>
-                                        { !this.state.isCommitted && !this.state.isCommitmentExists ?  
-                                            <> 
-                                                <button disabled={this.state.isCommiting ? "disabled": ""} className="btn btn-lg btn-primary f-20 mt-3 mb-3" onClick={(e)=> this.handleCommit() }>
-                                                    {this.state.isCommiting ? <><img width={25} src={spinner} /> Waiting Transaction</>: <>Request to Register</>} 
-                                                </button>  
-                                            </> : 
-                                            <>
-                                                { this.state.isCommitted || (this.state.isCommitmentExists && !this.state.isTimerCompleted) ?
-                                                    <CountdownCircleTimer 
-                                                            size={48}
-                                                            strokeWidth={3}
-                                                            isPlaying
-                                                            duration={ this.state.countdown < 1 ? Number(import.meta.env.VITE_APP_MINCOMMITMENTAGE): this.state.countdown } 
-                                                            colors={['#239e01', '#2ece02', '#e5ed07', '#836ef9']}
-                                                            colorsTime={[7, 5, 2, 0]}
-                                                            onComplete={()=> this.setState({ isTimerCompleted: true })}
-                                                            >
-                                                            {({ remainingTime }) => remainingTime}
-                                                    </CountdownCircleTimer>
-                                                    : <></>
-                                                }
-                                                
-                                                <button disabled={this.state.isRegistring || !this.state.isTimerCompleted ? "disabled": ""} className="btn btn-lg btn-primary align-self-center" onClick={(e)=> this.handleRegister() }>
-                                                    {this.state.isRegistring ? <><img width={25} src={spinner} />Waiting Transaction</>: <>REGISTER</>} 
-                                                </button>
-                                            </>
-                                        }
+                                    
+                                    <> 
+                                        <button disabled={this.state.isRegistring ? "disabled": ""} className="btn btn-lg btn-primary align-self-center" onClick={(e)=> this.handleRegister() }>
+                                            {this.state.isRegistring ? <><img width={25} src={spinner} />Waiting Transaction</>: <>REGISTER</>} 
+                                        </button>
                                     </>
+                                       
                                 }
                                 
                             </>
                         }
-                        <span className="mt-2 text-center">Requesting register helps prevent others from registering the name before you do. Your name is not registered until you've completed the second transaction.</span>
                     </div>
                 </div>
                 : 

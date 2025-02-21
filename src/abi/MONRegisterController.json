@@ -12,16 +12,6 @@
                 "type": "address"
             },
             {
-                "internalType": "uint256",
-                "name": "_minCommitmentAge",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_maxCommitmentAge",
-                "type": "uint256"
-            },
-            {
                 "internalType": "contract ReverseRegistrar",
                 "name": "_reverseRegistrar",
                 "type": "address"
@@ -266,19 +256,6 @@
         "inputs": [
             {
                 "internalType": "bytes32",
-                "name": "commitment",
-                "type": "bytes32"
-            }
-        ],
-        "name": "commit",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "bytes32",
                 "name": "",
                 "type": "bytes32"
             }
@@ -310,12 +287,7 @@
                 "internalType": "uint256",
                 "name": "duration",
                 "type": "uint256"
-            },
-            {
-                "internalType": "bytes32",
-                "name": "secret",
-                "type": "bytes32"
-            },
+            }, 
             {
                 "internalType": "address",
                 "name": "resolver",
@@ -434,12 +406,7 @@
                 "internalType": "uint256",
                 "name": "duration",
                 "type": "uint256"
-            },
-            {
-                "internalType": "bytes32",
-                "name": "secret",
-                "type": "bytes32"
-            },
+            }, 
             {
                 "internalType": "address",
                 "name": "resolver",

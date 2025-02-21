@@ -52,12 +52,14 @@ function Header() {
     return ( 
         <header>
             <div className="container-fluid d-flex align-items-center justify-content-between">
-            <NavLink to="/">
-                <h1 id="logo">
-                        <img src={Logo} alt="Monad Name Services" />
-                        <span>Monad Domains</span>
+            <NavLink to="/" className="logo-container">
+                <h1>
+                    <img src={Logo} alt="Monad Name Services" />
+                    <span className="d-none d-md-block">Monad Name Service</span>
+                    <span className="d-md-none">.mon</span>
                 </h1>
             </NavLink>
+            <div className="container-fluid d-flex align-items-center justify-content-between p-0">
             <div className="controls-content">
                 <nav>
                     <ul className="d-flex">
@@ -70,6 +72,7 @@ function Header() {
                         </li>
                     </ul>
                 </nav>
+            </div>
             </div>
              <ConnectWalletButton></ConnectWalletButton>
              <a onClick={ (e)=> openMobilMenu(e) }  className="mm" href="#"><span></span><span> </span><span></span></a>

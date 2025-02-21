@@ -1,31 +1,23 @@
 import twittericon from '../assets/images/twitter.svg' ;
 import githubicon from '../assets/images/githublogo.svg' ;
-import discordicon from '../assets/images/discordicon.svg' ;
-import telegramicon from '../assets/images/telegramicon.svg' ;
-import blockvisionicon from '../assets/images/blockvisionicon.svg' ;
-import etherscann from '../assets/images/etherscan-logo.png' ;
-import elementmarket from '../assets/images/element.svg' ;
-import MetaMaskLogo from '../assets/images/metamask.svg';
-
+import discordicon from '../assets/images/discordicon.svg' ; 
 import { useSwitchChain } from 'wagmi';
-
 import { Link } from 'react-router-dom';
+import { monadTestnet } from 'viem/chains';
 
 function Footer() {
-    const { switchChain } = useSwitchChain() 
+    const { switchChain } = useSwitchChain()
 
     return ( 
-        <footer className="w-100">
-            <div className="container-fluid">
+        <footer className="d-flex flex-column justify-content-between ">
+            <div className="d-flex flex-row justify-content-between align-items-center gap-3 ms-2 me-3">
                 <div className="footNav">
                     <ul className="d-flex">
                         <li><Link to="/terms">Terms</Link></li>
                         <li><Link to="/privacy">Privacy</Link></li>
                     </ul>
                 </div>
-                <div className='footerRight'>
-                    <button className="wallet-connect" onClick={() => switchChain({ chainId: Number(import.meta.env.VITE_APP_SUPPORTED_CHAIN_ID) }) }>Add to Metamask <img src={MetaMaskLogo} alt="loading..." /></button>
-                
+                <div className='footerRight'> 
                     <div className="monsocialMedia">
                         <ul className='d-flex'>
                             <li>
@@ -45,6 +37,9 @@ function Footer() {
                         </ul>
                     </div>
                 </div>
+            </div>
+            <div className="d-flex flex-column align-items-center">
+                <p className='text-center text-muted'>Copyright © 2025 Monad Name Service</p>
             </div>
         </footer>
      );

@@ -1,5 +1,6 @@
 import { useAccount, useSwitchChain } from 'wagmi';
-import MetaMaskLogo from '../assets/images/metamask.svg';
+import WalletIcon from '../assets/images/wallet-icon.svg';
+import ChevronDown from '../assets/images/chevron-down.svg';
 import WarningLogo from '../assets/images/warning-icon.svg';
 //import { useWeb3Modal } from '@web3modal/wagmi/react'
 import { useAppKit } from '@reown/appkit/react'
@@ -8,7 +9,7 @@ import { useChainId } from 'wagmi'
 
 export default function ConnectWalletButton({props}) {
 
-  const { open, close } = useAppKit()
+  const { open } = useAppKit()
   const { address, isConnected  } = useAccount() 
   const { switchChain } = useSwitchChain() 
   const chainId = useChainId()
@@ -19,12 +20,12 @@ export default function ConnectWalletButton({props}) {
     return (<>  { SUPPORTED_CHAIN_ID !== chainId ?
         <button {...props} className="wallet-connect wrongAlert" onClick={() => switchChain({ chainId: SUPPORTED_CHAIN_ID })}> Wrong Network <img src={WarningLogo} /></button>  
         : 
-        <button {...props} className="wallet-connect" onClick={() => open()}><span> {obscureAddress( address) } </span><img src={MetaMaskLogo} /> </button>  
+        <button {...props} className="wallet-connect btn-light text-dark border-0" onClick={() => open()}><span> {obscureAddress( address) } </span> <img width={16} height={16} src={ChevronDown}/> <img width={16} height={16} src={WalletIcon}/> </button> 
     }</>)
   } else {
     return (
         <>
-          <button {...props} className="wallet-connect" onClick={() => open()}><span>Connect Wallet</span><img src={MetaMaskLogo} /></button>
+          <button {...props} className="wallet-connect btn-primary text-white" onClick={() => open()}><span>Connect Wallet</span></button>
         </>
       )
   }
