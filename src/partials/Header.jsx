@@ -1,5 +1,5 @@
 import * as React from "react";
-import Logo from '../assets/images/zfknameservice-logo.svg'; 
+import Logo from '../assets/images/mns-logo.svg'; 
 import ConnectWalletButton from "../components/ConnectWalletButton"; 
 import { Link, NavLink } from 'react-router-dom';
 import { useRef } from "react";
@@ -51,10 +51,10 @@ function Header() {
     }
     return ( 
         <header>
-            <div className="container-fluid d-flex align-items-center justify-content-between">
+            <div className="container-fluid d-flex align-items-center justify-content-between mt-1 mb-1">
             <NavLink to="/" className="logo-container">
                 <h1>
-                    <img src={Logo} alt="Monad Name Services" />
+                    <img width={48} height={48} src={Logo} alt="Monad Name Services" />
                     <span className="d-none d-md-block">Monad Name Service</span>
                     <span className="d-md-none">.mon</span>
                 </h1>
