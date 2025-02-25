@@ -1,4 +1,3 @@
-import { ToastContainer } from "react-toastify";
 import Footer from "../partials/Footer";
 import Header from "../partials/Header";
 import { Outlet } from "react-router-dom";
@@ -6,15 +5,15 @@ import { Outlet } from "react-router-dom";
 export default function Page() {
     return (
         <div>
-            <main>
-            <Header />
-            <section className="pt-4">
-                <div className='container-fluid'>  
-                    <Outlet />
-                </div>
-            </section>
-            <Footer/>
-            </main>
+            <div className="container-fluid p-0 m-0">
+                <Header /> 
+            </div>
+            <div className='container-fluid mt-20 mb-20 p-3'>  
+                <Outlet />
+            </div>
+            <div className="container-fluid p-0 m-0">
+                <Footer />
+            </div>
         </div>
     )
 }
