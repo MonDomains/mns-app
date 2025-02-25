@@ -20,7 +20,7 @@ export default function ConnectWalletButton({props}) {
     return (<>  { SUPPORTED_CHAIN_ID !== chainId ?
         <button {...props} className="wallet-connect wrongAlert" onClick={() => switchChain({ chainId: SUPPORTED_CHAIN_ID })}> Wrong Network <img src={WarningLogo} /></button>  
         : 
-        <button {...props} className="wallet-connect btn-light text-dark border-0" onClick={() => open()}><span> {obscureAddress( address) } </span> <img width={16} height={16} src={ChevronDown}/> <img width={16} height={16} src={WalletIcon}/> </button> 
+        <button {...props} className="wallet-connect btn-light border-0" onClick={() => open()}><span> {obscureAddress( address) } </span> <img width={16} height={16} src={ChevronDown}/> <img width={16} height={16} className='text-white' src={WalletIcon}/> </button> 
     }</>)
   } else {
     return (

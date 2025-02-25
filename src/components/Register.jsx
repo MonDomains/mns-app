@@ -7,7 +7,7 @@ import monRegisterControllerABI from '../abi/MONRegisterController.json'
 import { waitForTransactionReceipt } from '@wagmi/core'
 import spinner from '../assets/images/spinner.svg';
 import moment from "moment";
-import { Modal } from "react-bootstrap";
+import { Form, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";  
 import { GET_DOMAIN } from "../graphql/Domain";
 import { CountdownCircleTimer } from 'react-countdown-circle-timer'
@@ -19,8 +19,7 @@ class Register extends Component {
      
     resolver = import.meta.env.VITE_APP_PUBLICRESOLVER;
     data =  [];
-    reverseRecord = true;
- 
+     
     constructor(props) {
       super(props);
 
@@ -46,14 +45,19 @@ class Register extends Component {
          isGettingBalance: false,
          balance: 0,
          showCounter: false,
-         countdown: 0
+         countdown: 0,
+         reverseRecord: true
       };
     }
  
     getUnixTime () {
         return moment().utc().unix();
     }
-  
+
+    handleReverseRecord(e) {
+        this.state.reverseRecord = !this.state.reverseRecord;
+    }
+ 
     async handleRegister () { 
          
         try {
@@ -68,7 +72,7 @@ class Register extends Component {
                 abi: monRegisterControllerABI,
                 address: import.meta.env.VITE_APP_MONREGISTERCONTROLLER,
                 functionName: "register",
-                args: [ this.props.name, this.props.owner, this.getDuration(), this.resolver, this.data, this.reverseRecord ],
+                args: [ this.props.name, this.props.owner, this.getDuration(), this.resolver, this.data, this.state.reverseRecord ],
                 account: this.props.owner,
                 value: this.state.price,
                 chainId: import.meta.env.VITE_APP_NODE_ENV === "production" ? monadTestnet.id: monadTestnet.id
@@ -236,14 +240,31 @@ class Register extends Component {
               
             {this.state.available ? 
                 <div className="container">
-                    <div className="d-flex flex-column justify-content-center countdowncontent">
-                        <ul>
+                    <div className="d-flex flex-column justify-content-center mt-3">
+                        <ul className="d-flex flex-column justify-content-center gap-3">
                             <li>
+                                <strong>Duration</strong>
+                                <p className="text-muted"> 
+                                    Your name will be registered for {this.state.duration} year. Additional years may be added after the registration has been completed.
+                                </p>
                                 <div className="customCounter">
                                     <button onClick={(e)=> this.handleDurationDown(e)} className="countminus"></button>
                                     <div><small>{this.state.duration} year </small></div>
                                     <button onClick={(e)=> this.handleDurationUp(e)} className="countplus"></button>
                                 </div>
+                            </li>
+                            <li className="d-flex flex-row justify-content-between align-items-top gap-2">
+                                <div>
+                                    <strong>Use as primary name</strong>
+                                    <p className="text-muted">
+                                        This links your address to this name, allowing dApps to display it as your profile when connected to them. You can only have one primary name per address.
+                                    </p> 
+                                </div>
+                                <Form.Check // prettier-ignore
+                                    type="switch"
+                                    defaultChecked={this.state.reverseRecord}
+                                    onChange={(e)=> this.handleReverseRecord(e)}
+                                /> 
                             </li>
                             <li className="text-center fw-bold fs-5">
                                 <span>Total: <span className="fw-bold">{formatEther(  this.state.price.toString()) } {import.meta.env.VITE_APP_NATIVE_TOKEN} </span> + GAS Fee</span>

@@ -8,7 +8,7 @@ export default function Page() {
         <div>
             <main>
             <Header />
-            <section className="pt-5">
+            <section className="pt-4">
                 <div className='container-fluid'>  
                     <Outlet />
                 </div>

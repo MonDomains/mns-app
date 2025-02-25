@@ -28,13 +28,11 @@ main section {
     align-items: center;
     justify-content: flex-start;
     flex-direction: column;
-    padding-top: 20px;
+    
 }
 main section>div{padding-bottom: 100px;}
 @media(max-width:768px){
-   main section{
-    padding-top: 20px;
-   }
+   
    
 }
 .centercontent {
@@ -5739,9 +5737,7 @@ header h1 span{
     padding: 0;
 }
 @media (max-width: 768px) {
-    header {
-        height: 100px;
-    }
+    
     header > div > a {
         max-width: 100%;
         width: 100%;
@@ -6096,9 +6092,6 @@ footer .monsocialMedia li a img {
 main {
     display: flex;
     flex-direction: column;
-}
-main section > div * {
-    
 }
 main section .banner {
     display: flex;
@@ -6785,7 +6778,7 @@ w3m-modal {
 /* body{transition: .2s;} */
 
 body.darkTheme{background-color: #000 !important;}
-.darkTheme .text-muted { color:#ffffff !important; }
+.darkTheme .text-muted { color: #aeaeae !important; }
 .darkTheme header{box-shadow: 0 1px 6px 0 #fff;background-color:#000 ;}
 .darkTheme footer{background-color:#000 !important;}
 .darkTheme footer  a{border-color:#fff !important;color:#fff !important;}
@@ -6807,4 +6800,21 @@ body.darkTheme{background-color: #000 !important;}
 
 .logo-container {
     width: 350px;
+}
+
+.form-switch .form-check-input {
+    width: 3em !important;
+    height: 1.5em !important;
+}
+
+.darkTheme  strong {
+    color: white;
+}
+
+.darkTheme  span {
+    color: white;
+}
+
+.darkTheme .btn-light span {
+    color: #000 !important;
 }

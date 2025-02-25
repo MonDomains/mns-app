@@ -17,9 +17,11 @@ import Layouts from "./layouts";
 
 import { ApolloProvider } from "@apollo/client";
 import { apolloClient } from "./config"
+ 
 
 
 function App() {
+
   return ( 
         <Web3Modal>
           <ApolloProvider client={apolloClient}> 
