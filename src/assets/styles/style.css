@@ -1,179 +1,35 @@
-/*#root{height: 100%;display: flex;justify-content: center;align-items: center;flex-direction: column;}
-#root > div{width: 100%;height: 100%;display: flex;justify-content: center;align-items: center;flex-direction: column;}
-*/
-@import url('https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css');
-@import url('https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css');
-    
-body {
-    margin: 0;
-    font: 400 16px / var(--bs-body-line-height) rbtm, Arial, Helvetica, sans-serif !important;
-    text-align: var(--bs-body-text-align);
-    background: #fff !important;
-    -webkit-text-size-adjust: 100%;
-    -webkit-tap-highlight-color: transparent;
-    color: #000;
-    background-size: 70% !important;
-    display: flex;
-    flex-direction: column;
-} 
+ 
 
-
-.search-content {
-    border-radius: 4px;
-    overflow: hidden;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    z-index: 88;
-    flex-direction: column;
-}
-.centercontent h3{color:#000 !important;}
-.darkTheme .centercontent h3{color:#fff !important;}
-.search-content form {
-    width: 100%;
-    height: 60px;
-    position: relative;
-    display: flex;
-    background-color: #fff;
-    border:1px solid #000;
-    border-radius: 4px;
-}
-.search-content form input {
-    width: 100%;
-    border: none;
-    font-size: 18px;
-}
-@media (max-width: 768px) {
-    .search-content form input {
-        font-size: 13px;
-    }
-}
-.search-content form select {
-    text-indent: 4px;
-}
-.search-content form button {
-    background-color: #836ef9;
-    color: #fff;
-    width: 150px;
-    font-size: 16px !important;
-    font-weight: 700;
-    height: 100%;
-    border-radius: 0;
-    transition: 0.3s;
-    border: 1px solid #836ef9;
-}
-.search-content form button:hover {
-    background-color: #fff;
-    color: #836ef9;
-}
-@media (max-width: 768px) {
-    .search-content form button {
-        font-size: 14px !important;
-    }
-}
-.search-content form img {
-    width: 30px;
-    margin: 0 20px;
-}
-@media (max-width: 768px) {
-    .search-content form img {
-        width: 15px;
-        margin: 0 10px;
-    }
-}
-.search-content .search-result-content {
-    width: 100%;
-    padding: 10px;
-    background-color: #fff;
-}
-
-
-@media(max-width:768px){
-  .search-content .search-result-content ul li, .accordion ul li, .itemlist li{
-    flex-wrap: wrap;
-  }
-  .search-content .search-result-content ul li > div, .accordion ul li > div, .itemlist li > div{
-    width: auto !important;
-  }
-  .search-content .search-result-content ul li > div.resultbutton, .accordion ul li > div.resultbutton, .itemlist li > div.resultbutton{
-    width: 100% !important;
-    margin-top: 10px;
-  }
-  
-  div.resultbutton button{width: 100%;}
-}
-
-
-.search-content .search-result-content ul,
-.accordion ul,
-.itemlist {
-    width: 100%;
-}
-.search-content .search-result-content ul li,
-.accordion ul li,
-.itemlist li {
-    font-size: 1.375rem;
-    color: #000;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #000;
-}
-.search-content .search-result-content ul li button,
-.accordion ul li button,
-.itemlist li button {
-    padding: 3px 3px !important;
-    font-size: 16px !important;
-    width: 145px;
-    letter-spacing: -1px;
-}
-       
-.search-result-content {
-    background-color: #f4f4f4 !important;
-    border-radius: 0 0 4px 4px;
-    border:1px solid #000;
-    border-top:none;
-    position: relative;
-    top:-3px;
-}
-
-.search-content .search-result-content ul li,
-.accordion ul li,
-.itemlist li {
-    border-bottom: none;
-    border-top: 1px solid #000;
-    padding-bottom: 0;
-    margin-bottom: 0;
-    padding-top: 10px;
-    margin-bottom: 10px;
-}
-.search-content form button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.search-content form button img {
-    display: block;
-    border-radius: 50%;
-    animation: spin 4s linear infinite;
-}
-.search-content .search-result-content ul li:first-child,
-.accordion ul li:first-child {
-    border: none !important;
-}
-.search-content .search-result-content ul li button,
-.accordion ul li button {
-    padding-left: 10px !important;
-    padding-right: 10px !important;
-}
-
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+ 
 
 .btn-primary {
     background-color: #836EF9 !important;
-    border-color: #eeecfb !important; 
 }
+
+.color-primary {
+    color: #836EF9 !important;
+}
+
+.bg-primary {
+    background-color: #836EF9 !important;
+}
+
+input[type="checkbox"] {
+     
+    transform: scale(1.5);
+}
+
+.gradient {
+    background: linear-gradient(45deg, #836EF9,#916ff7 70%, #916ff7 80%, #916ff7 90%, #916ff7);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1.2;
+    padding-bottom: .1em;
+}
+
+body {
+    font-family: "Ubuntu", serif !important;
+} 
+
+     

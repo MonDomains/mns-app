@@ -109,8 +109,6 @@ class RenewModal extends Component {
                 chainId: import.meta.env.VITE_APP_NODE_ENV === "production" ? monadTestnet.id: monadTestnet.id
             });
             
-            console.log(_price) 
-
             this.setState({ isFetchingPrice: false, isFetchedPrice: true, price: _price.base });
 
         } catch(e) { 
@@ -159,7 +157,7 @@ class RenewModal extends Component {
         
         return (
             <>
-            <button className="green f-19" onClick={() => this.handleShow(this.props.domain.id)}> 
+            <button className="btn bg-light-subtle f-19" onClick={() => this.handleShow(this.props.domain.id)}> 
                 Renew
             </button>
 

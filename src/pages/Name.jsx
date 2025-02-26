@@ -13,69 +13,33 @@ const Name = () => {
 
     const {name} = useParams(); 
     const { address: registrar, isConnected }  = useAccount();
-    const chainId = useChainId()
-     
+    const chainId = useChainId();
+  
     return (
         <>  
-            <div className="centercontent">
-                <Search name={name}  /> 
-                
-                {!isValidDomain(name) ?  <IsInvalid name={name} /> 
-                    : 
-                    <> 
-                        <Domain name={name} />
-                        { !isConnected || SUPPORTED_CHAIN_ID !== chainId ?  
-                            <ConnectWalletButton /> 
-                            : 
-                            <>
-                            <Register name={name} duration={3156600} owner={registrar} /> 
-                            </>
-                        }
-                    </> 
-                } 
-            </div>
+        <div class="d-flex flex-column rounded-4 bg-body-tertiary rounded-4 p-3 gap-4 fs-5">
+            {!isValidDomain(name) ?  
+                <>  
+                    <h3 className="alert alert-danger text-center container mt-3">
+                        <b>{obscureName(name, 50)}</b> is invalid!
+                    </h3> 
+                </>
+                : 
+                <> 
+                    <Domain name={name} />
+                    
+                    { !isConnected || SUPPORTED_CHAIN_ID !== chainId ?  
+                        <ConnectWalletButton /> 
+                        : 
+                        <>
+                        <Register name={name} duration={3156600} owner={registrar} /> 
+                        </>
+                    }
+                </> 
+            } 
+        </div>
         </>
     ) 
 };
-
-
-function Search({name}) {
-  
-    const [_name, setName] = useState(name);
-    const navigate = useNavigate();
-    
-    function handleOnChange(e) {
-        setName(e.target.value);
-    }
-
-    function handleSubmit(e) {
-        e.preventDefault();
-        navigate("/name/"+ _name+ ".mon")
-        return false;
-    }
-
-    return (
-        <div className="container">
-            <div className="search-content  "> 
-                <form onSubmit={(e) => handleSubmit(e)}>
-                    <img src={searchIcon} alt="" />
-                    <input type="text" onChange={handleOnChange} value={_name} placeholder="Search your .mon domain" />
-                    <span className='chainText'>.mon</span>
-                    <button >SEARCH</button>
-                </form>
-            </div>
-        </div>
-    )
-}
-
-function IsInvalid({name}) {
-    return (
-        <>  
-            <h3 className="alert alert-danger text-center container mt-3">
-                <b>{obscureName(name, 50)}</b> is invalid!
-            </h3> 
-        </>
-    ) 
-}
  
 export default Name;

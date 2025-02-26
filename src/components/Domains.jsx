@@ -29,8 +29,7 @@ class Domain extends Component {
 
        
     async handleAvailable() {
-        console.log("available")
-
+        
         let _available = false; 
 
         try {

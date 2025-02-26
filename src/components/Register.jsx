@@ -7,15 +7,18 @@ import monRegisterControllerABI from '../abi/MONRegisterController.json'
 import { waitForTransactionReceipt } from '@wagmi/core'
 import spinner from '../assets/images/spinner.svg';
 import moment from "moment";
-import { Form, Modal } from "react-bootstrap";
+import { Form, Modal, Spinner } from "react-bootstrap";
 import { Link } from "react-router-dom";  
 import { GET_DOMAIN } from "../graphql/Domain";
 import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 import { getDateSimple, getExpires, getLabelHash, getNameHash, getOneYearDuration, getTimeAgo, getTokenId, obscureLabel, obscureName } from "../helpers/String";
 import { getBalance } from '@wagmi/core'
 import { monadTestnet } from 'wagmi/chains'
+import { DashCircleFill, FileMinus, PlusCircle, PlusCircleFill, PlusLg } from "react-bootstrap-icons";
+import ConnectWalletButton from "./ConnectWalletButton";
+import { getAccount } from '@wagmi/core'
 
-class Register extends Component {
+class RegisterName extends Component {
      
     resolver = import.meta.env.VITE_APP_PUBLICRESOLVER;
     data =  [];
@@ -94,9 +97,7 @@ class Register extends Component {
         } 
     }
 
-    async handleAvailable() {
-        console.log("available")
-
+    async handleAvailable() { 
         let _available = false; 
 
         try {
@@ -156,8 +157,9 @@ class Register extends Component {
         return this.state.duration * getOneYearDuration();
     }
  
-    async handlePrice() {
-        console.log("handlePrice")
+    async handlePrice() { 
+
+        console.log("handlePrice    ")
         let _price = false; 
  
         try {
@@ -180,8 +182,8 @@ class Register extends Component {
     }
 
     async handleBalance() {
-        console.log("handleBalance")
         try {
+            if(this.props.owner == null) return;
 
             this.setState({ isGettingBalance : true });
 
@@ -190,110 +192,129 @@ class Register extends Component {
             });
 
             this.setState({ isGettingBalance : false, balance: balance.value });
-            console.log("balance:"+ balance.value)
         } catch(e) {
             this.setState({ isGettingBalance : false });
             toast.error(e.message);
         }
     }
-
+ 
     componentDidMount () {   
-        
-        console.log("commitments:"+ this.state.commitments);
+
         
         if(this.state.available === null) { 
             this.handleAvailable();
-            this.handleQuery(); 
+            this.handleQuery();  
         }
    
         if(!this.state.available) {
-            this.handleQuery(); 
+            this.handleQuery();  
         }
 
         if(this.state.duration) { 
             this.handlePrice();
-            this.handleBalance();
-        }
+            this.handleBalance(); 
+        } 
+ 
     }
 
     componentDidUpdate(prevProps, prevState) { 
-        
+         
         if(prevProps.name != this.props.name) {
             this.handleAvailable();
-             
             this.handleQuery();
             this.handlePrice();
             this.handleBalance();
         } 
 
         if(prevState.duration != this.state.duration) {
-         
             this.handlePrice();
-            this.handleBalance();
-        } 
+            this.handleBalance(); 
+        }  
     }
  
     render() {  
         
         return (
             <> 
-              
-            {this.state.available ? 
-                <div className="container">
-                    <div className="d-flex flex-column justify-content-center mt-3">
-                        <ul className="d-flex flex-column justify-content-center gap-3">
-                            <li>
-                                <strong>Duration</strong>
-                                <p className="text-muted"> 
-                                    Your name will be registered for {this.state.duration} year. Additional years may be added after the registration has been completed.
-                                </p>
-                                <div className="customCounter">
-                                    <button onClick={(e)=> this.handleDurationDown(e)} className="countminus"></button>
-                                    <div><small>{this.state.duration} year </small></div>
-                                    <button onClick={(e)=> this.handleDurationUp(e)} className="countplus"></button>
-                                </div>
-                            </li>
-                            <li className="d-flex flex-row justify-content-between align-items-top gap-2">
-                                <div>
-                                    <strong>Use as primary name</strong>
-                                    <p className="text-muted">
-                                        This links your address to this name, allowing dApps to display it as your profile when connected to them. You can only have one primary name per address.
-                                    </p> 
-                                </div>
-                                <Form.Check // prettier-ignore
-                                    type="switch"
-                                    defaultChecked={this.state.reverseRecord}
-                                    onChange={(e)=> this.handleReverseRecord(e)}
-                                /> 
-                            </li>
-                            <li className="text-center fw-bold fs-5">
-                                <span>Total: <span className="fw-bold">{formatEther(  this.state.price.toString()) } {import.meta.env.VITE_APP_NATIVE_TOKEN} </span> + GAS Fee</span>
-                            </li>
-                        </ul> 
-                        {this.isFetchingPrice || this.state.isGettingBalance ? 
-                            <button className="btn btn-lg btn-primary  align-self-center">
-                                <img width={25} src={spinner} /> Checking...
-                            </button>
-                            : 
-                            <>
-                                { this.state.balance < this.state.price ?
-                                    <button disabled="disabled" className="btn btn-light">
-                                        Unsufficient Balance {this.state.balance}
-                                    </button>
-                                    :
-                                    
-                                    <> 
-                                        <button disabled={this.state.isRegistring ? "disabled": ""} className="btn btn-lg btn-primary align-self-center" onClick={(e)=> this.handleRegister() }>
-                                            {this.state.isRegistring ? <><img width={25} src={spinner} />Waiting Transaction</>: <>REGISTER</>} 
-                                        </button>
-                                    </>
-                                       
-                                }
-                                
-                            </>
-                        }
-                    </div>
+            
+            {this.state.isAvailablePending ? 
+            <>
+                <div className="d-flex flex-column align-items-center">
+                    <Spinner size="lg" variant="primary" />
                 </div>
+            </>: <></> 
+            }
+
+            {this.state.available ? 
+ 
+                    <div className="d-flex flex-column justify-content-center gap-5 p-3">
+                        
+                        <h5>Register</h5>
+
+                        <div className="d-flex flex-row justify-content-between align-items-top gap-5">
+                            <div>
+                                <img className="rounded-2" width={250} src={import.meta.env.VITE_APP_METADATA_API + "/temp-image/"+ this.props.name} alt={this.props.name} />
+                            </div>
+                            <ul className="list-unstyled d-flex flex-column justify-content-center gap-3">
+                                <li>
+                                    <div className="d-flex flex-row justify-content-between align-items-center fs-1 border border-1 border-light-subtle">
+                                        <button className="btn border-0" onClick={(e)=> this.handleDurationDown(e)}><DashCircleFill size={24} className="text-primary" /> </button>
+                                        <div><small>{this.state.duration} year </small></div>
+                                        <button className="btn border-0" onClick={(e)=> this.handleDurationUp(e)}> <PlusCircleFill size={24} className="text-primary" /> </button>
+                                    </div>
+                                </li>
+                                <li className="d-flex flex-row justify-content-between align-items-top gap-2">
+                                    <div>
+                                        <strong>Use as primary name</strong>
+                                        <p className="text-muted">
+                                            This links your address to this name, allowing dApps to display it as your profile when connected to them. You can only have one primary name per address.
+                                        </p> 
+                                    </div>
+                                    <Form.Check
+                                        type="switch"
+                                        defaultChecked={this.state.reverseRecord}
+                                        className="form-switch-lg"
+                                        onChange={(e)=> this.handleReverseRecord(e)}
+                                    /> 
+                                </li>
+                                <li className="text-left fw-bold fs-5">
+                                    {this.state.isFetchingPrice  ? 
+                                        <> Price Updating... </> : 
+                                        <> <span>Estimated Total: <span className="fw-bold">{formatEther(  this.state.price.toString()) } {import.meta.env.VITE_APP_NATIVE_TOKEN} </span> + GAS Fee</span></>
+                                    }
+                                </li>
+                            </ul> 
+                        </div>
+
+                        <div className="d-flex flex-column justify-content-end align-items-end">
+                             
+                            { !this.props.isConnected  ? <ConnectWalletButton></ConnectWalletButton> : 
+                                <>
+                                    {this.state.isFetchingPrice || this.state.isGettingBalance ? 
+                                        <button className="btn btn-lg btn-primary  align-self-center border-0 rounded-0 w-50">
+                                            <Spinner size="sm" /> Waiting...
+                                        </button>
+                                        : 
+                                        <>
+
+                                            { this.state.balance < this.state.price ?
+                                                <button disabled="disabled" className="btn btn-lg btn-danger border-0 rounded-0 w-50">
+                                                    Unsufficient Balance {this.state.balance}
+                                                </button>
+                                                : 
+                                                <> 
+                                                    <button disabled={this.state.isRegistring ? "disabled": ""} className="btn btn-lg btn-primary align-self-center border-0 rounded-0 w-50" onClick={(e)=> this.handleRegister() }>
+                                                        {this.state.isRegistring ? <> <Spinner size="sm" /> Waiting For Transaction</>: <>Register</>} 
+                                                    </button>
+                                                </>
+                                                
+                                            } 
+                                        </>
+                                    }
+                                </>
+                            }
+                        </div>                       
+                    </div>
                 : 
                 <> </>
             }
@@ -337,4 +358,4 @@ class Register extends Component {
         
 }
 
-export default Register;
+export default RegisterName;

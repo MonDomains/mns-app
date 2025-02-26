@@ -27,7 +27,7 @@ function DomainPrice({available, name, duration}) {
     } else {
         return ( 
             <> 
-                <span className='me-3'>{ fromWei(  price.base.toString() ).toString() } {import.meta.env.VITE_APP_NATIVE_TOKEN} / YEAR</span>
+                <span className='me-3'>{ fromWei(  price.base.toString() ).toString() } {import.meta.env.VITE_APP_NATIVE_TOKEN} / Year</span>
             </>
          );
     }
