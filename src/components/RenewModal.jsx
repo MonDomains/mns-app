@@ -7,10 +7,10 @@ import monRegisterControllerABI from '../abi/MONRegisterController.json'
 import { waitForTransactionReceipt } from '@wagmi/core'
 import spinner from '../assets/images/spinner.svg';
 import { Modal } from "react-bootstrap";
-import {  } from "@apollo/client";
-import { getExpires, getTimeAgo, obscureName } from "../helpers/String";
+import { getExpires, obscureName } from "../helpers/String";
 import { getBalance } from '@wagmi/core'
 import { monadTestnet } from 'wagmi/chains'
+import { DashCircleFill, PlusCircleFill } from "react-bootstrap-icons";
 
 class RenewModal extends Component {
 
@@ -42,17 +42,14 @@ class RenewModal extends Component {
     } 
  
     async handleRenew () { 
-        console.log("handleRenew")
+        
         try {
 
             this.setState({ isRenewing: true, isRenewed: false });
- 
-            console.log(parseEther(this.state.price.toString()))
-            console.log(this.state.price.toString())
-
+  
             const _hash = await writeContract(wagmiAdapter.wagmiConfig, {
                 abi: monRegisterControllerABI,
-                address: import.meta.env.VITE_APP_MONREGISTERCONTROLLER,
+                address: import.meta.env.VITE_APP_REGISTER_CONTROLLER,
                 functionName: "renew",
                 args: [ this.props.domain.labelName, this.getDuration() ],
                 account: this.props.owner,
@@ -63,15 +60,13 @@ class RenewModal extends Component {
             toast.success("Your transaction has been sent.");
 
             const recepient = await waitForTransactionReceipt(wagmiAdapter.wagmiConfig, {  hash: _hash });
-
-            console.log(recepient);
-
+ 
             toast.success("Your transaction has been completed.");
 
             this.setState({ isRenewing: false, isRenewed: true, showModal: undefined });
  
         } catch(e) {
-            toast.error(e.message);
+            toast.error("An error occured.");
             this.setState({ isRenewing: false, isRenewed: false });
         } 
     }
@@ -92,17 +87,17 @@ class RenewModal extends Component {
         return this.state.duration * 60 * 60 * 24 * 365;
     }
 
-    async handlePrice() {
-        console.log("handlePrice Renew")
+    async handlePrice() { 
         let _price = false; 
 
         try { 
 
             this.setState({ isFetchingPrice: true, isFetchedPrice: false });
-
+            console.log(this.props.domain.labelName)
+            console.log(this.props.domain)
             _price = await readContract(wagmiAdapter.wagmiConfig, {
                 abi: monRegisterControllerABI,
-                address: import.meta.env.VITE_APP_MONREGISTERCONTROLLER,
+                address: import.meta.env.VITE_APP_REGISTER_CONTROLLER,
                 functionName: 'rentPrice',
                 args: [this.props.domain.labelName, this.getDuration()],
                 account: this.props.owner,
@@ -113,12 +108,12 @@ class RenewModal extends Component {
 
         } catch(e) { 
             this.setState({ isFetchingPrice: false, isFetchedPrice: false });
-            toast.error(e.message);
+            toast.error("An error occured.");
+            console.log(e.message)
         }
     }
 
-    async handleBalance() {
-        console.log("handleBalance")
+    async handleBalance() { 
         try {
 
             this.setState({ isGettingBalance : true });
@@ -132,7 +127,7 @@ class RenewModal extends Component {
             console.log("balance:"+ balance.value)
         } catch(e) {
             this.setState({ isGettingBalance : false });
-            toast.error(e.message);
+            toast.error("An error occured.");
         }
     }
  
@@ -157,8 +152,8 @@ class RenewModal extends Component {
         
         return (
             <>
-            <button className="btn bg-light-subtle f-19" onClick={() => this.handleShow(this.props.domain.id)}> 
-                Renew
+            <button className="btn btn-lg btn-primary rounded-2 border-0" onClick={() => this.handleShow(this.props.domain.id)}> 
+                Extend
             </button>
 
             <Modal {...this.props} 
@@ -170,51 +165,45 @@ class RenewModal extends Component {
                 centered
             >
                 <Modal.Header>
-                <Modal.Title>Renew Your Domain</Modal.Title>
+                <Modal.Title>Extend Your Name</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                <div className="tableContent">
-                    <table className="w-100 tabletype2">
-                        <thead>
-                            <tr>
-                                <th width="35%">Name</th>
-                                <th width="35%">Expires</th>
-                                <th width="35%">Extend</th> 
-                            </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>{obscureName(this.props.domain.name, 50)}</td>
-                            <td>{getExpires(this.props.domain.expiryDate)}</td>
-                            <td>
-                                <div className="customCounter">
-                                    <button onClick={(e)=> this.handleDurationDown(e)} className="countminus"><em></em></button>
-                                    <div><small>
-                                    {this.state.duration} year
-                                    </small></div>
-                                    <button onClick={(e)=> this.handleDurationUp(e)} className="countplus"><em></em><em></em></button>
-                                </div>
-                                {this.state.isFetchedPrice ? formatEther(  this.state.price.toString()) : "..." } {import.meta.env.VITE_APP_NATIVE_TOKEN} + GAS Fee
-                            </td> 
-                        </tr>
-                        </tbody>
-                    </table> 
+                <div className="d-flex flex-column">
+                    <ul className="d-flex flex-row justify-content-between list-unstyled">
+                        <li>
+                            <h4>{obscureName(this.props.domain.name, 50)}</h4>
+                        </li>
+                        <li>
+                            <strong>Expires</strong> <span>{getExpires(this.props.domain.expiryDate)}</span>
+                        </li>
+                    </ul>
+                    <div className="d-flex flex-column gap-3"> 
+                         <div className="d-flex flex-row justify-content-between align-items-center fs-1 border border-1 border-light-subtle">
+                            <button className="btn border-0" onClick={(e)=> this.handleDurationDown(e)}><DashCircleFill size={24} className="text-primary" /> </button>
+                            <div><small>{this.state.duration} year </small></div>
+                            <button className="btn border-0" onClick={(e)=> this.handleDurationUp(e)}> <PlusCircleFill size={24} className="text-primary" /> </button>
+                        </div>
+                        <div className="d-flex flex-row justify-content-between align-items-center">
+                            <h5>Estimated Total</h5>
+                            <span className="fs-5">{this.state.isFetchedPrice ? formatEther( this.state.price.toString()) : "Fetching Price..." } {import.meta.env.VITE_APP_NATIVE_TOKEN}</span>
+                        </div>
+                    </div> 
                 </div>
                 </Modal.Body>
                 <Modal.Footer>
                     <button className="btn btn-default" onClick={() => this.handleClose() }>Cancel</button>
                     { this.isFetchingPrice || this.state.isGettingBalance ? 
-                            <button className="btn btn-default  align-self-center">
+                            <button className="btn btn-lg btn-primary  border-0">
                                 <img width={25} src={spinner} /> Checking...
                             </button>
                             : 
                             <>
                                 { this.state.balance < this.state.price ? 
-                                    <button disabled="disabled" className="btn btn-lg btn-primary">
+                                    <button disabled="disabled" className="btn btn-lg btn-danger  border-0">
                                         Unsufficient Balance {this.state.balance}
                                     </button>
                                     :
-                                    <button className="btn btn-success" onClick={()=> this.handleRenew()}>
+                                    <button className="btn btn-lg btn-primary border-0" onClick={()=> this.handleRenew()}>
                                         {this.state.isRenewing ? <><img width={25} src={spinner} /> Waiting Transaction</>: <>Extend</>} 
                                     </button>
                                 }

@@ -13,7 +13,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Spinner } from 'react-bootstrap';
 import {  ArrowRight, ArrowRightShort, XCircle } from 'react-bootstrap-icons';
 
-function Search() {
+function Search({size}) {
      
     const navigate = useNavigate();
     const yearInSeconds = getOneYearDuration(); 
@@ -43,7 +43,7 @@ function Search() {
             setValid(true);
             setName(label);
             if (e.key === 'Enter' || e.keyCode === 13 ) {
-                navigate("/name/"+ label +".mon")
+                navigate("/"+ label +".mon")
             }
         } else {
             setValid(false);
@@ -52,7 +52,7 @@ function Search() {
     } 
 
     const monRegisterControllerConfig = {
-        address: import.meta.env.VITE_APP_MONREGISTERCONTROLLER,
+        address: import.meta.env.VITE_APP_REGISTER_CONTROLLER,
         abi: monRegisterControllerABI
     };
 
@@ -63,16 +63,17 @@ function Search() {
         chainId: import.meta.env.VITE_APP_NODE_ENV === "production" ? monadTestnet.id: monadTestnet.id
     });
  
-    if(error) toast.error(error.message)
+    if(error) toast.error("An error occured.");
      
     return ( 
+        
         <div className="col-12 col-lg-6 fs-5"> 
             <form className={focused ? "bg-light-subtle border border-2 border-primary rounded-4 position-relative": "bg-light-subtle border border-2 rounded-4 position-relative"} onSubmit={(e)=> handleSearch(e) }>
-                <div class="input-group flex-nowrap align-items-center pe-2">
-                    <span class="input-group-prepend">
-                        <div class="input-group-text bg-light-subtle border-0"><img width={24} src={searchIcon} alt="" /></div>
+                <div className="input-group flex-nowrap align-items-center pe-2">
+                    <span className="input-group-prepend">
+                        <div className="input-group-text bg-light-subtle border-0"><img width={size=="sm"? 12 : 24} src={searchIcon} alt="" /></div>
                     </span>
-                    <input type="text" ref={inputRef} placeholder="Search for a name"  onKeyUp={(e)=> handleOnKeyUp(e) } onBlur={(e)=> setFocused(false)} onFocus={(e)=> setFocused(true)} className='bg-light-subtle shadow-none form-control form-control-lg border-0 fs-3 ps-0 pe-0' />
+                    <input type="text" ref={inputRef} placeholder="Search for a name"  onKeyUp={(e)=> handleOnKeyUp(e) } onBlur={(e)=> setFocused(false)} onFocus={(e)=> setFocused(true)} className={size == "sm"? "bg-light-subtle shadow-none form-control fs-6 border-0 ps-0 pe-0": "bg-light-subtle shadow-none form-control form-control-lg fs-3 border-0 ps-0 pe-0"} />
                     { name != "" ? <> <XCircle size={24} role="button" className='p-1' onClick={(e)=> handleCloseResult(e)}  />  </> : "" }
                 </div>
                 { name == "" & focused ?
@@ -86,21 +87,17 @@ function Search() {
                 { name != "" & !valid ?
                     <> 
                         <div className="d-flex flex-row border rounded-4 align-items-center p-3 mt-2 bg-light-subtle position-absolute w-100">
-                            <ul>
-                                <li className="copy-container">
-                                    <span className='alert alert-danger container-fluid'>{obscureName(name, 50)} is invalid!</span>
-                                </li>
-                            </ul>
+                            <span className='text-danger'>{obscureName(name, 50)} is invalid!</span>
                         </div> 
                     </>
                     : <></>
                 }
                 {name != "" && valid ? 
                     <> 
-                    <Link to={ available ? "/register/"+ name +".mon": "/name/"+ name +".mon"} className="link-body-emphasis link-offset-2 link-underline-opacity-25 text-decoration-none">
+                    <Link to={ available ? "/register/"+ name +".mon": "/"+ name +".mon"} className="link-body-emphasis link-offset-2 link-underline-opacity-25 text-decoration-none">
                         <ul className='list-unstyled d-flex flex-row border rounded-4 align-items-center p-3 mt-2 justify-content-between bg-light-subtle position-absolute w-100'>
-                            <li>
-                                {obscureName(name, 20)}.mon 
+                            <li className='text-truncate'>
+                                {obscureName(name, 15)}.mon 
                             </li> 
                             <li> 
                                 {

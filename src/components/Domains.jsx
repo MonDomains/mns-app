@@ -8,12 +8,15 @@ import { waitForTransactionReceipt } from '@wagmi/core'
 import spinner from '../assets/images/spinner.svg';
 import moment from "moment";
 import { Modal } from "react-bootstrap";
-import { Link } from "react-router-dom";  
+import { Link, NavLink } from "react-router-dom";  
 import { GET_DOMAIN } from "../graphql/Domain";
 import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 import { getDateSimple, getExpires, getLabelHash, getNameHash, getOneYearDuration, getTimeAgo, getTokenId, obscureLabel, obscureName } from "../helpers/String";
 import { getBalance } from '@wagmi/core'
 import { monadTestnet } from 'wagmi/chains'
+import MonadIcon from '../assets/images/monad.svg';
+import RenewModal from "../components/RenewModal";
+import SetAsPrimary from "./SetAsPrimary";
 
 class Domain extends Component {
       
@@ -38,7 +41,7 @@ class Domain extends Component {
 
             _available = await readContract(wagmiAdapter.wagmiConfig, {
                 abi: monRegisterControllerABI,
-                address: import.meta.env.VITE_APP_MONREGISTERCONTROLLER,
+                address: import.meta.env.VITE_APP_REGISTER_CONTROLLER,
                 functionName: 'available',
                 args: [this.props.name],
                 account: this.props.owner,
@@ -74,9 +77,7 @@ class Domain extends Component {
     }
   
     componentDidMount () {   
-        
-        console.log("commitments:"+ this.state.commitments);
-        
+ 
         if(this.state.available === null) { 
             this.handleAvailable();
             this.handleQuery(); 
@@ -98,72 +99,77 @@ class Domain extends Component {
     render() {  
         
         return (
-        <> 
-            {this.state.isAvailablePending ? 
-                <> 
-                    <div className="container mt-3">
-                        <div className="alert alert-info text-center">
-                            <h3> Searching...</h3>
-                        </div> 
-                    </div>
-                </>
-                : 
-                <div className="container mt-3"> 
-                    <div className={this.state.available ? "alert alert-success text-center": "alert alert-danger text-center" }>
-                        <h3>  
-                            <>
-                                { this.state.available ? <> <b>{obscureLabel(this.props.name, 30)}.mon</b> is available to claim 🥳 </>: <><b>{obscureLabel(this.props.name, 30)}.mon</b> is not available to claim 🙁</>}
-                            </> 
-                        </h3>
-                    </div>
+        <>  
+        {this.state.domain ?
+            <div className="d-flex flex-column flex-lg-row justify-content-start align-items-lg-start gap-4">
+                <img className="rounded-2" width={250} src={import.meta.env.VITE_APP_METADATA_API + "/temp-image/"+ this.state.domain.labelName} alt={this.state.domain.name} />
+                <div className="d-flex flex-column flex-fill">
+                    <ul className="list-unstyled d-flex flex-column gap-4">
+                        <li className="d-flex flex-row justify-content-between">
+                            <strong>Owner: </strong> 
+                            <span className="badge bg-secondary-subtle text-secondary text-start p-2"><img src={MonadIcon} width={24} className="me-1" /> {this.state.domain?.owner?.id} {this.state.domain?.owner?.id?.toString() === this.props.owner?.id?.toString() ? <>(You)</>: <></>} </span>
+                        </li>
+                        <li className="d-flex flex-row justify-content-between">
+                            <strong>Registrant: </strong> 
+                            <span className="badge bg-secondary-subtle text-secondary text-start p-2"><img src={MonadIcon} width={24} className="me-1" /> {this.state.domain?.registrant?.id} {this.state.domain?.registrant?.id?.toString() === this.props.owner?.id?.toString() ? <>(You)</>: <></>} </span>
+                        </li>
+                        <li className="d-flex flex-row justify-content-between">
+                            <strong>Expires: </strong>
+                            <span>{getExpires(this.state.domain.expiryDate)} - { getDateSimple(this.state.domain.expiryDate) }</span>
+                        </li>
+                        <li className="d-flex flex-row justify-content-between">
+                            <strong>Created: </strong>
+                            <span>{getTimeAgo(this.state.domain.createdAt)} - { getDateSimple(this.state.domain.createdAt) } </span>
+                        </li>
+                        <li className="d-flex flex-row justify-content-between">
+                            <strong>Registered: </strong>
+                            <span>{getTimeAgo(this.state.domain.registeredAt)} - { getDateSimple(this.state.domain.registeredAt) } </span>
+                        </li>
+                        <li className="d-flex flex-row justify-content-end gap-3">
+                            { this.state.domain?.owner?.id?.toString().toLowerCase() === this.props.owner?.toString().toLowerCase() ? 
+                                <>
+                                    <SetAsPrimary domain={this.state.domain} owner={this.props.owner} key={"set_as_primary_"+ this.state.domain.id} /> 
+                                    <RenewModal domain={this.state.domain} owner={this.props.owner} key={"renew_"+this.state.domain.id} /> 
+                                </>
+                                : 
+                                <></>
+                            }
+                        </li>
+                    </ul>
+                </div> 
+            </div>
+            :
+            <>
+            <div className="d-flex flex-column flex-lg-row justify-content-start align-items-lg-start gap-3">
+                <img className="rounded-2" width={250} src={import.meta.env.VITE_APP_METADATA_API + "/temp-image/"+ this.props.name} alt={this.props.name} />
+                <div className="d-flex flex-column flex-fill">
+                    <ul className="list-unstyled d-flex flex-column gap-3">
+                        <li className="d-flex flex-row justify-content-between">
+                            <strong>Owner: </strong> 
+                            <span className="badge bg-secondary-subtle text-secondary text-start p-2"><img src={MonadIcon} width={24} className="me-1" />N/A</span>
+                        </li>
+                        <li className="d-flex flex-row justify-content-between">
+                            <strong>Registrant: </strong> 
+                            <span className="badge bg-secondary-subtle text-secondary text-start p-2"><img src={MonadIcon} width={24} className="me-1" /> N/A</span>
+                        </li>
+                        <li className="d-flex flex-row justify-content-between">
+                            <strong>Expires: </strong>
+                            <span>N/A</span>
+                        </li>
+                        <li className="d-flex flex-row justify-content-between">
+                            <strong>Created: </strong>
+                            <span>N/A </span>
+                        </li>
+                        <li className="d-flex flex-row justify-content-between">
+                            <strong>Registered: </strong>
+                            <span>N/A</span>
+                        </li>
+                    </ul>
                 </div>
-            }
-
-            {this.state.domain ? 
-                <div className="container tableContent">
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td>Label</td>
-                                <td>{this.state.domain.labelName}</td>
-                            </tr>
-                            <tr>
-                                <td>Token ID</td>
-                                <td>{getTokenId( this.state.domain.labelName )}</td>
-                            </tr>
-                            <tr>
-                                <td>Name Hash</td>
-                                <td>{getNameHash( this.state.domain.labelName  ) }</td>
-                            </tr>
-                            <tr>
-                                <td>Label Hash</td>
-                                <td>{getLabelHash( this.state.domain.labelName )}</td>
-                            </tr>
-                            <tr>
-                                <td>Owner</td>
-                                <td>{this.state.domain?.owner?.id} {this.state.domain?.owner?.id?.toString() === this.props.owner?.id?.toString() ? <>(You)</>: <></>}</td>
-                            </tr>
-                            <tr>
-                                <td>Registrant</td>
-                                <td>{this.state.domain?.registrant?.id} {this.state.domain?.registrant?.id?.toString() === this.props.owner?.id?.toString() ? <>(You)</>: <></>}</td>
-                            </tr>
-                            <tr>
-                                <td>Expires</td>
-                                <td>{getExpires(this.state.domain.expiryDate)} - { getDateSimple(this.state.domain.expiryDate) }</td>
-                            </tr>
-                            <tr>
-                                <td>Created</td>
-                                <td>{getTimeAgo(this.state.domain.createdAt)} - { getDateSimple(this.state.domain.createdAt) } </td>
-                            </tr>
-                            <tr>
-                                <td>Registered</td>
-                                <td>{getTimeAgo(this.state.domain.registeredAt)} - { getDateSimple(this.state.domain.registeredAt) } </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                : <> </>
-            } 
+            </div>
+            </>
+        } 
+ 
         </>
         )  
       

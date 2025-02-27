@@ -27,7 +27,7 @@ export default function App() {
                     <Route path="/" element={<Layouts.Page />}>
                       <Route path="/account" element={<Account />} />
                       <Route path="/favorites" element={<Favorites />} />
-                      <Route path="/name/:name.mon" element={<Name />} />
+                      <Route path="/:name.mon" element={<Name />} />
                       <Route path="/register/:name.mon" element={<Register />} />
                       <Route path="/terms" element={<Terms />} /> 
                       <Route path="/privacy" element={<Privacy />} />

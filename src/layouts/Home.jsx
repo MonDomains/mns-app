@@ -8,7 +8,7 @@ export default function Home() {
     return (
         <>
             <div className="container-fluid p-0 m-0">
-                <Header /> 
+                <Header showSearch={false} /> 
             </div>
             <div className="container-fluid">
                 <div className="row" style={ { height: 500 }}>

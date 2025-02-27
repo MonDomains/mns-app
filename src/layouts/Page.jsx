@@ -6,9 +6,9 @@ export default function Page() {
     return (
         <div>
             <div className="container-fluid p-0 m-0">
-                <Header /> 
+                <Header showSearch={true}/> 
             </div>
-            <div className='container p-5'>  
+            <div className='container align-items-center mt-lg-5 p-4 p-lg-0' style={ { maxWidth:960, minHeight: 300 }}>  
                 <div className="row">
                     <Outlet />
                 </div>
