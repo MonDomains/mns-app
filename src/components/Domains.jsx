@@ -17,6 +17,7 @@ import { monadTestnet } from 'wagmi/chains'
 import MonadIcon from '../assets/images/monad.svg';
 import RenewModal from "../components/RenewModal";
 import SetAsPrimary from "./SetAsPrimary";
+import { Copy } from "react-bootstrap-icons";
 
 class Domain extends Component {
       
@@ -30,6 +31,10 @@ class Domain extends Component {
       };
     }
 
+    handleCopyClick (e, text) {
+        navigator.clipboard.writeText(text);
+        toast.success("Copied");
+    }
        
     async handleAvailable() {
         
@@ -105,13 +110,13 @@ class Domain extends Component {
                 <img className="rounded-2" width={250} src={import.meta.env.VITE_APP_METADATA_API + "/temp-image/"+ this.state.domain.labelName} alt={this.state.domain.name} />
                 <div className="d-flex flex-column flex-fill">
                     <ul className="list-unstyled d-flex flex-column gap-4">
-                        <li className="d-flex flex-row justify-content-between">
+                        <li className="d-flex flex-column flex-lg-row justify-content-between gap-2">
                             <strong>Owner: </strong> 
-                            <span className="badge bg-secondary-subtle text-secondary text-start p-2"><img src={MonadIcon} width={24} className="me-1" /> {this.state.domain?.owner?.id} {this.state.domain?.owner?.id?.toString() === this.props.owner?.id?.toString() ? <>(You)</>: <></>} </span>
+                            <span className="badge bg-secondary-subtle text-secondary text-start p-2"><img src={MonadIcon} width={24} className="me-1" /> {this.state.domain?.owner?.id} {this.state.domain?.owner?.id?.toString() === this.props.owner?.id?.toString() ? <>(You)</>: <></>} <button className="btn bnt-default" onClick={(e)=> this.handleCopyClick(e, this.state.domain?.owner?.id?.toString())}><Copy /></button> </span>
                         </li>
-                        <li className="d-flex flex-row justify-content-between">
+                        <li className="d-flex flex-column flex-lg-row justify-content-between gap-2">
                             <strong>Registrant: </strong> 
-                            <span className="badge bg-secondary-subtle text-secondary text-start p-2"><img src={MonadIcon} width={24} className="me-1" /> {this.state.domain?.registrant?.id} {this.state.domain?.registrant?.id?.toString() === this.props.owner?.id?.toString() ? <>(You)</>: <></>} </span>
+                            <span className="badge bg-secondary-subtle text-secondary text-start p-2"><img src={MonadIcon} width={24} className="me-1" /> {this.state.domain?.registrant?.id} {this.state.domain?.registrant?.id?.toString() === this.props.owner?.id?.toString() ? <>(You)</>: <></>} <button className="btn bnt-default" onClick={(e)=> this.handleCopyClick(e, this.state.domain?.registrant?.id?.toString())}><Copy /></button> </span>
                         </li>
                         <li className="d-flex flex-row justify-content-between">
                             <strong>Expires: </strong>

@@ -103,19 +103,19 @@ class SetAsPrimary extends Component {
                             Double check these details before confirming in your wallet.
                         </li>
                         <li>
-                            <div className='border border-secondary-subtle p-4 rounded-2 d-flex flex-row justify-content-between align-item-center'>
+                            <div className='border border-secondary-subtle p-4 rounded-2 d-flex flex-column flex-lg-row justify-content-between align-item-center'>
                                 <strong>Name: </strong>
                                 <span className='fw-bold'>{obscureName(this.props.domain.name, 50)}</span>
                             </div>
                         </li> 
                         <li>
-                            <div className='border border-secondary-subtle p-4 rounded-2 d-flex flex-row justify-content-between align-item-center'>
+                            <div className='border border-secondary-subtle p-4 rounded-2 d-flex flex-column flex-lg-row justify-content-between align-item-center'>
                                 <strong>Action: </strong>
                                 <span className='fw-bold'>Set the primary name for your address</span>
                             </div>
                         </li> 
                         <li>
-                            <div className='border border-secondary-subtle p-4 rounded-2 d-flex flex-row justify-content-between align-item-center'>
+                            <div className='border border-secondary-subtle p-4 rounded-2 d-flex flex-column flex-lg-row justify-content-between align-item-center'>
                                 <strong>Address: </strong>
                                 <span className='fw-bold'>{obscureAddress(this.props.owner, 100)}</span>
                             </div>

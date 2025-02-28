@@ -2,7 +2,7 @@ import searchIcon from '../assets/images/search-icon.svg';
 import { Link, NavLink, useNavigate,  useParams } from "react-router-dom";
 import { getLabelHash, getNameHash, getTokenId, isValidDomain, obscureName } from "../helpers/String"; 
 import { useAccount, useChainId, useReadContract } from 'wagmi'
-import Register from "../components/Register";
+import RegisterName from "../components/RegisterName";
 import ConnectWalletButton from "../components/ConnectWalletButton";
 import React, { useState } from "react";  
 import Domain from '../components/Domains';
@@ -12,6 +12,8 @@ import { monadTestnet } from 'viem/chains';
 import moment from 'moment';
 import { getAccount } from '@wagmi/core';
 import { toast } from 'react-toastify';
+import {Helmet} from "react-helmet";
+
 
 const Name = () => { 
  
@@ -59,25 +61,25 @@ Powered by @monadns `);
     if(error) toast.error("An error occured.");
   
     return (
-        <>   
+        <>    
             {!isValidDomain(name) ?  
                 <>  
                     <div className="alert alert-danger text-center container mt-3">
-                        <b>{obscureName(name, 50)}</b> is invalid!
+                        <b>{obscureName(name, 30)}</b> is invalid!
                     </div> 
                 </>
                 : 
                 <> 
                     <div className='d-flex flex-column gap-3'>
                         <div className='d-flex flex-column flex-md-row justify-content-between gap-3'>
-                            <div className='d-flex flex-column flex-lg-row align-items-center gap-3'>
-                                <h2 className='p-0 m-0'>
-                                    <span> {obscureName(name, 20)}.mon </span> <button className='btn btn-sm btn-transparent' onClick={(e) => handleCopyClick(e)}><Copy /></button>
+                            <div className='d-flex flex-column flex-lg-row align-items-start gap-3 '>
+                                <h2 className='p-0 m-0 text-truncate'>
+                                    <span> {obscureName(name, 18)}.mon </span> <button className='btn btn-sm btn-transparent' onClick={(e) => handleCopyClick(e)}><Copy /></button>
                                 </h2>
                             </div>
                             <div className='d-flex flex-row justify-content-between align-items-center gap-2'>
                                 <Link target="_blank" to={"https://x.com/intent/post?text="+ getText()} className="btn btn-lg btn-dark border rounded-2"> Share on <TwitterX /></Link>
-                                {available ?  <NavLink to={"/register/"+ name +".mon"} className={"btn btn-lg  btn-primary rounded-2"} >Register Now</NavLink>: <></> }
+                                {available ?  <NavLink to={"/register/"+ name +".mon"} className={"btn btn-lg  btn-primary rounded-2 border-0"} >Register Now</NavLink>: <></> }
                                 {!available ? 
                                     <a href={import.meta.env.VITE_APP_TOKEN_URL +"/"+ getTokenId(name)} target='_blank' className='link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover'>
                                         <BoxArrowUpRight />

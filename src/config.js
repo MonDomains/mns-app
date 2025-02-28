@@ -4,6 +4,8 @@ import { injected, coinbaseWallet } from 'wagmi/connectors';
 import { ApolloClient, InMemoryCache } from "@apollo/client"; 
 import { WagmiAdapter } from '@reown/appkit-adapter-wagmi';
 
+
+
 export const projectId = import.meta.env.VITE_APP_PROJECT_ID;
 export const NODE_PROVIDER_URL = import.meta.env.VITE_APP_NODE_PROVIDER_URL;
 export const metadata = {
@@ -22,7 +24,8 @@ export const wagmiAdapter = new WagmiAdapter({
     coinbaseWallet({
       appName: metadata.name
     })
-  ]
+  ],
+  ssr: true,
 });
 export const config = wagmiAdapter.wagmiConfig;
 export const apolloClient = new ApolloClient({

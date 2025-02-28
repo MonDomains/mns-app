@@ -53,7 +53,7 @@ class RegisterName extends Component {
          reverseRecord: true,
          txHash: null,
          processing: false,
-         processed: false
+         processed: false, 
       };
     }
  
@@ -97,6 +97,7 @@ class RegisterName extends Component {
 
         } catch(e) {
             toast.error("An error occured.");
+            console.error(e)
             this.setState({ isRegistring: false, isRegistered: false });
         } 
     }
@@ -249,6 +250,11 @@ Powered by @monadns `);
             this.handlePrice();
             this.handleBalance(); 
         }  
+
+        if(prevProps.isConnected != this.props.isConnected || prevProps.isDisconnected != this.props.isDisconnected) {
+            this.handlePrice();
+            this.handleBalance();
+        } 
     }
  
     render() {  

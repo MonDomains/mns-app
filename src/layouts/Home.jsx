@@ -15,7 +15,7 @@ export default function Home() {
                     <Outlet />
                 </div>
             </div>
-            <div className="container-fluid fixed-bottom">
+            <div className="container-fluid">
                 <Footer />
             </div>
         </>

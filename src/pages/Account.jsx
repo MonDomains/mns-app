@@ -35,20 +35,18 @@ const Account = () => {
                 <ul className="list-group">
                     { data.domains.map((domain) => (
                       <>
-                        <li className="list-group-item" key={domain.id}>
-                          <NavLink to={"/"+ domain.name } className={"text-decoration-none link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover d-flex flex-row justify-content-between align-items-center"}>
-                            <div className="d-flex flex-row gap-2">
+                        <li className="p-2 list-group-item " key={domain.id}>
+                          <NavLink to={"/"+ domain.name } className="text-truncate text-decoration-none link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover d-flex flex-column flex-lg-row justify-content-between align-items-start align-items-lg-center gap-3">
+                            <div className="d-flex flex-row gap-2 ">
                               <img className="rounded-2" width={64} src={import.meta.env.VITE_APP_METADATA_API + "/temp-image/"+ domain.labelName} alt={domain.name} />
-                              <div className="d-flex flex-column">
-                              <h3>{obscureName(domain.name, 30)}</h3>
-                              <small className="text-muted">Expires {getExpires(domain.expiryDate)}</small>
+                              <div className="d-flex flex-column text-truncate">
+                                <h3>{domain.name}</h3>
+                                <small className="text-muted">Expires {getExpires(domain.expiryDate)}</small>
                               </div>
                             </div>
-                            <div className="d-flex flex-row gap-2">
+                            <div className="d-flex flex-row justify-content-between gap-2">
                               <span className="badge bg-success-subtle text-success-emphasis">Owner</span>
-                              <div className="d-flex flex-row">
                                 <ArrowRightShort />
-                              </div> 
                             </div>
                            </NavLink>
                         </li> 

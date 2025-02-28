@@ -51,7 +51,7 @@ export default function ConnectWalletButton({props}) {
         <button {...props} className="btn btn-danger fs-5 border-0" onClick={() => switchChain({ chainId: SUPPORTED_CHAIN_ID })}> Wrong Network <img src={WarningLogo} /></button>  
         : 
         <button {...props} className="btn fw-bold fs-5 border-0" onClick={() => open()}>
-          <span> { name ? obscureName(name) : obscureAddress(address) } </span> 
+          <span> { name ? obscureName(name, 12) : obscureAddress(address) } </span> 
           <ChevronDown className='fw-bold' />
         </button> 
     }</>)

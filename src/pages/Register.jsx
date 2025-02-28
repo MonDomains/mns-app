@@ -7,7 +7,7 @@ import { isValidDomain, obscureName } from "../helpers/String";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAccount, useChainId } from "wagmi";
 import ConnectWalletButton from "../components/ConnectWalletButton";
-import RegisterName from "../components/Register";
+import RegisterName from "../components/RegisterName";
 
 
 const Register = () => { 
