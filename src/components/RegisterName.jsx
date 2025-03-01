@@ -168,7 +168,7 @@ class RegisterName extends Component {
 
     getText() {
         return encodeURIComponent(
-`I've just minted ${obscureName(this.props.name, 20)}.mon on @monad_xyz.
+`I've just minted ${obscureName(this.props.name, 20)}.mon on @monad_xyz. 😎
 
 Mint yours! Click the link below 👇
 

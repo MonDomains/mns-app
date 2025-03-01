@@ -24,7 +24,7 @@ const Name = () => {
     const navigate = useNavigate();
       
     function handleCopyClick(e) {
-        navigator.clipboard.writeText(name);
+        navigator.clipboard.writeText(name +".mon");
         toast.success("Copied");
     }
 
@@ -34,7 +34,7 @@ const Name = () => {
 
     function getText() {
             return encodeURIComponent(
-    `I've minted ${obscureName(name, 20)}.mon on @monad_xyz.
+    `I've minted ${obscureName(name, 20)}.mon on @monad_xyz. 😎
     
 Mint yours! Click the link below 👇
     
