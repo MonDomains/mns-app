@@ -59,7 +59,7 @@ class Domain extends Component {
         } catch (e) {
 
             this.setState({ isAvailablePending: false });
-            toast.error(e.message);
+            toast.error("an error occurred");
 
         }
     } 
