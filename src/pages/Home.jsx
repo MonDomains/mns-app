@@ -1,5 +1,5 @@
 
-import LatestRegistered from "../partials/LatestRegistered";
+
 import Search from "../partials/Search";
 
 function Home() {

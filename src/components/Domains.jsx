@@ -10,7 +10,6 @@ import moment from "moment";
 import { Modal } from "react-bootstrap";
 import { Link, NavLink } from "react-router-dom";  
 import { GET_DOMAIN } from "../graphql/Domain";
-import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 import { getDateSimple, getExpires, getLabelHash, getNameHash, getOneYearDuration, getTimeAgo, getTokenId, obscureLabel, obscureName } from "../helpers/String";
 import { getBalance } from '@wagmi/core'
 import { monadTestnet } from 'wagmi/chains'

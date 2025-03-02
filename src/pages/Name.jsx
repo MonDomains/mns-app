@@ -12,7 +12,6 @@ import { monadTestnet } from 'viem/chains';
 import moment from 'moment';
 import { getAccount } from '@wagmi/core';
 import { toast } from 'react-toastify';
-import {Helmet} from "react-helmet";
 
 
 const Name = () => { 
@@ -34,13 +33,15 @@ const Name = () => {
 
     function getText() {
             return encodeURIComponent(
-    `I've minted ${obscureName(name, 20)}.mon on @monad_xyz. 😎
+    `I've minted ${obscureName(name, 25)}.mon 😎 
     
-Mint yours! Click the link below 👇
+Powered by @monadns, built on @monad_xyz. 
+    
+Mint yours 👇
     
 https://app.monadns.com/${name}.mon?v=${getUnixTime()} 
      
-Powered by @monadns `);
+`);
     
     }
 

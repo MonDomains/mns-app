@@ -8,19 +8,9 @@ const queryClient = new QueryClient();
 createAppKit({
   adapters: [wagmiAdapter],
   networks: chains,
-  projectId: projectId,
-  enableCoinbase: true,
+  projectId,
+  enableCoinbase: false,
   allowUnsupportedChain: false,
-  features: {
-    analytics: false,
-    swaps: false,
-    onramp: false,
-    socials: false,
-    email: false,
-    send: false,
-    receive: false,
-    legalCheckbox: false,
-  }
 })
  
 export function Web3Modal({ children }) {

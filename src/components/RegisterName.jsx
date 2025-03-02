@@ -10,7 +10,6 @@ import moment from "moment";
 import { Alert, Form, Modal, Spinner } from "react-bootstrap";
 import { Link, NavLink, useNavigate } from "react-router-dom";  
 import { GET_DOMAIN } from "../graphql/Domain";
-import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 import { getDateSimple, getExpires, getLabelHash, getNameHash, getOneYearDuration, getTimeAgo, getTokenId, obscureLabel, obscureName } from "../helpers/String";
 import { getBalance } from '@wagmi/core'
 import { monadTestnet } from 'wagmi/chains'
@@ -168,13 +167,15 @@ class RegisterName extends Component {
 
     getText() {
         return encodeURIComponent(
-`I've just minted ${obscureName(this.props.name, 20)}.mon on @monad_xyz. 😎
+`I've just minted ${obscureName(this.props.name, 20)}.mon 😎
 
-Mint yours! Click the link below 👇
+Powered by @monadns, built on @monad_xyz
+
+Mint yours! 👇
 
 https://app.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()} 
  
-Powered by @monadns `);
+ `);
 
     }
  
