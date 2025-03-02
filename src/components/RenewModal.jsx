@@ -93,8 +93,7 @@ class RenewModal extends Component {
         try { 
 
             this.setState({ isFetchingPrice: true, isFetchedPrice: false });
-            console.log(this.props.domain.labelName)
-            console.log(this.props.domain)
+           
             _price = await readContract(wagmiAdapter.wagmiConfig, {
                 abi: monRegisterControllerABI,
                 address: import.meta.env.VITE_APP_REGISTER_CONTROLLER,

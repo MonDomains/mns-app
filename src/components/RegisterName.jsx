@@ -179,8 +179,7 @@ Powered by @monadns `);
     }
  
     async handlePrice() { 
-
-        console.log("handlePrice    ")
+ 
         let _price = false; 
  
         try {
