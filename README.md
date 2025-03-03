@@ -1,35 +1,12 @@
-  
+# React + Vite
 
-# mns-app
-Monad Domains React Web Application
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## Install Dependencies
-to install dependencies, run the following command
+Currently, two official plugins are available:
 
-```shell
-yarn  install
-```
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Run
-to run app, first you need to set you env variables. rename .env.template file to .env then run the following command
+## Expanding the ESLint configuration
 
-```shell
-yarn  start
-```
-
-## How to set REACT_META_DATA_URL correctly?
-use the following format to set META_DATA_URL env.
-
-```shell
-REACT_APP_METADATA_URL={{META_DATA_URL}}/{{NETWORK_NAME}}/{{REGISTRAR_CONTROLLER_CONTRACT_ADDRESS}}/{{TOKEN_ID}}/image
-```
-
-## Build Docker Image
-```shell
-docker build -t user/mns-app --build-arg REACT_APP_PROJECT_ID="b6713ccd023958a1da397c790d050436" --build-arg REACT_APP_NODE_ENV="production" .
-```
-
-## Run Docker Image
-```shell
-docker run -it -p 3000:80 user/mns-app
-```
+If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.

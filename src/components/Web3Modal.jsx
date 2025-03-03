@@ -1,19 +1,18 @@
 import { WagmiProvider } from 'wagmi'
-import { wagmiAdapter, chains, projectId } from "../config";
+import { chains, rainbowConfig } from "../config";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { createAppKit } from '@reown/appkit/react' 
+import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
 
-const queryClient = new QueryClient() 
-createAppKit({
-  adapters: [wagmiAdapter],
-  networks: chains,
-  projectId: projectId
-})
- 
+const queryClient = new QueryClient();
+
 export function Web3Modal({ children }) {
   return (
-    <WagmiProvider config={wagmiAdapter.wagmiConfig}>
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    <WagmiProvider config={rainbowConfig}>
+      <QueryClientProvider client={queryClient}>
+      <RainbowKitProvider chains={chains}>
+        {children}
+      </RainbowKitProvider>
+      </QueryClientProvider>
     </WagmiProvider>
   )
 }

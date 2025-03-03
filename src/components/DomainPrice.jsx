@@ -8,7 +8,7 @@ import { monadTestnet } from 'wagmi/chains'
 function DomainPrice({available, name, duration}) { 
  
     const monRegisterControllerConfig = {
-        address: import.meta.env.VITE_APP_MONREGISTERCONTROLLER,
+        address: import.meta.env.VITE_APP_REGISTER_CONTROLLER,
         abi: monRegisterControllerABI
     };
 
@@ -19,7 +19,7 @@ function DomainPrice({available, name, duration}) {
         chainId: import.meta.env.VITE_APP_NODE_ENV === "production" ? monadTestnet.id: monadTestnet.id
     });
   
-    if(error) toast.error(error.message)
+    if(error) toast.error("An error occured.")
     if(!available) return <></>
 
     if(isPending) {
@@ -27,7 +27,7 @@ function DomainPrice({available, name, duration}) {
     } else {
         return ( 
             <> 
-                <span className='me-3'>{ fromWei(  price.base.toString() ).toString() } {import.meta.env.VITE_APP_NATIVE_TOKEN} / YEAR</span>
+                <span className='me-3'>{ fromWei(  price.base.toString() ).toString() } {import.meta.env.VITE_APP_NATIVE_TOKEN} / Year</span>
             </>
          );
     }

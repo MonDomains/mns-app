@@ -1,85 +1,85 @@
-import * as React from "react";
-import Logo from '../assets/images/mns-logo.svg'; 
+import { useState } from "react";
+import MnsLogo from '../assets/images/monadns-app-logo.svg'; 
 import ConnectWalletButton from "../components/ConnectWalletButton"; 
-import { Link, NavLink } from 'react-router-dom';
-import { useRef } from "react";
-import elementmarket from '../assets/images/element-logo-4.png';
-import alienswap from '../assets/images/AlienSwap_logo_color.png';
-import themecoloriconWhite from '../assets/images/theme-color-icon.svg';
-import themecoloriconBlack from '../assets/images/theme-color-icon-black.svg';
-import { Dropdown,NavDropdown } from "react-bootstrap";
+import { Link, NavLink } from 'react-router';
+import * as Icon from 'react-bootstrap-icons';
+import TopAlert from "./TopAlert";
+import Search from "./Search";
+import { useAccount } from "wagmi";
 
-
-function Header() {
-
-    //const menuRef = useRef();
-    function changeTheme(e){
-        var themeicon = document.getElementsByClassName("changeTheme");
-        var bodytag = document.getElementsByTagName("body");
-        if(themeicon[0].className.indexOf("active") != -1){
-            bodytag[0].classList.remove('darkTheme');
-            themeicon[0].classList.remove('active');
-        }else{
-            bodytag[0].classList.add('darkTheme');
-            themeicon[0].classList.add('active');
-        }
-    }
-    function closeMobileMenu(e){
-        var menuIcon = document.getElementsByClassName("mm");
-        var bodytag = document.getElementsByTagName("body")
-        var controlsContent = document.getElementsByClassName('controls-content');
-        bodytag[0].classList.remove('menuOn');
-        menuIcon[0].classList.remove('active');
-        controlsContent[0].classList.remove('active');
-    }
-    function openMobilMenu(e) {
-        
-        var menuIcon = document.getElementsByClassName("mm");
-        var bodytag = document.getElementsByTagName("body");
-        var controlsContent = document.getElementsByClassName('controls-content');
+function Header({showSearch}) { 
+    const [open, setOpen] = useState(false);
+    const [theme, setTheme] = useState(localStorage.getItem("theme") || "dark");
+    const { isConnected } = useAccount();
  
-        if (menuIcon[0].className.indexOf("active") != -1) {
-            bodytag[0].classList.remove('menuOn');
-            menuIcon[0].classList.remove('active');
-            controlsContent[0].classList.remove('active');
+    document.documentElement.setAttribute('data-bs-theme', theme);
+
+    function handleTheme() {
+        if (theme === 'light') {
+          document.documentElement.setAttribute('data-bs-theme', 'dark');
+          setTheme('dark');
+          localStorage.setItem("theme", "dark")
         } else {
-            bodytag[0].classList.add('menuOn');
-            menuIcon[0].classList.add('active');
-            controlsContent[0].classList.add('active');
+          document.documentElement.setAttribute('data-bs-theme', 'light');
+          setTheme('light');
+          localStorage.setItem("theme", "light")
         }
-        return false;
     }
+
     return ( 
-        <header>
-            <div className="container-fluid d-flex align-items-center justify-content-between mt-1 mb-1">
-            <NavLink to="/" className="logo-container">
-                <h1>
-                    <img width={48} height={48} src={Logo} alt="Monad Name Services" />
-                    <span className="d-none d-md-block">Monad Name Service</span>
-                    <span className="d-md-none">.mon</span>
-                </h1>
-            </NavLink>
-            <div className="container-fluid d-flex align-items-center justify-content-between p-0">
-            <div className="controls-content">
-                <nav>
-                    <ul className="d-flex">
-                        <li><Link onClick={(e) => closeMobileMenu(e)} to="/account">My Domains</Link></li>
-                        <li>
-                        <a className="changeTheme" onClick={(e) => changeTheme(e)}>
-                                <img className="moonwhite" src={themecoloriconWhite} />
-                                <img className="moonblack"  src={themecoloriconBlack} />
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
+        <>
+        <TopAlert />
+        <div className="container-fluid p-3 ps-lg-4">
+            <div className="d-flex flex-row gap-3">
+                <div className="d-flex flex-row justify-content-between gap-4 w-100">
+                    <div className="d-flex flex-row gap-4">
+                        <NavLink to="/" className="navbar-brand d-flex flex-row gap-2 align-items-center justify-content-center">
+                            <img width={32} src={MnsLogo} alt="Monad Name Services" />
+                            <span className="h3 fw-bold text-primary gradient mb-0">MNS</span>
+                        </NavLink> 
+                    </div>
+                    <div className="d-flex flex-row align-items-center gap-3">
+                        <div className="d-none d-lg-block">
+                            { isConnected ? 
+                            <ul className="list-unstyled mb-3 mb-lg-0 gap-3 list-unstyled">
+                                <li>
+                                    <Link className="text-decoration-none fs-5 link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" to="/account">
+                                        <Icon.ListUl className="me-2" /> 
+                                        My Domains
+                                    </Link>
+                                </li> 
+                            </ul>
+                            : <></>}
+                        </div>
+                        <div className="d-flex flex-row align-items-center gap-2">
+                            <ConnectWalletButton></ConnectWalletButton>
+                            <button aria-label="Collapse" className="btn btn-ms d-xs-block d-lg-none p-0 m-0" type="button" onClick={() => setOpen(!open)}>
+                                <Icon.List size={24} />
+                            </button>
+                            {theme === 'light' ? (
+                                <button className='btn btn-sm bg-light-subtle text-body-emphasis rounded-circle' onClick={() => handleTheme()}>
+                                <Icon.BrightnessHighFill />
+                                </button>
+                            ) : (
+                                <button className='btn btn-sm bg-light-subtle text-body-emphasis rounded-circle' onClick={() => handleTheme()}>
+                                <Icon.MoonFill />
+                                </button>
+                            )}
+                        </div>    
+                    </div> 
+                </div> 
             </div>
+            <div className={ !open ? "collapse" : "d-md-none p-2" }>
+                <ul className="list-unstyled mb-3 mb-lg-0 gap-3">
+                    <li>
+                        <Link className="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" to="/account">My Domains</Link>
+                    </li> 
+                </ul>
             </div>
-             <ConnectWalletButton></ConnectWalletButton>
-             <a onClick={ (e)=> openMobilMenu(e) }  className="mm" href="#"><span></span><span> </span><span></span></a>
-            </div> 
-        </header>
+        </div>
+        </>
         
-     );
+    );
 }
 
 export default Header;

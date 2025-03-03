@@ -1,26 +1,23 @@
-import { ToastContainer } from "react-toastify";
+import { Form } from "react-bootstrap";
 import Footer from "../partials/Footer";
 import Header from "../partials/Header";
-import { Outlet } from "react-router-dom";
-import {Alert} from "react-bootstrap";
+import { Outlet } from "react-router";
 
 
 export default function Home() {
     return (
-        <div>
-            <main>
-            <Header />
-            <Alert key={"warning"} variant={"warning"} className="text-center">
-                This is a <b>TEST</b> version. You are using Monad Name Service on <b>Monad Testnet</b>. 
-            </Alert>
-            <section>
-                <div className='container-fluid'>  
-                <Outlet />
+        <>
+            <div className="container-fluid p-0 m-0">
+                <Header showSearch={false} /> 
+            </div>
+            <div className="container-fluid">
+                <div className="row" style={ { height: 500 }}>
+                    <Outlet />
                 </div>
-            </section>
-            <Footer/>
-            </main>
-            
-        </div>
+            </div>
+            <div className="container-fluid">
+                <Footer />
+            </div>
+        </>
     )
 }

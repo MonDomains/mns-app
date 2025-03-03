@@ -1,33 +1,68 @@
-import { useAccount, useSwitchChain } from 'wagmi';
-import WalletIcon from '../assets/images/wallet-icon.svg';
-import ChevronDown from '../assets/images/chevron-down.svg';
-import WarningLogo from '../assets/images/warning-icon.svg';
-//import { useWeb3Modal } from '@web3modal/wagmi/react'
-import { useAppKit } from '@reown/appkit/react'
-import { obscureAddress } from "../helpers/String";
+import { useAccount, useReadContract, useSwitchChain } from 'wagmi';
+import { getLabelHash, getNameHash, obscureAddress, obscureName } from "../helpers/String";
 import { useChainId } from 'wagmi'
+import WarningLogo from '../assets/images/warning-icon.svg';
+import { ChevronBarDown, ChevronDown, Wallet2 } from 'react-bootstrap-icons';
+import { readContract } from '@wagmi/core'
+import { monadTestnet } from 'viem/chains';
+import { keccak256, namehash } from 'viem'
+import { useState } from 'react';
+import { chains, rainbowConfig } from "../config";
+import { useAccountModal, useConnectModal, useChainModal } from '@rainbow-me/rainbowkit';
+import { ExclamationCircle } from "react-bootstrap-icons";
 
+ 
 export default function ConnectWalletButton({props}) {
-
-  const { open } = useAppKit()
-  const { address, isConnected  } = useAccount() 
-  const { switchChain } = useSwitchChain() 
-  const chainId = useChainId()
-
+  const { openConnectModal } = useConnectModal()
+  const { address, isConnected, chainId  } = useAccount() 
+  const { openAccountModal } = useAccountModal()
+  const { openChainModal } = useChainModal() 
+  const [name, setName] = useState(null);
   const SUPPORTED_CHAIN_ID = Number(import.meta.env.VITE_APP_SUPPORTED_CHAIN_ID);
+
+  async function reverseLookkup(addr) {
+
+    
+
+    const abi = [
+      {
+        type: "function",
+        name: "name",
+        stateMutability: "view",
+        inputs: [{ name: "node", type: "bytes32" }],
+        outputs: [{ type: "string" }]
+      }, 
+    ]
   
+    const result = await readContract(rainbowConfig, {
+        abi,
+        functionName: 'name',
+        address: import.meta.env.VITE_APP_PUBLIC_RESOLVER,
+        args: [getNameHash( addr.slice(2) +".addr.reverse")],
+        chainId: import.meta.env.VITE_APP_NODE_ENV === "production" ? monadTestnet.id: monadTestnet.id
+    });
+
+    if(result) setName(result);
+  }
+
+   
   if(isConnected) { 
-    return (<>  { SUPPORTED_CHAIN_ID !== chainId ?
-        <button {...props} className="wallet-connect wrongAlert" onClick={() => switchChain({ chainId: SUPPORTED_CHAIN_ID })}> Wrong Network <img src={WarningLogo} /></button>  
+  
+    reverseLookkup(address); 
+
+    return (<>  { !chains.map(t=> t.id).includes(chainId) ?
+          <button {...props} className="btn btn-danger fs-5 border-0" onClick={() => openChainModal()}> Wrong Network <ExclamationCircle /> </button>
         : 
-        <button {...props} className="wallet-connect btn-light border-0" onClick={() => open()}><span> {obscureAddress( address) } </span> <img width={16} height={16} src={ChevronDown}/> <img width={16} height={16} className='text-white' src={WalletIcon}/> </button> 
+        <button {...props} className="btn fw-bold fs-5 border-0" onClick={openAccountModal}>
+          <span> { name ? obscureName(name, 12) : obscureAddress(address) } </span> 
+          <ChevronDown className='fw-bold' />
+        </button> 
     }</>)
   } else {
     return (
         <>
-          <button {...props} className="wallet-connect btn-primary text-white" onClick={() => open()}><span>Connect Wallet</span></button>
+          <button {...props} className="btn btn-primary fs-5 border-0" onClick={openConnectModal}><span>Connect Wallet</span></button>
         </>
       )
   }
-  
 }
