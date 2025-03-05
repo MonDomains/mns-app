@@ -274,13 +274,12 @@ https://app.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()}
             {this.state.available && !this.state.processing ? 
                 <div className="d-flex flex-column justify-content-center gap-5 p-3">
                     <h5>Register</h5>
-                    <div className="d-flex flex-column flex-lg-row justify-content-between align-items-center align-items-lg-top gap-5">
-                        <div> 
+                    <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-start gap-5">
+                        <div className="card rounded-2 bg-body-tertiary border-2 border-light-subtle" style={{ minWidth: 270}}>
                             <LazyLoadImage src={import.meta.env.VITE_APP_METADATA_API + "/temp-image/"+ this.props.name}
-                                width={250}
                                 alt={this.props.name}
-                                className="rounded-2"
-                            />
+                                className="rounded-1"
+                            />  
                         </div>
                         <ul className="list-unstyled d-flex flex-column justify-content-center gap-3">
                             <li>

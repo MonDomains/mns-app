@@ -8,7 +8,7 @@ export default function Page() {
             <div className="container-fluid p-0 m-0">
                 <Header showSearch={true}/> 
             </div>
-            <div className='container align-items-center mt-lg-5 p-4 p-lg-0' style={ { maxWidth:960, minHeight: 300 }}>  
+            <div className='container align-items-center mt-lg-5 p-4 p-lg-0' style={ { maxWidth:980, minHeight: 300 }}>  
                 <div className="row">
                     <Outlet />
                 </div>

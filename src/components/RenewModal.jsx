@@ -123,7 +123,6 @@ class RenewModal extends Component {
             });
 
             this.setState({ isGettingBalance : false, balance: balance.value });
-            console.log("balance:"+ balance.value)
         } catch(e) {
             this.setState({ isGettingBalance : false });
             toast.error("An error occured.");

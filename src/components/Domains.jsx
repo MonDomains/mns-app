@@ -106,14 +106,15 @@ class Domain extends Component {
         return (
         <>  
         {this.state.domain ?
-            <div className="d-flex flex-column flex-lg-row justify-content-start align-items-lg-start gap-4">
-                <LazyLoadImage 
-                    src={import.meta.env.VITE_APP_METADATA_API + "/temp-image/"+ this.props.name}
-                    width={250}
-                    alt={this.props.name}
-                    className="rounded-2"
-                />
-                <div className="d-flex flex-column flex-fill">
+            <div className="d-flex flex-column flex-md-row justify-content-start align-items-md-start gap-4">
+                <div className="card rounded-2 bg-body-tertiary border-2 border-light-subtle" style={{ minWidth: 270}}>
+                    <LazyLoadImage 
+                        src={import.meta.env.VITE_APP_METADATA_API + "/temp-image/"+ this.props.name}
+                        alt={this.props.name}
+                        className="rounded-1"
+                    /> 
+                </div>
+                <div className="d-flex flex-column flex-fill mt-3">
                     <ul className="list-unstyled d-flex flex-column gap-4">
                         <li className="d-flex flex-column flex-lg-row justify-content-between gap-2">
                             <strong>Owner: </strong> 
@@ -150,8 +151,14 @@ class Domain extends Component {
             </div>
             :
             <>
-            <div className="d-flex flex-column flex-lg-row justify-content-start align-items-lg-start gap-3">
-                <img className="rounded-2" width={250} src={import.meta.env.VITE_APP_METADATA_API + "/temp-image/"+ this.props.name} alt={this.props.name} />
+            <div className="d-flex flex-column flex-md-row justify-content-start align-items-md-start gap-3">
+                <div className="card rounded-2 bg-body-tertiary border-2 border-light-subtle" style={{ minWidth: 270}}>
+                    <LazyLoadImage 
+                        src={import.meta.env.VITE_APP_METADATA_API + "/temp-image/"+ this.props.name}
+                        alt={this.props.name}
+                        className="rounded-1"
+                    /> 
+                </div>
                 <div className="d-flex flex-column flex-fill">
                     <ul className="list-unstyled d-flex flex-column gap-3">
                         <li className="d-flex flex-row justify-content-between">
