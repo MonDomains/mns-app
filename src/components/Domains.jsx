@@ -17,6 +17,7 @@ import MonadIcon from '../assets/images/monad.svg';
 import RenewModal from "../components/RenewModal";
 import SetAsPrimary from "./SetAsPrimary";
 import { Copy } from "react-bootstrap-icons";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 class Domain extends Component {
       
@@ -106,7 +107,12 @@ class Domain extends Component {
         <>  
         {this.state.domain ?
             <div className="d-flex flex-column flex-lg-row justify-content-start align-items-lg-start gap-4">
-                <img className="rounded-2" width={250} src={import.meta.env.VITE_APP_METADATA_API + "/temp-image/"+ this.state.domain.labelName} alt={this.state.domain.name} />
+                <LazyLoadImage 
+                    src={import.meta.env.VITE_APP_METADATA_API + "/temp-image/"+ this.props.name}
+                    width={250}
+                    alt={this.props.name}
+                    className="rounded-2"
+                />
                 <div className="d-flex flex-column flex-fill">
                     <ul className="list-unstyled d-flex flex-column gap-4">
                         <li className="d-flex flex-column flex-lg-row justify-content-between gap-2">

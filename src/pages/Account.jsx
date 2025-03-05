@@ -9,6 +9,7 @@ import { Alert } from "react-bootstrap";
 import spinner from '../assets/images/spinner.svg';
 import { ArrowRightShort } from "react-bootstrap-icons";
 import { NavLink } from "react-router";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const Account = () => {
   const { address: owner, isConnected } = useAccount();
@@ -38,7 +39,12 @@ const Account = () => {
                         <li className="p-2 list-group-item " key={domain.id}>
                           <NavLink to={"/"+ domain.name } className="text-truncate text-decoration-none link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover d-flex flex-column flex-lg-row justify-content-between align-items-start align-items-lg-center gap-3">
                             <div className="d-flex flex-row gap-2 ">
-                              <img className="rounded-2" width={64} src={import.meta.env.VITE_APP_METADATA_API + "/temp-image/"+ domain.labelName} alt={domain.name} />
+                              <LazyLoadImage 
+                                  src={import.meta.env.VITE_APP_METADATA_API + "/temp-image/"+ domain.labelName}
+                                  width={64}
+                                  alt={domain.name}
+                                  className="rounded-2"
+                              />
                               <div className="d-flex flex-column text-truncate">
                                 <h3>{domain.name}</h3>
                                 <small className="text-muted">Expires {getExpires(domain.expiryDate)}</small>

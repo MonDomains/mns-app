@@ -17,6 +17,8 @@ import { BoxArrowUpRight, Check, DashCircleFill, FileMinus, PlusCircle, PlusCirc
 import ConnectWalletButton from "./ConnectWalletButton";
 import txProcessingGif from "../assets/images/tx_processing.gif"
 import txProcessingGif2 from "../assets/images/tx_processing2.gif"
+import { LazyLoadImage } from "react-lazy-load-image-component";
+
 
 class RegisterName extends Component {
      
@@ -273,8 +275,12 @@ https://app.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()}
                 <div className="d-flex flex-column justify-content-center gap-5 p-3">
                     <h5>Register</h5>
                     <div className="d-flex flex-column flex-lg-row justify-content-between align-items-center align-items-lg-top gap-5">
-                        <div>
-                            <img className="rounded-2" width={250} src={import.meta.env.VITE_APP_METADATA_API + "/temp-image/"+ this.props.name} alt={this.props.name} />
+                        <div> 
+                            <LazyLoadImage src={import.meta.env.VITE_APP_METADATA_API + "/temp-image/"+ this.props.name}
+                                width={250}
+                                alt={this.props.name}
+                                className="rounded-2"
+                            />
                         </div>
                         <ul className="list-unstyled d-flex flex-column justify-content-center gap-3">
                             <li>
@@ -346,6 +352,7 @@ https://app.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()}
 
                     <div className="d-flex flex-column justify-content-center align-items-center  gap-4">
                         <img width={240} src={txProcessingGif} />
+                        
                         <p className="fs-5 fw-bold mb-0">
                             Your transaction being processed...
                         </p> 
