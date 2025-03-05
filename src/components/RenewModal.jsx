@@ -167,21 +167,21 @@ class RenewModal extends Component {
                 </Modal.Header>
                 <Modal.Body>
                 <div className="d-flex flex-column">
-                    <ul className="d-flex flex-row justify-content-between list-unstyled">
+                    <ul className="d-flex flex-column flex-lg-row justify-content-between list-unstyled gap-2 text-truncate">
                         <li>
-                            <h4>{obscureName(this.props.domain.name, 50)}</h4>
+                            <h4>{obscureName(this.props.domain.name, 30)}</h4>
                         </li>
                         <li>
                             <strong>Expires</strong> <span>{getExpires(this.props.domain.expiryDate)}</span>
                         </li>
                     </ul>
-                    <div className="d-flex flex-column gap-3"> 
+                    <div className="d-flex flex-column gap-4"> 
                          <div className="d-flex flex-row justify-content-between align-items-center fs-1 border border-1 border-light-subtle">
                             <button className="btn border-0" onClick={(e)=> this.handleDurationDown(e)}><DashCircleFill size={24} className="text-primary" /> </button>
                             <div><small>{this.state.duration} year </small></div>
                             <button className="btn border-0" onClick={(e)=> this.handleDurationUp(e)}> <PlusCircleFill size={24} className="text-primary" /> </button>
                         </div>
-                        <div className="d-flex flex-row justify-content-between align-items-center">
+                        <div className="d-flex flex-column flex-md-row justify-content-between align-items-center">
                             <h5>Estimated Total</h5>
                             <span className="fs-5">{this.state.isFetchedPrice ? formatEther( this.state.price.toString()) : "Fetching Price..." } {import.meta.env.VITE_APP_NATIVE_TOKEN}</span>
                         </div>

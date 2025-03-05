@@ -21,9 +21,7 @@ export default function ConnectWalletButton({props}) {
   const SUPPORTED_CHAIN_ID = Number(import.meta.env.VITE_APP_SUPPORTED_CHAIN_ID);
 
   async function reverseLookkup(addr) {
-
-    
-
+ 
     const abi = [
       {
         type: "function",

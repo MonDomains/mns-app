@@ -16,7 +16,6 @@ export const rainbowConfig = getDefaultConfig({
   appName: 'Monad Name Service',
   projectId: projectId,
   chains: chains,
-  ssr: true,
   transports: {
     [monadTestnet.id]: http(NODE_PROVIDER_URL),
   },

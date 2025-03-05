@@ -31,7 +31,7 @@ function Header({showSearch}) {
         <TopAlert />
         <div className="container-fluid p-3 ps-lg-4">
             <div className="d-flex flex-row gap-3">
-                <div className="d-flex flex-row justify-content-between gap-4 w-100">
+                <div className="d-flex flex-row justify-content-between gap-2 w-100">
                     <div className="d-flex flex-row gap-4">
                         <NavLink to="/" className="navbar-brand d-flex flex-row gap-2 align-items-center justify-content-center">
                             <img width={32} src={MnsLogo} alt="Monad Name Services" />
@@ -69,13 +69,15 @@ function Header({showSearch}) {
                     </div> 
                 </div> 
             </div>
-            <div className={ !open ? "collapse" : "d-md-none p-2" }>
-                <ul className="list-unstyled mb-3 mb-lg-0 gap-3">
-                    <li>
-                        <Link className="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" to="/account">My Domains</Link>
-                    </li> 
-                </ul>
-            </div>
+        </div>
+        <div className={ !open ? "collapse" : "d-lg-none p-3 fs-5 position-absolute bg-body border-bottom w-100 z-3" }>
+            <ul className="list-unstyled gap-3">
+                <li>
+                    <Link className="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" to="/account">
+                    My Domains
+                    </Link>
+                </li> 
+            </ul>
         </div>
         </>
         
