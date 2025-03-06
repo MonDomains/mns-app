@@ -10,13 +10,13 @@ import { BoxArrowUpRight, Copy, TwitterX } from 'react-bootstrap-icons';
 import monRegisterControllerABI from '../abi/MONRegisterController.json'
 import { monadTestnet } from 'viem/chains';
 import moment from 'moment';
-import { getAccount } from '@wagmi/core';
+import { getAccount, getChainId } from '@wagmi/core';
 import { toast } from 'react-toastify';
+import { rainbowConfig } from '../config';
 
 
 const Name = () => { 
  
-    const SUPPORTED_CHAIN_ID = Number(import.meta.env.VITE_APP_SUPPORTED_CHAIN_ID);
     const {name} = useParams(); 
     const { address: owner, isConnected, isDisconnected }  = useAccount();
     const chainId = useChainId();
@@ -26,25 +26,7 @@ const Name = () => {
         navigator.clipboard.writeText(name +".mon");
         toast.success("Copied");
     }
-
-    function getUnixTime () {
-            return moment().utc().unix();
-    }
-
-    function getText() {
-            return encodeURIComponent(
-    `I've minted ${obscureName(name, 25)}.mon 😎 
-    
-Powered by @monadns, built on @monad_xyz. 
-    
-Mint yours 👇
-    
-https://app.monadns.com/${name}.mon?v=${getUnixTime()} 
-     
-`);
-    
-    }
-
+ 
     const monRegisterControllerConfig = {
         address: import.meta.env.VITE_APP_REGISTER_CONTROLLER,
         abi: monRegisterControllerABI
@@ -54,7 +36,7 @@ https://app.monadns.com/${name}.mon?v=${getUnixTime()}
         ...monRegisterControllerConfig,
         functionName: 'available',
         args: [name],
-        chainId: import.meta.env.VITE_APP_NODE_ENV === "production" ? monadTestnet.id: monadTestnet.id
+        chainId: getChainId(rainbowConfig)
     });
 
     
@@ -79,7 +61,7 @@ https://app.monadns.com/${name}.mon?v=${getUnixTime()}
                                 </h2>
                             </div>
                             <div className='d-flex flex-row justify-content-between align-items-center gap-2'>
-                                <Link target="_blank" to={"https://x.com/intent/post?text="+ getText()} className="btn btn-lg btn-dark border rounded-2"> Share on <TwitterX /></Link>
+                                
                                 {available ?  <NavLink to={"/register/"+ name +".mon"} className={"btn btn-lg  btn-primary rounded-2 border-0"} >Register Now</NavLink>: <></> }
                                 {!available ? 
                                     <a href={import.meta.env.VITE_APP_TOKEN_URL +"/"+ getTokenId(name)} target='_blank' className='link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover'>

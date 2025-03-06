@@ -1,22 +1,19 @@
-import { ethers, formatEther, keccak256, parseEther } from "ethers";
+import { ethers, formatEther } from "ethers";
 import { apolloClient, rainbowConfig } from "../config";
-import { readContract, writeContract } from '@wagmi/core'
+import { getChainId, getGasPrice, readContract, writeContract } from '@wagmi/core'
 import { toast } from "react-toastify";
 import React, {Component} from 'react';
 import monRegisterControllerABI from '../abi/MONRegisterController.json'
 import { waitForTransactionReceipt } from '@wagmi/core'
-import spinner from '../assets/images/spinner.svg';
 import moment from "moment";
-import { Alert, Form, Modal, Spinner } from "react-bootstrap";
-import { Link, NavLink, useNavigate } from "react-router";  
+import { Form, Spinner } from "react-bootstrap";
+import { Link, NavLink } from "react-router";  
 import { GET_DOMAIN } from "../graphql/Domain";
-import { getDateSimple, getExpires, getLabelHash, getNameHash, getOneYearDuration, getTimeAgo, getTokenId, obscureLabel, obscureName } from "../helpers/String";
+import { getOneYearDuration, getTokenId, obscureName } from "../helpers/String";
 import { getBalance } from '@wagmi/core'
-import { monadTestnet } from 'wagmi/chains'
-import { BoxArrowUpRight, Check, DashCircleFill, FileMinus, PlusCircle, PlusCircleFill, PlusLg, TwitterX } from "react-bootstrap-icons";
+import { BoxArrowUpRight, Check, DashCircleFill, EvStationFill, PlusCircleFill, TwitterX } from "react-bootstrap-icons";
 import ConnectWalletButton from "./ConnectWalletButton";
 import txProcessingGif from "../assets/images/tx_processing.gif"
-import txProcessingGif2 from "../assets/images/tx_processing2.gif"
 import { LazyLoadImage } from "react-lazy-load-image-component";
 
 
@@ -55,6 +52,8 @@ class RegisterName extends Component {
          txHash: null,
          processing: false,
          processed: false, 
+         gasPrice: 0,
+         isPendingGasPrice: false,
       };
     }
  
@@ -66,12 +65,26 @@ class RegisterName extends Component {
         this.state.reverseRecord = !this.state.reverseRecord;
     }
  
+    async handleGasPrice() {
+        
+        try {
+            this.state.isGasPricePending = true;
+            const gasPrice = await getGasPrice(rainbowConfig);
+            console.log(gasPrice);
+            this.state.gasPrice = gasPrice;
+            this.state.isGasPricePending = false;
+        } catch(e) {
+            console.log(e.message)
+            this.state.gasPrice = 0;
+            this.state.isGasPricePending = false;
+        }
+    }
+ 
     async handleRegister () { 
          
         try {
 
             this.setState({ isRegistring: true, isRegistered: false });
- 
             const _hash = await writeContract(rainbowConfig, {
                 abi: monRegisterControllerABI,
                 address: import.meta.env.VITE_APP_REGISTER_CONTROLLER,
@@ -79,7 +92,7 @@ class RegisterName extends Component {
                 args: [ this.props.name, this.props.owner, this.getDuration(), this.resolver, this.data, this.state.reverseRecord ],
                 account: this.props.owner,
                 value: this.state.price,
-                chainId: import.meta.env.VITE_APP_NODE_ENV === "production" ? monadTestnet.id: monadTestnet.id
+                chainId: getChainId(rainbowConfig)
             });
 
             this.setState({ txHash: _hash });
@@ -116,7 +129,7 @@ class RegisterName extends Component {
                 functionName: 'available',
                 args: [this.props.name],
                 account: this.props.owner,
-                chainId: import.meta.env.VITE_APP_NODE_ENV === "production" ? monadTestnet.id: monadTestnet.id
+                chainId: getChainId(rainbowConfig)
             });
 
             if(!_available) {
@@ -182,9 +195,7 @@ https://app.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()}
     }
  
     async handlePrice() { 
- 
         let _price = false; 
- 
         try {
             this.setState({ isFetchingPrice: true });
             _price = await readContract(rainbowConfig, {
@@ -193,7 +204,7 @@ https://app.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()}
                 functionName: 'rentPrice',
                 args: [this.props.name, this.getDuration()],
                 account: this.props.owner,
-                chainId: import.meta.env.VITE_APP_NODE_ENV === "production" ? monadTestnet.id: monadTestnet.id
+                chainId: getChainId(rainbowConfig)
             });
              
             this.setState({ isFetchingPrice: false, price: _price.base });
@@ -222,7 +233,8 @@ https://app.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()}
  
     componentDidMount () {   
 
-        
+        this.handleGasPrice();
+
         if(this.state.available === null) { 
             this.handleAvailable();
             this.handleQuery();  
@@ -273,7 +285,12 @@ https://app.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()}
 
             {this.state.available && !this.state.processing ? 
                 <div className="d-flex flex-column justify-content-center gap-5 p-3">
-                    <h5>Register</h5>
+                    <div className="d-flex flex-row align-items-center justify-content-between">
+                        <h4>Register</h4>
+                        <span className="gap-2">
+                        <EvStationFill/> { this.state.isGasPricePending ? <Spinner size="sm" variant="primary" /> : ethers.formatUnits(this.state.gasPrice, "gwei")} Gwei
+                        </span>
+                    </div>
                     <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-start gap-5">
                         <div className="card rounded-2 bg-body-tertiary border-2 border-light-subtle" style={{ minWidth: 270}}>
                             <LazyLoadImage src={import.meta.env.VITE_APP_METADATA_API + "/temp-image/"+ this.props.name}
@@ -281,7 +298,7 @@ https://app.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()}
                                 className="rounded-1"
                             />  
                         </div>
-                        <ul className="list-unstyled d-flex flex-column justify-content-center gap-3">
+                        <ul className="list-unstyled d-flex flex-column justify-content-center gap-4">
                             <li>
                                 <h5 className="fw-bold">Duration</h5>
                                 <div className="d-flex flex-row justify-content-between align-items-center fs-1 border border-1 border-light-subtle">
@@ -290,10 +307,10 @@ https://app.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()}
                                     <button className="btn border-0" onClick={(e)=> this.handleDurationUp(e)}> <PlusCircleFill size={24} className="text-primary" /> </button>
                                 </div>
                             </li>
-                            <li className="d-flex flex-row justify-content-between align-items-top gap-2">
+                            <li className="d-flex flex-row justify-content-between align-items-top gap-5">
                                 <div>
                                     <h5 className="fw-bold">Set as Primary Name</h5>
-                                    <p className="text-muted">
+                                    <p className="text-muted text-wrap">
                                         This links your address to this name, allowing dApps to display it as your profile when connected to them. You can only have one primary name per address.
                                     </p> 
                                 </div>
@@ -392,7 +409,6 @@ https://app.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()}
         )  
       
     }
-        
 }
 
 export default RegisterName;

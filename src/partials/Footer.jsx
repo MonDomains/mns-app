@@ -4,7 +4,7 @@ import discordicon from '../assets/images/discordicon.svg' ;
 import { useSwitchChain } from 'wagmi';
 import { Link } from 'react-router';
 import { monadTestnet } from 'viem/chains';
-import { Github, Twitter, TwitterX } from 'react-bootstrap-icons';
+import { Discord, Github, Twitter, TwitterX } from 'react-bootstrap-icons';
 
 function Footer() {
     const { switchChain } = useSwitchChain()
@@ -23,6 +23,11 @@ function Footer() {
                         </a>
                     </li>
                     <li>
+                        <a href={import.meta.env.VITE_APP_DISCORD_URL} target="_blank" rel="noreferrer" className='link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover'>
+                            <Discord />
+                        </a>
+                    </li>
+                    <li>
                         <a href={import.meta.env.VITE_APP_GITHUB_URL} target="_blank" rel="noreferrer" className='link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover'>
                             <Github />
                         </a>
@@ -30,7 +35,7 @@ function Footer() {
                 </ul>
             </div>
             <div className="d-flex flex-column align-items-center">
-                <p className='text-center text-muted'>Copyright © 2025 Monad Name Service</p>
+                <p className='text-center text-muted'>Copyright © 2025 Mon Name Service</p>
             </div>
         </>
      );

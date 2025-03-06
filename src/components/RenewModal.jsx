@@ -1,6 +1,6 @@
 import { formatEther, parseEther } from "ethers";
 import { rainbowConfig } from "../config";
-import { readContract, writeContract } from '@wagmi/core'
+import { getChainId, readContract, writeContract } from '@wagmi/core'
 import { toast } from "react-toastify";
 import React, {Component} from 'react';
 import monRegisterControllerABI from '../abi/MONRegisterController.json'
@@ -9,7 +9,6 @@ import spinner from '../assets/images/spinner.svg';
 import { Modal } from "react-bootstrap";
 import { getExpires, obscureName } from "../helpers/String";
 import { getBalance } from '@wagmi/core'
-import { monadTestnet } from 'wagmi/chains'
 import { DashCircleFill, PlusCircleFill } from "react-bootstrap-icons";
 
 class RenewModal extends Component {
@@ -54,7 +53,7 @@ class RenewModal extends Component {
                 args: [ this.props.domain.labelName, this.getDuration() ],
                 account: this.props.owner,
                 value: this.state.price,
-                chainId: import.meta.env.VITE_APP_NODE_ENV === "production" ? monadTestnet.id: monadTestnet.id
+                chainId: getChainId(rainbowConfig)
             });
 
             toast.success("Your transaction has been sent.");
@@ -100,7 +99,7 @@ class RenewModal extends Component {
                 functionName: 'rentPrice',
                 args: [this.props.domain.labelName, this.getDuration()],
                 account: this.props.owner,
-                chainId: import.meta.env.VITE_APP_NODE_ENV === "production" ? monadTestnet.id: monadTestnet.id
+                chainId: getChainId(rainbowConfig)
             });
             
             this.setState({ isFetchingPrice: false, isFetchedPrice: true, price: _price.base });
@@ -119,7 +118,7 @@ class RenewModal extends Component {
 
             const balance = await getBalance(rainbowConfig, {
                 address: this.props.owner, 
-                chainId: import.meta.env.VITE_APP_NODE_ENV === "production" ? monadTestnet.id: monadTestnet.id
+                chainId: getChainId(rainbowConfig)
             });
 
             this.setState({ isGettingBalance : false, balance: balance.value });

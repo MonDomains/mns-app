@@ -3,7 +3,8 @@ import loadericon from '../assets/images/loader-icon.svg';
 import { useReadContract } from 'wagmi'
 import { toast } from 'react-toastify'; 
 import { fromWei } from '../helpers/String';
-import { monadTestnet } from 'wagmi/chains'
+import { getChainId } from '@wagmi/core';
+import { rainbowConfig } from '../config';
 
 function DomainPrice({available, name, duration}) { 
  
@@ -16,7 +17,7 @@ function DomainPrice({available, name, duration}) {
         ...monRegisterControllerConfig,
         functionName: 'rentPrice',
         args: [name, duration],
-        chainId: import.meta.env.VITE_APP_NODE_ENV === "production" ? monadTestnet.id: monadTestnet.id
+        chainId: getChainId(rainbowConfig)
     });
   
     if(error) toast.error("An error occured.")

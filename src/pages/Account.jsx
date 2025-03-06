@@ -27,8 +27,8 @@ const Account = () => {
   return (
     <>   
       <div className="d-flex flex-column gap-3">
-          <h2>My Domains</h2> 
-          <div className="d-flex flex-column rounded-4 bg-body-tertiary rounded-4 p-3 gap-4 fs-5">
+          <h2>My Domains</h2>
+          <div className="d-flex flex-column bg-body-tertiary border border-light-subtle rounded-2 p-2 gap-4 fs-5">
             { loading ? <span>Loading...</span>
           :
             <>

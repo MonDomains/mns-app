@@ -11,7 +11,7 @@ export default function Home() {
                 <Header showSearch={false} /> 
             </div>
             <div className="container-fluid">
-                <div className="row" style={ { height: 500 }}>
+                <div className="row" style={ { minHeight: "calc(100vh - 13em)" }}>
                     <Outlet />
                 </div>
             </div>

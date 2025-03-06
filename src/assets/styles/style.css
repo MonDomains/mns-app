@@ -6,6 +6,7 @@
     src: url('../fonts/Satoshi-Variable.ttf');  
 }
 
+
 .btn-primary {
     background-color: #836EF9 !important;
 }
@@ -19,8 +20,7 @@
 }
 
 input[type="checkbox"] {
-     
-    transform: scale(1.5);
+    transform: scale(1.6);
 }
 
 .gradient {
@@ -34,5 +34,3 @@ input[type="checkbox"] {
 body {
     font-family: "Satoshi Variable", serif !important;
 } 
-
-     

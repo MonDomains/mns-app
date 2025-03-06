@@ -5,9 +5,8 @@ import { Modal } from "react-bootstrap";
 import { obscureAddress, obscureName } from "../helpers/String";
 import reverRegistrarABI from '../abi/ReverseRegistrar.json'
 import { toast } from 'react-toastify';
-import { writeContract } from '@wagmi/core'
+import { getChainId, writeContract } from '@wagmi/core'
 import { rainbowConfig } from '../config';
-import { monadTestnet } from 'wagmi/chains'
 import { waitForTransactionReceipt } from '@wagmi/core'
 import { Check, Check2Circle } from 'react-bootstrap-icons';
 
@@ -47,7 +46,7 @@ class SetAsPrimary extends Component {
                 functionName: "setName",
                 args: [this.props.domain.name],
                 account: this.props.owner,
-                chainId: import.meta.env.VITE_APP_NODE_ENV === "production" ? monadTestnet.id: monadTestnet.id
+                chainId: getChainId(rainbowConfig)
             });
 
             toast.success("Your transaction has been sent.");

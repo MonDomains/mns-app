@@ -12,6 +12,8 @@ import DomainPrice from '../components/DomainPrice';
 import { Link, useNavigate } from 'react-router'; 
 import { Spinner } from 'react-bootstrap';
 import {  ArrowRight, ArrowRightShort, XCircle } from 'react-bootstrap-icons';
+import { getChainId } from '@wagmi/core';
+import { rainbowConfig } from '../config';
 
 function Search({size}) {
      
@@ -60,7 +62,7 @@ function Search({size}) {
         ...monRegisterControllerConfig,
         functionName: 'available',
         args: [name],
-        chainId: import.meta.env.VITE_APP_NODE_ENV === "production" ? monadTestnet.id: monadTestnet.id
+        chainId: getChainId(rainbowConfig)
     });
  
     if(error) toast.error("An error occured.");

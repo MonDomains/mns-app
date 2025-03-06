@@ -13,7 +13,7 @@ function Header({showSearch}) {
     const { isConnected } = useAccount();
  
     document.documentElement.setAttribute('data-bs-theme', theme);
-
+ 
     function handleTheme() {
         if (theme === 'light') {
           document.documentElement.setAttribute('data-bs-theme', 'dark');
@@ -29,13 +29,14 @@ function Header({showSearch}) {
     return ( 
         <>
         <TopAlert />
+        
         <div className="container-fluid p-3 ps-lg-4">
             <div className="d-flex flex-row gap-3">
                 <div className="d-flex flex-row justify-content-between gap-2 w-100">
                     <div className="d-flex flex-row gap-4">
                         <NavLink to="/" className="navbar-brand d-flex flex-row gap-2 align-items-center justify-content-center">
-                            <img width={32} src={MnsLogo} alt="Monad Name Services" />
-                            <span className="h3 fw-bold text-primary gradient mb-0">MNS</span>
+                            <img width={32} src={MnsLogo} alt="Mon Name Services" />
+                            <span className="logo h3 fw-bold text-primary gradient mb-0">MNS</span>
                         </NavLink> 
                     </div>
                     <div className="d-flex flex-row align-items-center gap-3">

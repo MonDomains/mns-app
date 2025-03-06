@@ -1,17 +1,12 @@
-import { useAccount, useReadContract, useSwitchChain } from 'wagmi';
-import { getLabelHash, getNameHash, obscureAddress, obscureName } from "../helpers/String";
-import { useChainId } from 'wagmi'
-import WarningLogo from '../assets/images/warning-icon.svg';
-import { ChevronBarDown, ChevronDown, Wallet2 } from 'react-bootstrap-icons';
-import { readContract } from '@wagmi/core'
-import { monadTestnet } from 'viem/chains';
-import { keccak256, namehash } from 'viem'
+import { useAccount } from 'wagmi';
+import { getNameHash, obscureAddress, obscureName } from "../helpers/String";
+import { ChevronDown } from 'react-bootstrap-icons';
+import { getChainId, readContract } from '@wagmi/core'
 import { useState } from 'react';
 import { chains, rainbowConfig } from "../config";
 import { useAccountModal, useConnectModal, useChainModal } from '@rainbow-me/rainbowkit';
 import { ExclamationCircle } from "react-bootstrap-icons";
 
- 
 export default function ConnectWalletButton({props}) {
   const { openConnectModal } = useConnectModal()
   const { address, isConnected, chainId  } = useAccount() 
@@ -37,7 +32,7 @@ export default function ConnectWalletButton({props}) {
         functionName: 'name',
         address: import.meta.env.VITE_APP_PUBLIC_RESOLVER,
         args: [getNameHash( addr.slice(2) +".addr.reverse")],
-        chainId: import.meta.env.VITE_APP_NODE_ENV === "production" ? monadTestnet.id: monadTestnet.id
+        chainId: getChainId(rainbowConfig)
     });
 
     if(result) setName(result);
