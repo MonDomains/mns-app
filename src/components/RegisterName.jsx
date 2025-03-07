@@ -1,6 +1,6 @@
 import { ethers, formatEther } from "ethers";
-import { apolloClient, rainbowConfig } from "../config";
-import { getChainId, getGasPrice, readContract, writeContract } from '@wagmi/core'
+import { apolloClient, chainId, rainbowConfig, registrarController } from "../config";
+import { getGasPrice, readContract, writeContract } from '@wagmi/core'
 import { toast } from "react-toastify";
 import React, {Component} from 'react';
 import monRegisterControllerABI from '../abi/MONRegisterController.json'
@@ -56,6 +56,8 @@ class RegisterName extends Component {
          isPendingGasPrice: false,
       };
     }
+
+    
  
     getUnixTime () {
         return moment().utc().unix();
@@ -70,7 +72,6 @@ class RegisterName extends Component {
         try {
             this.state.isGasPricePending = true;
             const gasPrice = await getGasPrice(rainbowConfig);
-            console.log(gasPrice);
             this.state.gasPrice = gasPrice;
             this.state.isGasPricePending = false;
         } catch(e) {
@@ -87,13 +88,14 @@ class RegisterName extends Component {
             this.setState({ isRegistring: true, isRegistered: false });
             const _hash = await writeContract(rainbowConfig, {
                 abi: monRegisterControllerABI,
-                address: import.meta.env.VITE_APP_REGISTER_CONTROLLER,
+                address: registrarController,
                 functionName: "register",
-                args: [ this.props.name, this.props.owner, this.getDuration(), this.resolver, this.data, this.state.reverseRecord ],
+                args: [ String(this.props.name), this.props.owner, this.getDuration(), this.resolver, this.data, this.state.reverseRecord ],
                 account: this.props.owner,
                 value: this.state.price,
-                chainId: getChainId(rainbowConfig)
+                chainId: chainId
             });
+            console.log(_hash)
 
             this.setState({ txHash: _hash });
 
@@ -125,11 +127,11 @@ class RegisterName extends Component {
 
             _available = await readContract(rainbowConfig, {
                 abi: monRegisterControllerABI,
-                address: import.meta.env.VITE_APP_REGISTER_CONTROLLER,
+                address: registrarController,
                 functionName: 'available',
                 args: [this.props.name],
                 account: this.props.owner,
-                chainId: getChainId(rainbowConfig)
+                chainId: chainId
             });
 
             if(!_available) {
@@ -200,11 +202,11 @@ https://app.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()}
             this.setState({ isFetchingPrice: true });
             _price = await readContract(rainbowConfig, {
                 abi: monRegisterControllerABI,
-                address: import.meta.env.VITE_APP_REGISTER_CONTROLLER,
+                address: registrarController,
                 functionName: 'rentPrice',
                 args: [this.props.name, this.getDuration()],
                 account: this.props.owner,
-                chainId: getChainId(rainbowConfig)
+                chainId: chainId
             });
              
             this.setState({ isFetchingPrice: false, price: _price.base });
@@ -272,12 +274,11 @@ https://app.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()}
     }
  
     render() {  
-        
         return (
             <>  
             
             {this.state.isAvailablePending ?
-                <div className="d-flex flex-column align-items-center">
+                <div className="d-flex flex-column align-items-center p-5">
                     <Spinner size="lg" variant="primary" />
                 </div>
                 : <></> 
@@ -288,7 +289,7 @@ https://app.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()}
                     <div className="d-flex flex-row align-items-center justify-content-between">
                         <h4>Register</h4>
                         <span className="gap-2">
-                        <EvStationFill/> { this.state.isGasPricePending ? <Spinner size="sm" variant="primary" /> : ethers.formatUnits(this.state.gasPrice, "gwei")} Gwei
+                            <EvStationFill/> { this.state.isGasPricePending ? <Spinner size="sm" variant="primary" /> : ethers.formatUnits(this.state.gasPrice, "gwei")} Gwei
                         </span>
                     </div>
                     <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-start gap-5">
@@ -325,7 +326,7 @@ https://app.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()}
                                 <span className="fw-bold">Estimated Total: </span>
                                 {this.state.isFetchingPrice  ? 
                                     <> Price Updating... </> : 
-                                    <>  <span>{formatEther(  this.state.price.toString()) } {import.meta.env.VITE_APP_NATIVE_TOKEN}</span> </>
+                                    <>  <span>{formatEther(this.state.price.toString()) } {import.meta.env.VITE_APP_NATIVE_TOKEN}</span> </>
                                 }
                             </li>
                         </ul> 
@@ -336,7 +337,7 @@ https://app.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()}
                             <>
                                 {this.state.isFetchingPrice || this.state.isGettingBalance ? 
                                     <button className="btn btn-lg btn-primary border-0">
-                                        <Spinner size="sm" /> Waiting...
+                                        <Spinner variant="light" size="sm" /> Waiting...
                                     </button>
                                     : 
                                     <> 
@@ -347,7 +348,7 @@ https://app.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()}
                                             : 
                                             <> 
                                                 <button disabled={this.state.isRegistring ? "disabled": ""} className="btn btn-lg btn-primary border-0" onClick={(e)=> this.handleRegister() }>
-                                                    {this.state.isRegistring ? <> <Spinner size="sm" /> Waiting For Transaction</>: <>Register</>} 
+                                                    {this.state.isRegistring ? <> <Spinner variant="light" size="sm" /> Waiting For Transaction</>: <>Register</>} 
                                                 </button>
                                             </>
                                             
@@ -383,23 +384,36 @@ https://app.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()}
             }
 
             {this.state.processed ? 
-                <div className="d-flex flex-column justify-content-center align-items-center gap-3 p-3">
-                    <h2><Check /> Successfully Registered</h2>
-
-                    <div className="d-flex flex-column justify-content-center align-items-center  gap-4">
-                        <img className="rounded-2" width={250} src={import.meta.env.VITE_APP_METADATA_API + "/temp-image/"+ this.props.name} alt={this.props.name} />
-                        <p className="fs-5 fw-bold mb-0 text-center">
-                            Your are the owner of <span>{obscureName( this.props.name , 20)}.mon</span>
-                        </p>
-                        <Link to={import.meta.env.VITE_APP_TOKEN_URL +"/"+ getTokenId(this.props.name)} target='_blank' className='link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover'>
-                                <BoxArrowUpRight />
-                                <span className='ms-2'>View on Explorer</span>
+                <div className="d-flex flex-column flex-fill align-items-center gap-4 p-4">
+                    <h2 className="text-center"><Check /> Successfully Registered</h2>       
+                    <LazyLoadImage 
+                        src={`${import.meta.env.VITE_APP_METADATA_API }/temp-image/${this.props.name}`}
+                        alt={this.props.name}
+                        className="rounded-1"
+                    /> 
+                    <Link target="_blank" to={`https://x.com/intent/post?text=${this.getText()}`} className="btn btn-lg btn-dark border rounded-2"> 
+                        Share on <TwitterX />
+                    </Link>  
+                    <p className="fs-5 fw-bold mb-0 text-center">
+                        Your are the owner of <span>{obscureName( this.props.name , 20)}.mon</span>
+                    </p> 
+                    <div className="d-flex flex-column flex-lg-row justify-content-between align-items-center gap-4">
+                        <Link to={`${import.meta.env.VITE_APP_TOKEN_URL}/${getTokenId(this.props.name)}`} target='_blank' className='link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover'>
+                            <BoxArrowUpRight />
+                            <span className='ms-2'>View on Explorer</span>
                         </Link>
-                        <Link target="_blank" to={"https://x.com/intent/post?text="+ this.getText()} className="btn btn-lg btn-dark border rounded-2"> Share on <TwitterX /></Link>
-                        <div className="d-flex flex-row gap-3">
-                            <NavLink to={"/"} className="btn btn-lg btn-primary border rounded-2">Mint Another</NavLink>
-                            <NavLink to={"/"+ this.props.name +".mon"} className="btn btn-lg btn-primary border rounded-2">Manage Domain</NavLink>
-                        </div>
+                        <Link to={`${import.meta.env.VITE_APP_MARKET_URL}/${getTokenId(this.props.name)}`} target='_blank' className='link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover'>
+                            <BoxArrowUpRight />
+                            <span className='ms-2'>View on Marketplace</span>
+                        </Link>
+                    </div> 
+                    <div className="d-flex flex-column flex-lg-row justify-content-between gap-3">
+                        <NavLink to={"/"} className="btn btn-lg btn-primary border rounded-2">
+                            Mint Another
+                        </NavLink>
+                        <NavLink to={`${this.props.name}.mon`} className="btn btn-lg btn-primary border rounded-2">
+                            Manage Domain
+                        </NavLink>
                     </div>
                 </div>
                 : 

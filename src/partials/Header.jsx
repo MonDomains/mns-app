@@ -44,10 +44,10 @@ function Header({showSearch}) {
                             { isConnected ? 
                             <ul className="list-unstyled mb-3 mb-lg-0 gap-3 list-unstyled">
                                 <li>
-                                    <Link className="text-decoration-none fs-5 link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" to="/account">
+                                    <a className="text-decoration-none fs-5 link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="/account">
                                         <Icon.ListUl className="me-2" /> 
                                         My Domains
-                                    </Link>
+                                    </a>
                                 </li> 
                             </ul>
                             : <></>}

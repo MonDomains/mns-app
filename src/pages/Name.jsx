@@ -1,25 +1,18 @@
-import searchIcon from '../assets/images/search-icon.svg'; 
-import { Link, NavLink, useNavigate,  useParams } from "react-router";
-import { getLabelHash, getNameHash, getTokenId, isValidDomain, obscureName } from "../helpers/String"; 
-import { useAccount, useChainId, useReadContract } from 'wagmi'
-import RegisterName from "../components/RegisterName";
-import ConnectWalletButton from "../components/ConnectWalletButton";
-import React, { useState } from "react";  
+import { NavLink, useNavigate,  useParams } from "react-router";
+import { getTokenId, isValidDomain, obscureName } from "../helpers/String"; 
+import { useAccount, useReadContract } from 'wagmi'
+import React from "react";  
 import Domain from '../components/Domains';
-import { BoxArrowUpRight, Copy, TwitterX } from 'react-bootstrap-icons';
+import { BoxArrowUpRight, Copy } from 'react-bootstrap-icons';
 import monRegisterControllerABI from '../abi/MONRegisterController.json'
-import { monadTestnet } from 'viem/chains';
-import moment from 'moment';
-import { getAccount, getChainId } from '@wagmi/core';
 import { toast } from 'react-toastify';
-import { rainbowConfig } from '../config';
+import { chainId, registrarController } from '../config';
 
 
 const Name = () => { 
  
     const {name} = useParams(); 
-    const { address: owner, isConnected, isDisconnected }  = useAccount();
-    const chainId = useChainId();
+    const { address: owner }  = useAccount();
     const navigate = useNavigate();
       
     function handleCopyClick(e) {
@@ -28,7 +21,7 @@ const Name = () => {
     }
  
     const monRegisterControllerConfig = {
-        address: import.meta.env.VITE_APP_REGISTER_CONTROLLER,
+        address: registrarController,
         abi: monRegisterControllerABI
     };
 
@@ -36,11 +29,9 @@ const Name = () => {
         ...monRegisterControllerConfig,
         functionName: 'available',
         args: [name],
-        chainId: getChainId(rainbowConfig)
+        chainId: chainId
     });
-
-    
-    if(available) navigate("/register/"+ name + ".mon"); 
+  
     if(error) toast.error("An error occured.");
   
     return (
@@ -60,16 +51,9 @@ const Name = () => {
                                     <span> {obscureName(name, 18)}.mon </span> <button className='btn btn-sm btn-transparent' onClick={(e) => handleCopyClick(e)}><Copy /></button>
                                 </h2>
                             </div>
-                            <div className='d-flex flex-row justify-content-between align-items-center gap-2'>
-                                
+                            <div className='d-flex flex-row justify-content-end align-items-center gap-3'>
+                                {available ? <span className='badge text-bg-success'>Available</span>: <></>}
                                 {available ?  <NavLink to={"/register/"+ name +".mon"} className={"btn btn-lg  btn-primary rounded-2 border-0"} >Register Now</NavLink>: <></> }
-                                {!available ? 
-                                    <a href={import.meta.env.VITE_APP_TOKEN_URL +"/"+ getTokenId(name)} target='_blank' className='link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover'>
-                                        <BoxArrowUpRight />
-                                        <span className='ms-2'>View on Explorer</span>
-                                    </a>
-                                    : <></>
-                                }
                             </div>
                         </div> 
                         <ul className='list-unstyled list-inline text-muted fs-4 d-flex flex-row gap-3 fw-bold'>

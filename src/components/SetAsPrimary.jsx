@@ -5,8 +5,8 @@ import { Modal } from "react-bootstrap";
 import { obscureAddress, obscureName } from "../helpers/String";
 import reverRegistrarABI from '../abi/ReverseRegistrar.json'
 import { toast } from 'react-toastify';
-import { getChainId, writeContract } from '@wagmi/core'
-import { rainbowConfig } from '../config';
+import { writeContract } from '@wagmi/core'
+import { chainId, rainbowConfig } from '../config';
 import { waitForTransactionReceipt } from '@wagmi/core'
 import { Check, Check2Circle } from 'react-bootstrap-icons';
 
@@ -46,7 +46,7 @@ class SetAsPrimary extends Component {
                 functionName: "setName",
                 args: [this.props.domain.name],
                 account: this.props.owner,
-                chainId: getChainId(rainbowConfig)
+                chainId: chainId
             });
 
             toast.success("Your transaction has been sent.");
@@ -125,7 +125,7 @@ class SetAsPrimary extends Component {
                 <Modal.Footer>
                     <button className="btn btn-default" onClick={() => this.handleClose() }>Cancel</button>
                     <button className="btn btn-lg btn-primary border-0" onClick={()=> this.handleSetAsPrimary()}>
-                        {this.state.pending ? <><img width={25} src={spinner} /> Waiting Transaction</>: <>Confirm</>} 
+                        {this.state.pending ? <><Spinner variant="light" size="sm" /> Waiting Transaction</>: <>Confirm</>} 
                     </button> 
                 </Modal.Footer>
             </Modal>

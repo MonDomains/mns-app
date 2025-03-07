@@ -1,15 +1,15 @@
 import { useAccount } from 'wagmi';
 import { getNameHash, obscureAddress, obscureName } from "../helpers/String";
 import { ChevronDown } from 'react-bootstrap-icons';
-import { getChainId, readContract } from '@wagmi/core'
+import { readContract } from '@wagmi/core'
 import { useState } from 'react';
-import { chains, rainbowConfig } from "../config";
+import { chainId, chains, rainbowConfig } from "../config";
 import { useAccountModal, useConnectModal, useChainModal } from '@rainbow-me/rainbowkit';
 import { ExclamationCircle } from "react-bootstrap-icons";
 
 export default function ConnectWalletButton({props}) {
   const { openConnectModal } = useConnectModal()
-  const { address, isConnected, chainId  } = useAccount() 
+  const { address, isConnected, chainId: cid  } = useAccount() 
   const { openAccountModal } = useAccountModal()
   const { openChainModal } = useChainModal() 
   const [name, setName] = useState(null);
@@ -32,7 +32,7 @@ export default function ConnectWalletButton({props}) {
         functionName: 'name',
         address: import.meta.env.VITE_APP_PUBLIC_RESOLVER,
         args: [getNameHash( addr.slice(2) +".addr.reverse")],
-        chainId: getChainId(rainbowConfig)
+        chainId: chainId
     });
 
     if(result) setName(result);
@@ -43,7 +43,7 @@ export default function ConnectWalletButton({props}) {
   
     reverseLookkup(address); 
 
-    return (<>  { !chains.map(t=> t.id).includes(chainId) ?
+    return (<>  { !chains.map(t=> t.id).includes(cid) ?
           <button {...props} className="btn btn-danger fs-5 border-0" onClick={() => openChainModal()}> Wrong Network <ExclamationCircle /> </button>
         : 
         <button {...props} className="btn fw-bold fs-5 border-0" onClick={openAccountModal}>

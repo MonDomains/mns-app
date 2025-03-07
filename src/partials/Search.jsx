@@ -12,8 +12,7 @@ import DomainPrice from '../components/DomainPrice';
 import { Link, useNavigate } from 'react-router'; 
 import { Spinner } from 'react-bootstrap';
 import {  ArrowRight, ArrowRightShort, XCircle } from 'react-bootstrap-icons';
-import { getChainId } from '@wagmi/core';
-import { rainbowConfig } from '../config';
+import { chainId, rainbowConfig, registrarController } from '../config';
 
 function Search({size}) {
      
@@ -54,7 +53,7 @@ function Search({size}) {
     } 
 
     const monRegisterControllerConfig = {
-        address: import.meta.env.VITE_APP_REGISTER_CONTROLLER,
+        address: registrarController,
         abi: monRegisterControllerABI
     };
 
@@ -62,7 +61,7 @@ function Search({size}) {
         ...monRegisterControllerConfig,
         functionName: 'available',
         args: [name],
-        chainId: getChainId(rainbowConfig)
+        chainId: chainId
     });
  
     if(error) toast.error("An error occured.");

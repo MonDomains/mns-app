@@ -3,13 +3,13 @@ import loadericon from '../assets/images/loader-icon.svg';
 import { useReadContract } from 'wagmi'
 import { toast } from 'react-toastify'; 
 import { fromWei } from '../helpers/String';
-import { getChainId } from '@wagmi/core';
-import { rainbowConfig } from '../config';
+import { chainId, rainbowConfig, registrarController } from '../config';
+import { Spinner } from 'react-bootstrap';
 
 function DomainPrice({available, name, duration}) { 
  
     const monRegisterControllerConfig = {
-        address: import.meta.env.VITE_APP_REGISTER_CONTROLLER,
+        address: registrarController,
         abi: monRegisterControllerABI
     };
 
@@ -17,14 +17,16 @@ function DomainPrice({available, name, duration}) {
         ...monRegisterControllerConfig,
         functionName: 'rentPrice',
         args: [name, duration],
-        chainId: getChainId(rainbowConfig)
+        chainId: chainId
     });
   
     if(error) toast.error("An error occured.")
     if(!available) return <></>
 
     if(isPending) {
-        <span className='me-3'><img src={loadericon} alt="" /></span>
+        <span className='me-3'>
+            <Spinner variant='primary' size='sm' />
+        </span>
     } else {
         return ( 
             <> 

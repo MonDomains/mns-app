@@ -1,12 +1,12 @@
 import { formatEther, parseEther } from "ethers";
-import { rainbowConfig } from "../config";
-import { getChainId, readContract, writeContract } from '@wagmi/core'
+import { chainId, rainbowConfig, registrarController } from "../config";
+import { readContract, writeContract } from '@wagmi/core'
 import { toast } from "react-toastify";
 import React, {Component} from 'react';
 import monRegisterControllerABI from '../abi/MONRegisterController.json'
 import { waitForTransactionReceipt } from '@wagmi/core'
 import spinner from '../assets/images/spinner.svg';
-import { Modal } from "react-bootstrap";
+import { Modal, Spinner } from "react-bootstrap";
 import { getExpires, obscureName } from "../helpers/String";
 import { getBalance } from '@wagmi/core'
 import { DashCircleFill, PlusCircleFill } from "react-bootstrap-icons";
@@ -48,12 +48,12 @@ class RenewModal extends Component {
   
             const _hash = await writeContract(rainbowConfig, {
                 abi: monRegisterControllerABI,
-                address: import.meta.env.VITE_APP_REGISTER_CONTROLLER,
+                address: registrarController,
                 functionName: "renew",
                 args: [ this.props.domain.labelName, this.getDuration() ],
                 account: this.props.owner,
                 value: this.state.price,
-                chainId: getChainId(rainbowConfig)
+                chainId: chainId
             });
 
             toast.success("Your transaction has been sent.");
@@ -95,11 +95,11 @@ class RenewModal extends Component {
            
             _price = await readContract(rainbowConfig, {
                 abi: monRegisterControllerABI,
-                address: import.meta.env.VITE_APP_REGISTER_CONTROLLER,
+                address: registrarController,
                 functionName: 'rentPrice',
                 args: [this.props.domain.labelName, this.getDuration()],
                 account: this.props.owner,
-                chainId: getChainId(rainbowConfig)
+                chainId: chainId
             });
             
             this.setState({ isFetchingPrice: false, isFetchedPrice: true, price: _price.base });
@@ -118,7 +118,7 @@ class RenewModal extends Component {
 
             const balance = await getBalance(rainbowConfig, {
                 address: this.props.owner, 
-                chainId: getChainId(rainbowConfig)
+                chainId: chainId
             });
 
             this.setState({ isGettingBalance : false, balance: balance.value });
@@ -191,7 +191,7 @@ class RenewModal extends Component {
                     <button className="btn btn-default" onClick={() => this.handleClose() }>Cancel</button>
                     { this.isFetchingPrice || this.state.isGettingBalance ? 
                             <button className="btn btn-lg btn-primary  border-0">
-                                <img width={25} src={spinner} /> Checking...
+                                <Spinner variant="light" size="sm" /> Checking...
                             </button>
                             : 
                             <>
@@ -201,7 +201,7 @@ class RenewModal extends Component {
                                     </button>
                                     :
                                     <button className="btn btn-lg btn-primary border-0" onClick={()=> this.handleRenew()}>
-                                        {this.state.isRenewing ? <><img width={25} src={spinner} /> Waiting Transaction</>: <>Extend</>} 
+                                        {this.state.isRenewing ? <><Spinner variant="light" size="sm" /> Waiting Transaction</>: <>Extend</>} 
                                     </button>
                                 }
                             </>
