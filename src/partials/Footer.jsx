@@ -11,10 +11,10 @@ function Footer() {
 
     return ( 
         <>
-            <div className="container-fluid d-flex flex-column flex-md-row w-100 justify-content-between align-items-center gap-3 ms-2">
+            <div className="container-fluid d-flex flex-column flex-md-row w-100 justify-content-between align-items-center gap-3">
                 <ul className="d-flex flex-row gap-3 list-unstyled">
-                    <li><Link className="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" to="/terms">Terms</Link></li>
-                    <li><Link className="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" to="/privacy">Privacy</Link></li>
+                    <li><Link className="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" target='_blank' to="https://monadns.com/terms">Terms</Link></li>
+                    <li><Link className="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" target='_blank' to="https://monadns.com/privacy">Privacy</Link></li>
                 </ul>
                 <ul className='d-flex flex-row gap-3 list-unstyled'>
                     <li>
@@ -35,7 +35,7 @@ function Footer() {
                 </ul>
             </div>
             <div className="d-flex flex-column align-items-center">
-                <p className='text-center text-muted'>Copyright © 2025 Mon Name Service</p>
+                <p className='text-center text-muted'>Copyright © 2025 <a href="https://monadns.com" className='link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover'>Mon Name Service</a></p>
             </div>
         </>
      );

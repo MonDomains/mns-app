@@ -13,6 +13,7 @@ import SetAsPrimary from "./SetAsPrimary";
 import { BoxArrowUpRight, Copy, TwitterX } from "react-bootstrap-icons";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { Spinner } from "react-bootstrap";
+import TransferOwnership from "./TransferOwnership";
 
 class Domain extends Component {
       
@@ -106,22 +107,20 @@ class Domain extends Component {
 
     getText() {
         return encodeURIComponent(
-`I've minted ${obscureName(name, 25)}.mon 😎 
+`I've minted ${obscureName(this.props.name, 25)}.mon 😎 
 
-Powered by @monadns, built on @monad_xyz. 
+Powered by @MonDomains, built on @monad_xyz. 
 
 Mint yours 👇
 
-https://app.monadns.com/${name}.mon?v=${this.getUnixTime()} 
+https://dapp.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()} 
  
 `);
         }
  
-    render() {  
-        
+    render() {   
         return (
-            <>  
-
+            <>   
             {this.state.isDomainFetching == true && this.state.domain == null ?
                 <div className="d-flex flex-column justify-content-between align-items-center mh-100">
                     <Spinner size="lg" variant="primary" />
@@ -135,6 +134,7 @@ https://app.monadns.com/${name}.mon?v=${this.getUnixTime()}
                             <LazyLoadImage 
                                 src={`${import.meta.env.VITE_APP_METADATA_API }/temp-image/${this.props.name}`}
                                 alt={this.props.name}
+                                placeholder={<Spinner />}
                                 className="rounded-1"
                             /> 
                         </div>
@@ -150,7 +150,14 @@ https://app.monadns.com/${name}.mon?v=${this.getUnixTime()}
                     </div>
                     <div className="d-flex flex-column flex-fill mt-3">
                         <ul className="list-unstyled d-flex flex-column gap-4"> 
-                            <li className="d-flex flex-column flex-lg-row justify-content-between gap-2">
+                            <li className="d-flex flex-column justify-content-between gap-2">
+                                <strong>TokenID: </strong> 
+                                <span role="button" onClick={(e)=> this.handleCopyClick(e, getTokenId(this.props.name))} className="badge bg-secondary-subtle text-secondary text-start p-2 overflow-x-scroll">
+                                    {getTokenId(this.props.name)}
+                                    <button className="btn bnt-default" ><Copy /></button> 
+                                </span> 
+                            </li>
+                            <li className="d-flex flex-column justify-content-between gap-2">
                                 <strong>Owner: </strong> 
                                 <span role="button" onClick={(e)=> this.handleCopyClick(e, this.state.domain?.owner?.id?.toString())} className="badge bg-secondary-subtle text-secondary text-start p-2 overflow-x-scroll">
                                     <img src={MonadIcon} width={24} className="me-2" />
@@ -158,7 +165,7 @@ https://app.monadns.com/${name}.mon?v=${this.getUnixTime()}
                                     <button className="btn bnt-default" ><Copy /></button> 
                                 </span> 
                             </li>
-                            <li className="d-flex flex-column flex-lg-row justify-content-between gap-2">
+                            <li className="d-flex flex-column justify-content-between gap-2">
                                 <strong>Registrant: </strong> 
                                 <span role="button" onClick={(e)=> this.handleCopyClick(e, this.state.domain?.owner?.id?.toString())} className="badge bg-secondary-subtle text-secondary text-start p-2 overflow-x-scroll">
                                     <img src={MonadIcon} width={24} className="me-2" /> 
@@ -181,6 +188,7 @@ https://app.monadns.com/${name}.mon?v=${this.getUnixTime()}
                             <li className="d-flex flex-column flex-md-row justify-content-end gap-3">
                                 { this.state.domain?.owner?.id?.toString().toLowerCase() === this.props.owner?.toString().toLowerCase() ? 
                                     <>
+                                        <TransferOwnership domain={this.state.domain} owner={this.props.owner} key={"transfer_ownership"+ this.state.domain.id} /> 
                                         <SetAsPrimary domain={this.state.domain} owner={this.props.owner} key={"set_as_primary_"+ this.state.domain.id} /> 
                                         <RenewModal domain={this.state.domain} owner={this.props.owner} key={"renew_"+this.state.domain.id} /> 
                                     </>
@@ -201,6 +209,7 @@ https://app.monadns.com/${name}.mon?v=${this.getUnixTime()}
                             <LazyLoadImage 
                                 src={`${import.meta.env.VITE_APP_METADATA_API }/temp-image/${this.props.name}`}
                                 alt={this.props.name}
+                                placeholder={<Spinner />}
                                 className="rounded-1"
                             /> 
                         </div>
@@ -210,11 +219,11 @@ https://app.monadns.com/${name}.mon?v=${this.getUnixTime()}
                     </div>
                     <div className="d-flex flex-column flex-fill">
                         <ul className="list-unstyled d-flex flex-column gap-3">
-                            <li className="d-flex flex-row justify-content-between">
+                            <li className="d-flex flex-column justify-content-between gap-2">
                                 <strong>Owner: </strong> 
                                 <span className="badge bg-secondary-subtle text-secondary text-start p-2"><img src={MonadIcon} width={24} className="me-1" />N/A</span>
                             </li>
-                            <li className="d-flex flex-row justify-content-between">
+                            <li className="d-flex flex-column justify-content-between gap-2">
                                 <strong>Registrant: </strong> 
                                 <span className="badge bg-secondary-subtle text-secondary text-start p-2"><img src={MonadIcon} width={24} className="me-1" /> N/A</span>
                             </li>

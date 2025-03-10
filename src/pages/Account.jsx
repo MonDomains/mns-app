@@ -5,7 +5,7 @@ import { useQuery } from "@apollo/client";
 import { getExpires, getTimeAgo, getTokenId, obscureName } from "../helpers/String";
 import moment from "moment";
 import ConnectWalletButton from "../components/ConnectWalletButton";
-import { Alert } from "react-bootstrap";
+import { Alert, Spinner } from "react-bootstrap";
 import spinner from '../assets/images/spinner.svg';
 import { ArrowRightShort } from "react-bootstrap-icons";
 import { NavLink } from "react-router";
@@ -18,7 +18,7 @@ const Account = () => {
   
   if (!isConnected)
     return ( 
-        <Alert key={"warning"} variant={"warning"} className="d-flex flex-row gap-3 w-100 p-4 align-items-center justify-content-center">
+        <Alert key={"warning"} variant={"warning"} className="d-flex flex-column flex-lg-row gap-3 w-100 p-4 align-items-center justify-content-center">
           You need to connect wallet first to see your domains. <ConnectWalletButton></ConnectWalletButton>
         </Alert> 
       )
@@ -26,7 +26,7 @@ const Account = () => {
   if (error) return <div className="container alert alert-danger"> {error.message} </div>
   return (
     <>   
-      <div className="d-flex flex-column gap-3">
+      <div className="d-flex flex-column gap-3 p-0">
           <h2>My Domains</h2>
           <div className="d-flex flex-column bg-body-tertiary border border-light-subtle rounded-2 p-2 gap-4 fs-5">
             { loading ? <span>Loading...</span>
@@ -43,6 +43,7 @@ const Account = () => {
                                   src={import.meta.env.VITE_APP_METADATA_API + "/temp-image/"+ domain.labelName}
                                   width={64}
                                   alt={domain.name}
+                                  placeholder={<Spinner />}
                                   className="rounded-2"
                               />
                               <div className="d-flex flex-column text-truncate">

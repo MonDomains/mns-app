@@ -1,7 +1,7 @@
 
 import React, {Component} from 'react';
 import spinner from '../assets/images/spinner.svg';
-import { Modal } from "react-bootstrap";
+import { Modal, Spinner } from "react-bootstrap";
 import { obscureAddress, obscureName } from "../helpers/String";
 import reverRegistrarABI from '../abi/ReverseRegistrar.json'
 import { toast } from 'react-toastify';

@@ -27,11 +27,13 @@ export default function ConnectWalletButton({props}) {
       }, 
     ]
   
+    const reverseNameHash = getNameHash( addr.slice(2) +".addr.reverse");
+    
     const result = await readContract(rainbowConfig, {
         abi,
         functionName: 'name',
         address: import.meta.env.VITE_APP_PUBLIC_RESOLVER,
-        args: [getNameHash( addr.slice(2) +".addr.reverse")],
+        args: [reverseNameHash],
         chainId: chainId
     });
 

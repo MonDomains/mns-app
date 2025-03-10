@@ -186,11 +186,11 @@ class RegisterName extends Component {
         return encodeURIComponent(
 `I've just minted ${obscureName(this.props.name, 20)}.mon 😎
 
-Powered by @monadns, built on @monad_xyz
+Powered by @MonDomains, built on @monad_xyz
 
 Mint yours! 👇
 
-https://app.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()} 
+https://dapp.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()} 
  
  `);
 
@@ -294,8 +294,10 @@ https://app.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()}
                     </div>
                     <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-start gap-5">
                         <div className="card rounded-2 bg-body-tertiary border-2 border-light-subtle" style={{ minWidth: 270}}>
-                            <LazyLoadImage src={import.meta.env.VITE_APP_METADATA_API + "/temp-image/"+ this.props.name}
+                            <LazyLoadImage 
+                                src={import.meta.env.VITE_APP_METADATA_API + "/temp-image/"+ this.props.name}
                                 alt={this.props.name}
+                                placeholder={<Spinner />}
                                 className="rounded-1"
                             />  
                         </div>
@@ -389,9 +391,10 @@ https://app.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()}
                     <LazyLoadImage 
                         src={`${import.meta.env.VITE_APP_METADATA_API }/temp-image/${this.props.name}`}
                         alt={this.props.name}
+                        placeholder={<Spinner />}
                         className="rounded-1"
                     /> 
-                    <Link target="_blank" to={`https://x.com/intent/post?text=${this.getText()}`} className="btn btn-lg btn-dark border rounded-2"> 
+                    <Link target="_blank" to={`https://x.com/intent/post?text=${this.getText()}`} className="btn btn-lg bg-black text-white border rounded-2"> 
                         Share on <TwitterX />
                     </Link>  
                     <p className="fs-5 fw-bold mb-0 text-center">
@@ -411,7 +414,7 @@ https://app.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()}
                         <NavLink to={"/"} className="btn btn-lg btn-primary border rounded-2">
                             Mint Another
                         </NavLink>
-                        <NavLink to={`${this.props.name}.mon`} className="btn btn-lg btn-primary border rounded-2">
+                        <NavLink to={`/${this.props.name}.mon`} className="btn btn-lg btn-primary border rounded-2">
                             Manage Domain
                         </NavLink>
                     </div>

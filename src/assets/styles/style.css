@@ -34,3 +34,7 @@ input[type="checkbox"] {
 body {
     font-family: "Satoshi Variable", serif !important;
 } 
+
+.logo {
+    font-weight: 900!important
+}
