@@ -1,6 +1,5 @@
 import { ethers } from 'ethers'; 
 import moment from 'moment';
-import namehash from "@ensdomains/eth-ens-namehash";
 import {validate} from "@ensdomains/ens-validation"           
 import json5 from "json5";
 
@@ -10,7 +9,7 @@ const PREMIUM_PERIOD =  Number(import.meta.env.VITE_APP_PREMIUM_PERIOD);
 export const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 
 export const obscureAddress = (address) => {
-    return address.substring(0, 6) + '...' + address.substring(address.length - 4, address.length);
+    return address.substring(0, 4) + '...' + address.substring(address.length - 4, address.length);
 }
  
 export const obscureEnsName = (name) => {
@@ -52,7 +51,7 @@ export const getLabelHash = (label) => {
 }
 
 export const getNameHash = (name) => { 
-    return namehash.hash(name);
+    return ethers.namehash(name);
 }
   
 export const isAscii = (label) => { 
@@ -114,7 +113,7 @@ export function getDateSimple(timestamp) {
 }
 
 export function normalizeName (name) {
-    return namehash.normalize(name);
+    return ethers.ensNormalize(name);
 }
   
 export function isValidDomain(name) {
@@ -127,7 +126,7 @@ export function isValidDomain(name) {
 
 export function isValidName(name) {
     try {
-      return validate(name) === true && name === namehash.normalize(name);
+      return validate(name) === true && name === ethers.ensNormalize(name);
     } catch {
       return false;
     }

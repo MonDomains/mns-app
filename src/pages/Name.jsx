@@ -1,81 +1,72 @@
-import searchIcon from '../assets/images/search-icon.svg'; 
-import { useNavigate,  useParams } from "react-router-dom";
-import { isValidDomain, obscureName } from "../helpers/String"; 
-import { useAccount, useChainId } from 'wagmi'
-import Register from "../components/Register";
-import ConnectWalletButton from "../components/ConnectWalletButton";
-import React, { useState } from "react";  
+import { NavLink, useNavigate,  useParams } from "react-router";
+import { getTokenId, isValidDomain, obscureName } from "../helpers/String"; 
+import { useAccount, useReadContract } from 'wagmi'
+import React from "react";  
 import Domain from '../components/Domains';
- 
+import { BoxArrowUpRight, Copy } from 'react-bootstrap-icons';
+import monRegisterControllerABI from '../abi/MONRegisterController.json'
+import { toast } from 'react-toastify';
+import { chainId, registrarController } from '../config';
+
+
 const Name = () => { 
  
-    const SUPPORTED_CHAIN_ID = Number(import.meta.env.VITE_APP_SUPPORTED_CHAIN_ID);
-
     const {name} = useParams(); 
-    const { address: registrar, isConnected }  = useAccount();
-    const chainId = useChainId()
-     
+    const { address: owner }  = useAccount();
+    const navigate = useNavigate();
+      
+    function handleCopyClick(e) {
+        navigator.clipboard.writeText(name +".mon");
+        toast.success("Copied");
+    }
+ 
+    const monRegisterControllerConfig = {
+        address: registrarController,
+        abi: monRegisterControllerABI
+    };
+
+    const { data: available, error, isPending } = useReadContract({
+        ...monRegisterControllerConfig,
+        functionName: 'available',
+        args: [name],
+        chainId: chainId
+    });
+  
+    if(error) toast.error("An error occured.");
+  
     return (
-        <>  
-            <div className="centercontent">
-                <Search name={name}  /> 
-                
-                {!isValidDomain(name) ?  <IsInvalid name={name} /> 
-                    : 
-                    <> 
-                        <Domain name={name} />
-                        { !isConnected || SUPPORTED_CHAIN_ID !== chainId ?  
-                            <ConnectWalletButton /> 
-                            : 
-                            <>
-                            <Register name={name} duration={3156600} owner={registrar} /> 
-                            </>
-                        }
-                    </> 
-                } 
-            </div>
+        <>    
+            {!isValidDomain(name) ?  
+                <>  
+                    <div className="alert alert-danger text-center container mt-3">
+                        <b>{obscureName(name, 30)}</b> is invalid!
+                    </div> 
+                </>
+                : 
+                <> 
+                    <div className='d-flex flex-column gap-3'>
+                        <div className='d-flex flex-column flex-md-row justify-content-between gap-3'>
+                            <div className='d-flex flex-column flex-lg-row align-items-start gap-3 '>
+                                <h2 className='p-0 m-0 text-truncate'>
+                                    <span> {obscureName(name, 18)}.mon </span> <button className='btn btn-sm btn-transparent' onClick={(e) => handleCopyClick(e)}><Copy /></button>
+                                </h2>
+                            </div>
+                            <div className='d-flex flex-row justify-content-end align-items-center gap-3'>
+                                {available ? <span className='badge text-bg-success'>Available</span>: <></>}
+                                {available ?  <NavLink to={"/register/"+ name +".mon"} className={"btn btn-lg  btn-primary rounded-2 border-0"} >Register Now</NavLink>: <></> }
+                            </div>
+                        </div> 
+                        <ul className='list-unstyled list-inline text-muted fs-4 d-flex flex-row gap-3 fw-bold'>
+                            <li> <NavLink className='text-decoration-none link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover' to={"/"+ name +".mon"}>Profile</NavLink> </li>
+                        </ul> 
+                    </div>
+                    <div className="d-flex flex-column bg-body-tertiary border border-light-subtle rounded-4 p-3 gap-4">
+                        <Domain name={name} owner={owner} />
+                    </div>
+                </> 
+            }
         </>
     ) 
 };
-
-
-function Search({name}) {
-  
-    const [_name, setName] = useState(name);
-    const navigate = useNavigate();
-    
-    function handleOnChange(e) {
-        setName(e.target.value);
-    }
-
-    function handleSubmit(e) {
-        e.preventDefault();
-        navigate("/name/"+ _name+ ".mon")
-        return false;
-    }
-
-    return (
-        <div className="container">
-            <div className="search-content  "> 
-                <form onSubmit={(e) => handleSubmit(e)}>
-                    <img src={searchIcon} alt="" />
-                    <input type="text" onChange={handleOnChange} value={_name} placeholder="Search your .mon domain" />
-                    <span className='chainText'>.mon</span>
-                    <button >SEARCH</button>
-                </form>
-            </div>
-        </div>
-    )
-}
-
-function IsInvalid({name}) {
-    return (
-        <>  
-            <h3 className="alert alert-danger text-center container mt-3">
-                <b>{obscureName(name, 50)}</b> is invalid!
-            </h3> 
-        </>
-    ) 
-}
  
 export default Name;

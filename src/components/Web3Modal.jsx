@@ -1,19 +1,20 @@
 import { WagmiProvider } from 'wagmi'
-import { wagmiAdapter, chains, projectId } from "../config";
+import { chains, rainbowConfig } from "../config";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { createAppKit } from '@reown/appkit/react' 
+import { RainbowKitProvider, darkTheme, lightTheme } from '@rainbow-me/rainbowkit';
+import { useState } from 'react';
 
-const queryClient = new QueryClient() 
-createAppKit({
-  adapters: [wagmiAdapter],
-  networks: chains,
-  projectId: projectId
-})
- 
+const queryClient = new QueryClient();
+
 export function Web3Modal({ children }) {
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "dark");
   return (
-    <WagmiProvider config={wagmiAdapter.wagmiConfig}>
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    <WagmiProvider config={rainbowConfig}>
+      <QueryClientProvider client={queryClient}>
+        <RainbowKitProvider theme={theme == "dark" ? darkTheme() : lightTheme()}>
+          {children}
+        </RainbowKitProvider>
+      </QueryClientProvider>
     </WagmiProvider>
   )
 }

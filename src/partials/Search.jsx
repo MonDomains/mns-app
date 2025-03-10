@@ -9,17 +9,20 @@ import { toast } from 'react-toastify';
 
 import { isValidDomain, obscureName, getOneYearDuration } from "../helpers/String";
 import DomainPrice from '../components/DomainPrice';
-import { Link, useNavigate } from 'react-router-dom'; 
+import { Link, useNavigate } from 'react-router'; 
 import { Spinner } from 'react-bootstrap';
+import {  ArrowRight, ArrowRightShort, XCircle } from 'react-bootstrap-icons';
+import { chainId, rainbowConfig, registrarController } from '../config';
 
-function Search() {
+function Search({size}) {
      
     const navigate = useNavigate();
     const yearInSeconds = getOneYearDuration(); 
     const inputRef = useRef("")
     const [name, setName] = useState(""); 
     const [valid, setValid] = useState(false); 
- 
+    const [focused, setFocused] = useState(false); 
+
     const delay = async (ms) => {
         return new Promise((resolve) => setTimeout(resolve, ms));
     };
@@ -29,18 +32,19 @@ function Search() {
         handleSearch(e);
     }
 
-    function handleSearch(e) {
-         
+    async function handleCloseResult (e) {
+        setName("")
+        inputRef.current.value = "";
+    }
 
-        e.preventDefault();
-
-        let label = inputRef.current.value.toLowerCase();
-         
+    function handleSearch(e) { 
+        e.preventDefault(); 
+        let label = inputRef.current.value.toLowerCase();         
         if(isValidDomain(label)) {
             setValid(true);
             setName(label);
             if (e.key === 'Enter' || e.keyCode === 13 ) {
-                navigate("/name/"+ label +".mon")
+                navigate("/"+ label +".mon")
             }
         } else {
             setValid(false);
@@ -49,7 +53,7 @@ function Search() {
     } 
 
     const monRegisterControllerConfig = {
-        address: import.meta.env.VITE_APP_MONREGISTERCONTROLLER,
+        address: registrarController,
         abi: monRegisterControllerABI
     };
 
@@ -57,59 +61,67 @@ function Search() {
         ...monRegisterControllerConfig,
         functionName: 'available',
         args: [name],
-        chainId: import.meta.env.VITE_APP_NODE_ENV === "production" ? monadTestnet.id: monadTestnet.id
+        chainId: chainId
     });
  
-    if(error) toast.error(error.message)
+    if(error) toast.error("An error occured.");
      
     return ( 
-        <div className="search-content container pe-0 ps-0 mb-3"> 
-            <form onSubmit={(e)=> handleSubmit(e) }>
-                <img src={searchIcon} alt="" />
-                <input type="text" ref={inputRef} placeholder="Search your domain name"  onKeyUp={(e)=> handleOnKeyUp(e) } />
-                <span className='chainText'>.mon</span>
-                <button onClick={(e)=> handleSearch(e) }>{isPending ? <><img src={loadericon} /></> : "SEARCH" }</button>
-            </form>
-            { name != "" & !valid ?
-                <>
-               
-                <div className="search-result-content">
-                    <ul>
-                        <li className="copy-container">
-                            <span className='alert alert-danger container-fluid'>{obscureName(name, 50)} is invalid!</span>
-                        </li>
-                    </ul>
+        
+        <div className="col-12 col-lg-6 fs-5"> 
+            <form className={focused ? "bg-light-subtle border border-2 border-primary rounded-4 position-relative": "bg-light-subtle border border-2 rounded-4 position-relative"} onSubmit={(e)=> handleSearch(e) }>
+                <div className="input-group flex-nowrap align-items-center pe-2">
+                    <span className="input-group-prepend">
+                        <div className="input-group-text bg-light-subtle border-0"><img width={size=="sm"? 12 : 24} src={searchIcon} alt="" /></div>
+                    </span>
+                    <input type="text" ref={inputRef} placeholder="Search for a name"  onKeyUp={(e)=> handleOnKeyUp(e) } onBlur={(e)=> setFocused(false)} onFocus={(e)=> setFocused(true)} className={size == "sm"? "bg-light-subtle shadow-none form-control fs-6 border-0 ps-0 pe-0": "bg-light-subtle shadow-none form-control form-control-lg fs-3 border-0 ps-0 pe-0"} />
+                    { name != "" ? <> <XCircle size={24} role="button" className='p-1' onClick={(e)=> handleCloseResult(e)}  />  </> : "" }
                 </div>
-                 
+                { name == "" & focused ?
+                <> 
+                    <div className="d-flex flex-row border rounded-4 align-items-center p-3 mt-2 bg-light-subtle position-absolute w-100">
+                         <span className='text-secondary'>Type a name to search</span>
+                    </div>
                 </>
                 : <></>
-            }
-            {name != "" && valid ? 
-                <> 
-                <Link to={"/name/"+ name +".mon"} className="search-result-content text-decoration-none">
-                    <div >
-                        <ul>
-                            <li className="copy-container">
-                                <span className="domainName ">
-                                    {obscureName(name, 20)}.mon 
-                                </span>
-                                <div className='pricing'>
-                                    <DomainPrice available={available} name={name} duration={yearInSeconds} />
-                                </div>
-                                <div className='resultbutton d-flex justify-content-end'> 
-                                    {!isPending ? <>
-                                        <button  className={available ? "green": "red"}>{ available ? "Available": "Not Available"}</button>
+                } 
+                { name != "" & !valid ?
+                    <> 
+                        <div className="d-flex flex-row border rounded-4 align-items-center p-3 mt-2 bg-light-subtle position-absolute w-100">
+                            <span className='text-danger'>{obscureName(name, 50)} is invalid!</span>
+                        </div> 
+                    </>
+                    : <></>
+                }
+                {name != "" && valid ? 
+                    <> 
+                    <Link to={ available ? "/register/"+ name +".mon": "/"+ name +".mon"} className="link-body-emphasis link-offset-2 link-underline-opacity-25 text-decoration-none">
+                        <ul className='list-unstyled d-flex flex-row border rounded-4 align-items-center p-3 mt-2 justify-content-between bg-light-subtle position-absolute w-100'>
+                            <li className='text-truncate'>
+                                {obscureName(name, 15)}.mon 
+                            </li> 
+                            <li> 
+                                {
+                                    !isPending ? 
+                                    <>
+                                        <small className={available ? "bg-success-subtle p-1 border rounded-2 fw-bold text-success-emphasis": "bg-danger-subtle p-1 border rounded-2 fw-bold text-danger-emphasis"}>
+                                            { available ? "Available": "Not Available"}
+                                        </small>
+                                        <ArrowRightShort className='ms-1'/>
                                     </> : 
-                                        <Spinner />
-                                    } 
-                                </div>
+                                    <>
+                                        <Spinner variant="primary" size='sm' />
+                                    </>
+                                } 
+
                             </li>
                         </ul>
-                    </div>
-                </Link>
-                </>
-            : <></>
-            }
+                    </Link>
+                    </>
+                : <></>
+                }
+            </form>
+            
         </div>
      );
 }

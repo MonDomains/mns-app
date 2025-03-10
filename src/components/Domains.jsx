@@ -1,19 +1,19 @@
-import { ethers, formatEther, keccak256, parseEther } from "ethers";
-import { apolloClient, wagmiAdapter } from "../config";
-import { readContract, writeContract } from '@wagmi/core'
+import { apolloClient, chainId, rainbowConfig, registrarController } from "../config";
+import { readContract } from '@wagmi/core'
 import { toast } from "react-toastify";
 import React, {Component} from 'react';
 import monRegisterControllerABI from '../abi/MONRegisterController.json'
-import { waitForTransactionReceipt } from '@wagmi/core'
-import spinner from '../assets/images/spinner.svg';
 import moment from "moment";
-import { Modal } from "react-bootstrap";
-import { Link } from "react-router-dom";  
+import { Link } from "react-router";  
 import { GET_DOMAIN } from "../graphql/Domain";
-import { CountdownCircleTimer } from 'react-countdown-circle-timer'
-import { getDateSimple, getExpires, getLabelHash, getNameHash, getOneYearDuration, getTimeAgo, getTokenId, obscureLabel, obscureName } from "../helpers/String";
-import { getBalance } from '@wagmi/core'
-import { monadTestnet } from 'wagmi/chains'
+import { getDateSimple, getExpires,  getTimeAgo, getTokenId, obscureName } from "../helpers/String";
+import MonadIcon from '../assets/images/monad.svg';
+import RenewModal from "../components/RenewModal";
+import SetAsPrimary from "./SetAsPrimary";
+import { BoxArrowUpRight, Copy, TwitterX } from "react-bootstrap-icons";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import { Spinner } from "react-bootstrap";
+import TransferOwnership from "./TransferOwnership";
 
 class Domain extends Component {
       
@@ -23,36 +23,40 @@ class Domain extends Component {
       this.state = {
          available: null,
          isAvailablePending: false,
-         domain: null
+         domain: null,
+         isDomainFetching: false
       };
     }
 
+    handleCopyClick (e, text) {
+        navigator.clipboard.writeText(text);
+        toast.success("Copied");
+    }
        
     async handleAvailable() {
-        console.log("available")
-
+        
         let _available = false; 
 
         try {
 
             this.setState({ isAvailablePending: true });
 
-            _available = await readContract(wagmiAdapter.wagmiConfig, {
+            _available = await readContract(rainbowConfig, {
                 abi: monRegisterControllerABI,
-                address: import.meta.env.VITE_APP_MONREGISTERCONTROLLER,
+                address: registrarController,
                 functionName: 'available',
                 args: [this.props.name],
                 account: this.props.owner,
-                chainId: import.meta.env.VITE_APP_NODE_ENV === "production" ? monadTestnet.id: monadTestnet.id
+                chainId: chainId
             });
 
             this.setState({ isAvailablePending: false });
             this.setState({ available: _available });
 
         } catch (e) {
-
+            console.log(e.message)
             this.setState({ isAvailablePending: false });
-            toast.error(e.message);
+            toast.error("an error occurred");
 
         }
     } 
@@ -60,6 +64,7 @@ class Domain extends Component {
     async handleQuery() {
 
         try {
+            this.setState({ isDomainFetching: true })
             let name = this.props.name + ".mon";
             const result = await apolloClient.query( {
                 query: GET_DOMAIN,
@@ -67,17 +72,17 @@ class Domain extends Component {
                     name
                 }
             }); 
-            this.setState({ domain: result.data.domains[0] })
+            this.setState({ domain: result.data.domains[0], isDomainFetching: false })
         } catch(e) {
+            this.setState({ isDomainFetching: false })
             console.log(e);
+            toast.error("An error occurred.")
         }
 
     }
   
     componentDidMount () {   
-        
-        console.log("commitments:"+ this.state.commitments);
-        
+ 
         if(this.state.available === null) { 
             this.handleAvailable();
             this.handleQuery(); 
@@ -95,77 +100,150 @@ class Domain extends Component {
             this.handleQuery();
         }  
     }
+
+    getUnixTime () {
+        return moment().utc().unix();
+    }
+
+    getText() {
+        return encodeURIComponent(
+`I've minted ${obscureName(this.props.name, 25)}.mon 😎 
+
+Powered by @MonDomains, built on @monad_xyz. 
+
+Mint yours 👇
+
+https://dapp.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()} 
  
-    render() {  
-        
+`);
+        }
+ 
+    render() {   
         return (
-        <> 
-            {this.state.isAvailablePending ? 
-                <> 
-                    <div className="container mt-3">
-                        <div className="alert alert-info text-center">
-                            <h3> Searching...</h3>
-                        </div> 
-                    </div>
-                </>
-                : 
-                <div className="container mt-3"> 
-                    <div className={this.state.available ? "alert alert-success text-center": "alert alert-danger text-center" }>
-                        <h3>  
-                            <>
-                                { this.state.available ? <> <b>{obscureLabel(this.props.name, 30)}.mon</b> is available to claim 🥳 </>: <><b>{obscureLabel(this.props.name, 30)}.mon</b> is not available to claim 🙁</>}
-                            </> 
-                        </h3>
-                    </div>
-                </div>
+            <>   
+            {this.state.isDomainFetching == true && this.state.domain == null ?
+                <div className="d-flex flex-column justify-content-between align-items-center mh-100">
+                    <Spinner size="lg" variant="primary" />
+                </div> : <></>
             }
 
-            {this.state.domain ? 
-                <div className="container tableContent">
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td>Label</td>
-                                <td>{this.state.domain.labelName}</td>
-                            </tr>
-                            <tr>
-                                <td>Token ID</td>
-                                <td>{getTokenId( this.state.domain.labelName )}</td>
-                            </tr>
-                            <tr>
-                                <td>Name Hash</td>
-                                <td>{getNameHash( this.state.domain.labelName  ) }</td>
-                            </tr>
-                            <tr>
-                                <td>Label Hash</td>
-                                <td>{getLabelHash( this.state.domain.labelName )}</td>
-                            </tr>
-                            <tr>
-                                <td>Owner</td>
-                                <td>{this.state.domain?.owner?.id} {this.state.domain?.owner?.id?.toString() === this.props.owner?.id?.toString() ? <>(You)</>: <></>}</td>
-                            </tr>
-                            <tr>
-                                <td>Registrant</td>
-                                <td>{this.state.domain?.registrant?.id} {this.state.domain?.registrant?.id?.toString() === this.props.owner?.id?.toString() ? <>(You)</>: <></>}</td>
-                            </tr>
-                            <tr>
-                                <td>Expires</td>
-                                <td>{getExpires(this.state.domain.expiryDate)} - { getDateSimple(this.state.domain.expiryDate) }</td>
-                            </tr>
-                            <tr>
-                                <td>Created</td>
-                                <td>{getTimeAgo(this.state.domain.createdAt)} - { getDateSimple(this.state.domain.createdAt) } </td>
-                            </tr>
-                            <tr>
-                                <td>Registered</td>
-                                <td>{getTimeAgo(this.state.domain.registeredAt)} - { getDateSimple(this.state.domain.registeredAt) } </td>
-                            </tr>
-                        </tbody>
-                    </table>
+            {this.state.isDomainFetching == false && this.state.domain != null ?
+                <div className="d-flex flex-column flex-md-row justify-content-start align-items-md-start gap-4">
+                    <div className="d-flex flex-column gap-3">
+                        <div className="card rounded-2 bg-body-tertiary border-2 border-light-subtle" style={{ minWidth: 270}}>
+                            <LazyLoadImage 
+                                src={`${import.meta.env.VITE_APP_METADATA_API }/temp-image/${this.props.name}`}
+                                alt={this.props.name}
+                                placeholder={<Spinner />}
+                                className="rounded-1"
+                            /> 
+                        </div>
+                        <Link target="_blank" to={"https://x.com/intent/post?text="+ this.getText()} className="btn btn-lg bg-black text-white border rounded-2"> Share on <TwitterX /></Link>
+                        <a href={`${import.meta.env.VITE_APP_TOKEN_URL}/${getTokenId(this.state.domain?.labelName)}`} target='_blank' className='link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover'>
+                            <BoxArrowUpRight />
+                            <span className='ms-2'>View on Explorer</span>
+                        </a> 
+                        <a href={`${import.meta.env.VITE_APP_MARKET_URL}/${getTokenId(this.state.domain?.labelName)}`} target='_blank' className='link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover'>
+                            <BoxArrowUpRight />
+                            <span className='ms-2'>View on Marketplace</span>
+                        </a> 
+                    </div>
+                    <div className="d-flex flex-column flex-fill mt-3">
+                        <ul className="list-unstyled d-flex flex-column gap-4"> 
+                            <li className="d-flex flex-column justify-content-between gap-2">
+                                <strong>TokenID: </strong> 
+                                <span role="button" onClick={(e)=> this.handleCopyClick(e, getTokenId(this.props.name))} className="badge bg-secondary-subtle text-secondary text-start p-2 overflow-x-scroll">
+                                    {getTokenId(this.props.name)}
+                                    <button className="btn bnt-default" ><Copy /></button> 
+                                </span> 
+                            </li>
+                            <li className="d-flex flex-column justify-content-between gap-2">
+                                <strong>Owner: </strong> 
+                                <span role="button" onClick={(e)=> this.handleCopyClick(e, this.state.domain?.owner?.id?.toString())} className="badge bg-secondary-subtle text-secondary text-start p-2 overflow-x-scroll">
+                                    <img src={MonadIcon} width={24} className="me-2" />
+                                    {this.state.domain?.owner?.id} {this.state.domain?.owner?.id?.toString() === this.props.owner?.id?.toString() ? <>(You)</>: <></>} 
+                                    <button className="btn bnt-default" ><Copy /></button> 
+                                </span> 
+                            </li>
+                            <li className="d-flex flex-column justify-content-between gap-2">
+                                <strong>Registrant: </strong> 
+                                <span role="button" onClick={(e)=> this.handleCopyClick(e, this.state.domain?.owner?.id?.toString())} className="badge bg-secondary-subtle text-secondary text-start p-2 overflow-x-scroll">
+                                    <img src={MonadIcon} width={24} className="me-2" /> 
+                                    {this.state.domain?.registrant?.id} {this.state.domain?.registrant?.id?.toString() === this.props.owner?.id?.toString() ? <>(You)</>: <></>} 
+                                    <button className="btn bnt-default" ><Copy /></button> 
+                                </span>
+                            </li>
+                            <li className="d-flex flex-column flex-md-row justify-content-between gap-2">
+                                <strong>Expires: </strong>
+                                <span>{getExpires(this.state.domain.expiryDate)} - { getDateSimple(this.state.domain.expiryDate) }</span>
+                            </li>
+                            <li className="d-flex flex-column flex-md-row justify-content-between gap-2">
+                                <strong>Created: </strong>
+                                <span>{getTimeAgo(this.state.domain.createdAt)} - { getDateSimple(this.state.domain.createdAt) } </span>
+                            </li>
+                            <li className="d-flex flex-column flex-md-row justify-content-between gap-2">
+                                <strong>Registered: </strong>
+                                <span>{getTimeAgo(this.state.domain.registeredAt)} - { getDateSimple(this.state.domain.registeredAt) } </span>
+                            </li>
+                            <li className="d-flex flex-column flex-md-row justify-content-end gap-3">
+                                { this.state.domain?.owner?.id?.toString().toLowerCase() === this.props.owner?.toString().toLowerCase() ? 
+                                    <>
+                                        <TransferOwnership domain={this.state.domain} owner={this.props.owner} key={"transfer_ownership"+ this.state.domain.id} /> 
+                                        <SetAsPrimary domain={this.state.domain} owner={this.props.owner} key={"set_as_primary_"+ this.state.domain.id} /> 
+                                        <RenewModal domain={this.state.domain} owner={this.props.owner} key={"renew_"+this.state.domain.id} /> 
+                                    </>
+                                    : 
+                                    <></>
+                                }
+                            </li> 
+                        </ul>
+                    </div> 
                 </div>
-                : <> </>
-            } 
-        </>
+                : <></>
+            }  
+
+            { this.state.isDomainFetching == false && this.state.domain == null ? 
+                <div className="d-flex flex-column flex-md-row justify-content-start align-items-md-start gap-3">
+                    <div className="d-flex flex-column gap-2">
+                        <div className="card rounded-2 bg-body-tertiary border-2 border-light-subtle" style={{ minWidth: 270}}>
+                            <LazyLoadImage 
+                                src={`${import.meta.env.VITE_APP_METADATA_API }/temp-image/${this.props.name}`}
+                                alt={this.props.name}
+                                placeholder={<Spinner />}
+                                className="rounded-1"
+                            /> 
+                        </div>
+                        <Link target="_blank" to={"https://x.com/intent/post?text="+ this.getText()} className="btn btn-lg btn-dark border rounded-2">
+                            Share on <TwitterX />
+                        </Link>
+                    </div>
+                    <div className="d-flex flex-column flex-fill">
+                        <ul className="list-unstyled d-flex flex-column gap-3">
+                            <li className="d-flex flex-column justify-content-between gap-2">
+                                <strong>Owner: </strong> 
+                                <span className="badge bg-secondary-subtle text-secondary text-start p-2"><img src={MonadIcon} width={24} className="me-1" />N/A</span>
+                            </li>
+                            <li className="d-flex flex-column justify-content-between gap-2">
+                                <strong>Registrant: </strong> 
+                                <span className="badge bg-secondary-subtle text-secondary text-start p-2"><img src={MonadIcon} width={24} className="me-1" /> N/A</span>
+                            </li>
+                            <li className="d-flex flex-column flex-md-row justify-content-between gap-2">
+                                <strong>Expires: </strong>
+                                <span>N/A</span>
+                            </li>
+                            <li className="d-flex flex-column flex-md-row justify-content-between gap-2">
+                                <strong>Created: </strong>
+                                <span>N/A </span>
+                            </li>
+                            <li className="d-flex flex-column flex-md-row justify-content-between gap-2">
+                                <strong>Registered: </strong>
+                                <span>N/A</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div> : <></>
+            }
+            </>
         )  
       
     }

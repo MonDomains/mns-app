@@ -1,53 +1,23 @@
-import { http } from 'wagmi'
-import { monadTestnet } from 'wagmi/chains'
-import { injected, coinbaseWallet } from 'wagmi/connectors'
+import { http } from 'wagmi';
+import { monadTestnet } from 'wagmi/chains';
 import { ApolloClient, InMemoryCache } from "@apollo/client"; 
-import { WagmiAdapter } from '@reown/appkit-adapter-wagmi'
+import { getDefaultConfig } from '@rainbow-me/rainbowkit';
+import '@rainbow-me/rainbowkit/styles.css';
 
-export const projectId = import.meta.env.VITE_APP_PROJECT_ID
-export const NODE_PROVIDER_URL = import.meta.env.VITE_APP_NODE_PROVIDER_URL
-
-export const metadata = {
-  name: 'Monad Name Service',
-  description: ''
-}
-
+export const chainId = import.meta.env.VITE_APP_NODE_ENV === "production" ? monadTestnet.id: monadTestnet.id
+export const registrarController = import.meta.env.VITE_APP_REGISTER_CONTROLLER;
+export const projectId = import.meta.env.VITE_APP_PROJECT_ID;
+export const NODE_PROVIDER_URL = import.meta.env.VITE_APP_NODE_PROVIDER_URL;
 export const chains = [monadTestnet];
- 
-export const wagmiAdapter = new WagmiAdapter({
-  networks: chains,
+export const rainbowConfig = getDefaultConfig({
+  appName: 'Mon Name Service',
   projectId: projectId,
-  transports: { 
+  chains: chains,
+  transports: {
     [monadTestnet.id]: http(NODE_PROVIDER_URL),
   },
-  connectors: [
-    injected({ shimDisconnect: true }),
-    coinbaseWallet({
-      appName: metadata.name
-    })
-  ]
-})
-
-export const config = wagmiAdapter.wagmiConfig
-
-/* 
-export const wagmiConfig = createConfig({
-    chains: chains,
-    transports: { 
-      [mainnet.id]: http(),
-      [monadTestnet.id]: http(NODE_PROVIDER_URL),
-    },
-    connectors: [
-      walletConnect({ projectId, metadata, showQrModal: true }),
-      injected({ shimDisconnect: true }),
-      coinbaseWallet({
-        appName: metadata.name
-      })
-    ]
 });
-*/
-
 export const apolloClient = new ApolloClient({
   uri: import.meta.env.VITE_APP_GRAPHAPI_URL,
   cache: new InMemoryCache()
-})
+});
