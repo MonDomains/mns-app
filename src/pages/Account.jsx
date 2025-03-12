@@ -40,7 +40,7 @@ const Account = () => {
                           <NavLink to={"/"+ domain.name } className="text-truncate text-decoration-none link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover d-flex flex-column flex-lg-row justify-content-between align-items-start align-items-lg-center gap-3">
                             <div className="d-flex flex-row gap-2 ">
                               <LazyLoadImage 
-                                  src={import.meta.env.VITE_APP_METADATA_API + "/temp-image/"+ domain.labelName}
+                                  src={import.meta.env.VITE_APP_METADATA_API + "/preview/"+ domain.name}
                                   width={64}
                                   alt={domain.name}
                                   placeholder={<Spinner />}
