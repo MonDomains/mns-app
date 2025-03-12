@@ -132,8 +132,9 @@ https://dapp.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()}
                     <div className="d-flex flex-column gap-3">
                         <div className="card rounded-2 bg-body-tertiary border-2 border-light-subtle" style={{ minWidth: 270}}>
                             <LazyLoadImage 
-                                src={`${import.meta.env.VITE_APP_METADATA_API }/temp-image/${this.props.name}`}
+                                src={`${import.meta.env.VITE_APP_METADATA_API }/preview/${this.props.name}.mon`}
                                 alt={this.props.name}
+                                minWidth={96}
                                 placeholder={<Spinner />}
                                 className="rounded-1"
                             /> 
@@ -141,7 +142,7 @@ https://dapp.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()}
                         <Link target="_blank" to={"https://x.com/intent/post?text="+ this.getText()} className="btn btn-lg bg-black text-white border rounded-2"> Share on <TwitterX /></Link>
                         <a href={`${import.meta.env.VITE_APP_TOKEN_URL}/${getTokenId(this.state.domain?.labelName)}`} target='_blank' className='link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover'>
                             <BoxArrowUpRight />
-                            <span className='ms-2'>View on Explorer</span>
+                            <span className='ms-2'>View on Blockvision</span>
                         </a> 
                         <a href={`${import.meta.env.VITE_APP_MARKET_URL}/${getTokenId(this.state.domain?.labelName)}`} target='_blank' className='link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover'>
                             <BoxArrowUpRight />
@@ -207,9 +208,10 @@ https://dapp.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()}
                     <div className="d-flex flex-column gap-2">
                         <div className="card rounded-2 bg-body-tertiary border-2 border-light-subtle" style={{ minWidth: 270}}>
                             <LazyLoadImage 
-                                src={`${import.meta.env.VITE_APP_METADATA_API }/temp-image/${this.props.name}`}
+                                src={`${import.meta.env.VITE_APP_METADATA_API }/preview/${this.props.name}.mon`}
                                 alt={this.props.name}
                                 placeholder={<Spinner />}
+                                minWidth={96}
                                 className="rounded-1"
                             /> 
                         </div>

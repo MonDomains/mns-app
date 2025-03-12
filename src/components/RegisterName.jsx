@@ -295,8 +295,9 @@ https://dapp.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()}
                     <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-start gap-5">
                         <div className="card rounded-2 bg-body-tertiary border-2 border-light-subtle" style={{ minWidth: 270}}>
                             <LazyLoadImage 
-                                src={import.meta.env.VITE_APP_METADATA_API + "/temp-image/"+ this.props.name}
+                                src={import.meta.env.VITE_APP_METADATA_API + "/preview/"+ this.props.name + ".mon"}
                                 alt={this.props.name}
+                                minWidth={96}
                                 placeholder={<Spinner />}
                                 className="rounded-1"
                             />  
@@ -377,7 +378,7 @@ https://dapp.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()}
                         </p> 
                         <Link to={import.meta.env.VITE_APP_SCAN_URL +"/tx/"+ this.state.txHash } target='_blank' className='link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover'>
                             <BoxArrowUpRight />
-                            <span className='ms-2'>View on Monad Explorer</span>
+                            <span className='ms-2'>View on Blockvision</span>
                         </Link>
                     </div>
                 </div>
@@ -389,8 +390,9 @@ https://dapp.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()}
                 <div className="d-flex flex-column flex-fill align-items-center gap-4 p-4">
                     <h2 className="text-center"><Check /> Successfully Registered</h2>       
                     <LazyLoadImage 
-                        src={`${import.meta.env.VITE_APP_METADATA_API }/temp-image/${this.props.name}`}
+                        src={`${import.meta.env.VITE_APP_METADATA_API }/preview/${this.props.name}.mon`}
                         alt={this.props.name}
+                        minWidth={96}
                         placeholder={<Spinner />}
                         className="rounded-1"
                     /> 
@@ -403,7 +405,7 @@ https://dapp.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()}
                     <div className="d-flex flex-column flex-lg-row justify-content-between align-items-center gap-4">
                         <Link to={`${import.meta.env.VITE_APP_TOKEN_URL}/${getTokenId(this.props.name)}`} target='_blank' className='link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover'>
                             <BoxArrowUpRight />
-                            <span className='ms-2'>View on Explorer</span>
+                            <span className='ms-2'>View on Blockvision</span>
                         </Link>
                         <Link to={`${import.meta.env.VITE_APP_MARKET_URL}/${getTokenId(this.props.name)}`} target='_blank' className='link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover'>
                             <BoxArrowUpRight />
