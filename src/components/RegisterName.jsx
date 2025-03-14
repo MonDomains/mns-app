@@ -305,7 +305,7 @@ https://dapp.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()}
                         <ul className="list-unstyled d-flex flex-column justify-content-center gap-4">
                             <li>
                                 <h5 className="fw-bold">Duration</h5>
-                                <div className="d-flex flex-row justify-content-between align-items-center fs-1 border border-1 border-light-subtle">
+                                <div className="d-flex flex-row justify-content-between align-items-center fs-1 border-light-subtle">
                                     <button className="btn border-0" onClick={(e)=> this.handleDurationDown(e)}><DashCircleFill size={24} className="text-primary" /> </button>
                                     <div><small>{this.state.duration} year </small></div>
                                     <button className="btn border-0" onClick={(e)=> this.handleDurationUp(e)}> <PlusCircleFill size={24} className="text-primary" /> </button>

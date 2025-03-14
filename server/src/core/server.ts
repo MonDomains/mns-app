@@ -43,9 +43,9 @@ export class Server {
             res.render("index", { name: encodeURIComponent(req.params.name) +".mon", timestamp: Date.now() })
         }); 
 
-        this.app.use("/account", (req: Request, res: Response, next: NextFunction ) => {
+        this.app.use(["/account", "/register/:name"], (req: Request, res: Response, next: NextFunction ) => {
             res.render("index", { timestamp: Date.now() })
-        }); 
+        });  
 
         this.app.use(Express.static('dist'));
  
