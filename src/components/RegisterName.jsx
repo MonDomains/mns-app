@@ -293,19 +293,16 @@ https://dapp.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()}
                         </span>
                     </div>
                     <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-start gap-5">
-                        <div className="card rounded-2 bg-body-tertiary border-2 border-light-subtle" style={{ minWidth: 270}}>
-                            <LazyLoadImage 
-                                src={import.meta.env.VITE_APP_METADATA_API + "/preview/"+ this.props.name + ".mon"}
-                                alt={this.props.name}
-                                minWidth={96}
-                                placeholder={<Spinner />}
-                                className="rounded-1"
-                            />  
-                        </div>
+                        <LazyLoadImage 
+                            src={import.meta.env.VITE_APP_METADATA_API + "/preview/"+ this.props.name + ".mon"}
+                            alt={this.props.name}
+                            placeholder={<Spinner />}
+                            className="rounded-1 preview"
+                        />  
                         <ul className="list-unstyled d-flex flex-column justify-content-center gap-4">
                             <li>
                                 <h5 className="fw-bold">Duration</h5>
-                                <div className="d-flex flex-row justify-content-between align-items-center fs-1 border-light-subtle">
+                                <div className="d-flex flex-row justify-content-between align-items-center fs-1 border border-1 border-light-subtle">
                                     <button className="btn border-0" onClick={(e)=> this.handleDurationDown(e)}><DashCircleFill size={24} className="text-primary" /> </button>
                                     <div><small>{this.state.duration} year </small></div>
                                     <button className="btn border-0" onClick={(e)=> this.handleDurationUp(e)}> <PlusCircleFill size={24} className="text-primary" /> </button>
@@ -392,9 +389,8 @@ https://dapp.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()}
                     <LazyLoadImage 
                         src={`${import.meta.env.VITE_APP_METADATA_API }/preview/${this.props.name}.mon`}
                         alt={this.props.name}
-                        minWidth={96}
                         placeholder={<Spinner />}
-                        className="rounded-1"
+                        className="rounded-1 preview"
                     /> 
                     <Link target="_blank" to={`https://x.com/intent/post?text=${this.getText()}`} className="btn btn-lg bg-black text-white border rounded-2"> 
                         Share on <TwitterX />

@@ -38,3 +38,8 @@ body {
 .logo {
     font-weight: 900!important
 }
+
+.preview { 
+    min-width: 270px !important;
+    min-height: 270px !important;  
+}
