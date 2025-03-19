@@ -9,7 +9,7 @@ import moment from "moment";
 import { Form, Spinner } from "react-bootstrap";
 import { Link, NavLink } from "react-router";  
 import { GET_DOMAIN } from "../graphql/Domain";
-import { getOneYearDuration, getTokenId, obscureName } from "../helpers/String";
+import { getNameHash, getOneYearDuration, getTokenId, obscureName } from "../helpers/String";
 import { getBalance } from '@wagmi/core'
 import { BoxArrowUpRight, Check, DashCircleFill, EvStationFill, PlusCircleFill, TwitterX } from "react-bootstrap-icons";
 import ConnectWalletButton from "./ConnectWalletButton";
@@ -90,7 +90,7 @@ class RegisterName extends Component {
                 abi: monRegisterControllerABI,
                 address: registrarController,
                 functionName: "register",
-                args: [ String(this.props.name), this.props.owner, this.getDuration(), this.resolver, this.data, this.state.reverseRecord ],
+                args: [ String(this.props.name), this.props.owner, this.getDuration(), getNameHash(this.props.name), this.resolver, this.data, this.state.reverseRecord, 0],
                 account: this.props.owner,
                 value: this.state.price,
                 chainId: chainId
@@ -375,7 +375,7 @@ https://dapp.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()}
                         </p> 
                         <Link to={import.meta.env.VITE_APP_SCAN_URL +"/tx/"+ this.state.txHash } target='_blank' className='link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover'>
                             <BoxArrowUpRight />
-                            <span className='ms-2'>View on Blockvision</span>
+                            <span className='ms-2'>View on Explorer</span>
                         </Link>
                     </div>
                 </div>
@@ -401,7 +401,7 @@ https://dapp.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()}
                     <div className="d-flex flex-column flex-lg-row justify-content-between align-items-center gap-4">
                         <Link to={`${import.meta.env.VITE_APP_TOKEN_URL}/${getTokenId(this.props.name)}`} target='_blank' className='link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover'>
                             <BoxArrowUpRight />
-                            <span className='ms-2'>View on Blockvision</span>
+                            <span className='ms-2'>View on Explorer</span>
                         </Link>
                         <Link to={`${import.meta.env.VITE_APP_MARKET_URL}/${getTokenId(this.props.name)}`} target='_blank' className='link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover'>
                             <BoxArrowUpRight />

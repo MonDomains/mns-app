@@ -1,12 +1,11 @@
-import React from "react";  
+import React, { useState } from "react";  
 import { useAccount } from "wagmi";
 import { GET_MY_DOMAINS } from "../graphql/Domain";
 import { useQuery } from "@apollo/client";
-import { getExpires, getTimeAgo, getTokenId, obscureName } from "../helpers/String";
+import { getExpires } from "../helpers/String";
 import moment from "moment";
 import ConnectWalletButton from "../components/ConnectWalletButton";
 import { Alert, Spinner } from "react-bootstrap";
-import spinner from '../assets/images/spinner.svg';
 import { ArrowRightShort } from "react-bootstrap-icons";
 import { NavLink } from "react-router";
 import { LazyLoadImage } from "react-lazy-load-image-component";
@@ -14,7 +13,12 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 const Account = () => {
   const { address: owner, isConnected } = useAccount();
   const now = moment().utc().unix();
-  const { data, loading, error, refetch } = useQuery(GET_MY_DOMAINS, { variables: { owner, now }, notifyOnNetworkStatusChange: true });
+  const first = 10;
+  const [page, setPage] = useState(0);
+  const [skip, setSkip] = useState(0);
+  
+  const { data, loading, error, refetch } = useQuery(GET_MY_DOMAINS, { variables: { owner, now, skip, first }, notifyOnNetworkStatusChange: true });
+  
   
   if (!isConnected)
     return ( 
@@ -24,6 +28,7 @@ const Account = () => {
       )
  
   if (error) return <div className="container alert alert-danger"> {error.message} </div>
+  
   return (
     <>   
       <div className="d-flex flex-column gap-3 p-0">
@@ -32,20 +37,18 @@ const Account = () => {
             { loading ? <span>Loading...</span>
           :
             <>
-              {data.domains == null || data.domains.length < 1 ? <div className="alert alert-info">No domain(s) found</div>: <></>}
-                <ul className="list-group">
+                {data.domains == null || data.domains.length < 1 ? 
+                  <div className="alert alert-info">No domain(s) found</div>: 
+                  
+                  <>
+
+                  <ul className="list-group">
                     { data.domains.map((domain) => (
                       <>
-                        <li className="p-2 list-group-item " key={domain.id}>
+                        <li className="p-3 list-group-item " key={domain.id}>
                           <NavLink to={"/"+ domain.name } className="text-truncate text-decoration-none link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover d-flex flex-column flex-lg-row justify-content-between align-items-start align-items-lg-center gap-3">
                             <div className="d-flex flex-row gap-2 ">
-                              <LazyLoadImage 
-                                  src={import.meta.env.VITE_APP_METADATA_API + "/preview/"+ domain.name}
-                                  width={64}
-                                  alt={domain.name}
-                                  placeholder={<Spinner />}
-                                  className="rounded-2"
-                              />
+                              
                               <div className="d-flex flex-column text-truncate">
                                 <h3>{domain.name}</h3>
                                 <small className="text-muted">Expires {getExpires(domain.expiryDate)}</small>
@@ -55,12 +58,33 @@ const Account = () => {
                               <span className="badge bg-success-subtle text-success-emphasis">Owner</span>
                                 <ArrowRightShort />
                             </div>
-                           </NavLink>
+                          </NavLink>
                         </li> 
                       </>
                       )) 
                     }  
                 </ul> 
+
+                <div className="d-flex flex-row justify-content-between gap-3">
+                  <button onClick={() => {
+                    let p = page > 1 ? parseInt(page) - 1 : 0;
+                    let s = p * parseInt(first);
+                    setPage(p);
+                    setSkip(s) 
+                    refetch() 
+                  }} className="btn btn-default">{"<"} Prev</button>
+                  <button onClick={() => {
+                    let p = parseInt(page) + 1;
+                    let s = p * parseInt(first);
+                    setPage(p);
+                    setSkip(s) 
+                    refetch() 
+                  }} className="btn btn-default">Next {">"}</button>
+                  </div>
+                  </>
+                }
+ 
+                
             </>
           }
           </div>

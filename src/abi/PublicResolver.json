@@ -7,8 +7,13 @@
                 "type": "address"
             },
             {
+                "internalType": "contract INameWrapper",
+                "name": "wrapperAddress",
+                "type": "address"
+            },
+            {
                 "internalType": "address",
-                "name": "_trustedETHController",
+                "name": "_trustedMONController",
                 "type": "address"
             },
             {

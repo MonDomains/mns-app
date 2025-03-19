@@ -26,10 +26,12 @@ export const GET_DOMAIN = gql`
 `;
 
 export const GET_MY_DOMAINS = gql`
-    query Domains( $owner: String, $now:BigInt ) {
+    query Domains( $owner: String, $now:BigInt, $skip: Int, $first: Int) {
         domains ( 
             orderBy: createdAt
-            orderDirection:desc
+            orderDirection: desc
+            skip: $skip
+            first: $first
             where: {
             owner: $owner
             labelName_not:null

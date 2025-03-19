@@ -139,7 +139,7 @@ https://dapp.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()}
                         <Link target="_blank" to={"https://x.com/intent/post?text="+ this.getText()} className="btn btn-lg bg-black text-white border rounded-2"> Share on <TwitterX /></Link>
                         <a href={`${import.meta.env.VITE_APP_TOKEN_URL}/${getTokenId(this.state.domain?.labelName)}`} target='_blank' className='link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover'>
                             <BoxArrowUpRight />
-                            <span className='ms-2'>View on Blockvision</span>
+                            <span className='ms-2'>View on Explorer</span>
                         </a> 
                         <a href={`${import.meta.env.VITE_APP_MARKET_URL}/${getTokenId(this.state.domain?.labelName)}`} target='_blank' className='link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover'>
                             <BoxArrowUpRight />
