@@ -13,6 +13,7 @@ function Footer() {
         <>
             <div className="container-fluid d-flex flex-column flex-md-row w-100 justify-content-between align-items-center gap-3">
                 <ul className="d-flex flex-row gap-3 list-unstyled">
+                    <li><Link className="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" target='_blank' to="https://docs.monadns.com">Docs</Link></li>
                     <li><Link className="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" target='_blank' to="https://monadns.com/terms">Terms</Link></li>
                     <li><Link className="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" target='_blank' to="https://monadns.com/privacy">Privacy</Link></li>
                 </ul>
