@@ -1,4 +1,4 @@
-import { ethers, formatEther } from "ethers";
+import { ethers, formatEther, AbiCoder, Interface } from "ethers";
 import { apolloClient, chainId, rainbowConfig, registrarController } from "../config";
 import { getGasPrice, readContract, writeContract } from '@wagmi/core'
 import { toast } from "react-toastify";
@@ -85,12 +85,25 @@ class RegisterName extends Component {
          
         try {
 
+            const nameHash = getNameHash(`${this.props.name}.mon`);
+            let iface = new Interface([
+                "function setAddr(bytes32 node,address a)"
+            ]);
+            let calldata = iface.encodeFunctionData(
+                "setAddr", 
+                [
+                    nameHash, 
+                    this.props.owner
+                ]
+            ); 
+            
             this.setState({ isRegistring: true, isRegistered: false });
+
             const _hash = await writeContract(rainbowConfig, {
                 abi: monRegisterControllerABI,
                 address: registrarController,
                 functionName: "register",
-                args: [ String(this.props.name), this.props.owner, this.getDuration(), getNameHash(this.props.name), this.resolver, this.data, this.state.reverseRecord, 0],
+                args: [ String(this.props.name), this.props.owner, this.getDuration(), getNameHash(this.props.name), this.resolver, [calldata], this.state.reverseRecord, 0],
                 account: this.props.owner,
                 value: this.state.price,
                 chainId: chainId
