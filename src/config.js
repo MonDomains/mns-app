@@ -1,6 +1,8 @@
 import { http } from 'wagmi';
 import { monadTestnet } from 'wagmi/chains';
 import { ApolloClient, InMemoryCache } from "@apollo/client"; 
+import { createHttpLink } from 'apollo-link-http';
+import { setContext } from 'apollo-link-context';
 import { getDefaultConfig } from '@rainbow-me/rainbowkit';
 import '@rainbow-me/rainbowkit/styles.css';
 
@@ -19,7 +21,24 @@ export const rainbowConfig = getDefaultConfig({
     [monadTestnet.id]: http(NODE_PROVIDER_URL),
   },
 });
-export const apolloClient = new ApolloClient({
+
+
+const httpLink = createHttpLink({
   uri: import.meta.env.VITE_APP_GRAPHAPI_URL,
+});
+
+const authLink = setContext((_, { headers }) => {
+  const token = import.meta.env.VITE_APP_GRAPHAPI_BEARER;
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : "",
+    }
+  }
+});
+
+export const apolloClient = new ApolloClient({
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache()
 });
+

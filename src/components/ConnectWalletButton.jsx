@@ -1,5 +1,5 @@
 import { useAccount, useEnsName as useMnsName } from 'wagmi';
-import { obscureAddress, obscureName } from "../helpers/String";
+import { getNameHash, normalizeName, obscureAddress, obscureName } from "../helpers/String";
 import { ChevronDown } from 'react-bootstrap-icons';
 import { chains, universalResolver } from "../config";
 import { useAccountModal, useConnectModal, useChainModal } from '@rainbow-me/rainbowkit';
@@ -11,15 +11,13 @@ export default function ConnectWalletButton({props}) {
   const { address, isConnected, chainId: cid  } = useAccount() 
   const { openAccountModal } = useAccountModal()
   const { openChainModal } = useChainModal() 
-   
- 
+  const {data: mnsName} =  useMnsName({
+    address: address,
+    universalResolverAddress: universalResolver,
+    chainId: monadTestnet.id
+  }); 
+  
   if(isConnected) { 
- 
-    const {data: mnsName} =  useMnsName({
-      address: address,
-      universalResolverAddress: universalResolver,
-      chainId: monadTestnet.id
-    });
   
     return (<>  { !chains.map(t=> t.id).includes(cid) ?
           <button {...props} className="btn btn-danger fs-5 border-0" onClick={() => openChainModal()}> Wrong Network <ExclamationCircle /> </button>
