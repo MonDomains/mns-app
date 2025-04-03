@@ -2,6 +2,7 @@
 import React, {Component} from 'react';
 import { Modal, Spinner } from "react-bootstrap";
 import baseRegistrarImplementationABI from '../abi/BaseRegistrarImplementation.json'
+import nameWrapperABI from '../abi/NameWrapper.json'
 import { toast } from 'react-toastify';
 import { writeContract } from '@wagmi/core'
 import { chainId, rainbowConfig } from '../config';
@@ -40,11 +41,43 @@ class TransferOwnership extends Component {
  
             this.setState({ pending: true, completed: false });
   
+            console.log([ this.props.owner, this.inputRef.current.value.trim(), getTokenId(this.props.domain.labelName)])
             const _hash = await writeContract(rainbowConfig, {
                 abi: baseRegistrarImplementationABI,
-                address: import.meta.env.VITE_APP_BASE_REGISTER_IMPLEMENTATION,
+                address: import.meta.env.VITE_APP_BASE_REGISTRAR,
                 functionName: "safeTransferFrom",
                 args: [ this.props.owner, this.inputRef.current.value.trim(), getTokenId(this.props.domain.labelName)],
+                account: this.props.owner,
+                chainId: chainId
+            });
+
+            toast.success("Your transaction has been sent.");
+
+            const recepient = await waitForTransactionReceipt(rainbowConfig, {  hash: _hash });
+ 
+            toast.success("Your transaction has been completed.");
+
+            this.setState({ pending: false, completed: true });
+            this.handleClose();
+        } catch(e) {
+            toast.error("An error occured.");
+            console.log(e.message)
+            this.setState({ pending: false, completed: false });
+            this.handleClose();
+        } 
+    }
+
+    async handleWrappedTransfer() {
+         
+        try {
+ 
+            this.setState({ pending: true, completed: false });
+  
+            const _hash = await writeContract(rainbowConfig, {
+                abi: nameWrapperABI,
+                address: import.meta.env.VITE_APP_NAME_WRAPPER,
+                functionName: "safeTransferFrom",
+                args: [ this.props.owner, this.inputRef.current.value.trim(), BigInt(this.props.domain.id), 1, "0x"],
                 account: this.props.owner,
                 chainId: chainId
             });
@@ -71,7 +104,7 @@ class TransferOwnership extends Component {
             <button className="btn btn-lg btn-primary rounded-2 border-0" onClick={() => this.handleShow(this.props.domain.id)}> 
                 Transfer
             </button>
-
+ 
             <Modal {...this.props} 
                 show={this.state.showModal === this.props.domain.id} 
                 onHide={() => this.handleClose()}  
@@ -91,7 +124,8 @@ class TransferOwnership extends Component {
                 </Modal.Body>
                 <Modal.Footer>
                     <button className="btn btn-default" onClick={() => this.handleClose() }>Cancel</button>
-                    <button className="btn btn-lg btn-primary border-0" onClick={()=> this.handleTransfer()}>
+                    {this.props.domain.wrappedOwner === this.props.owner?.toLowerCase()}
+                    <button className="btn btn-lg btn-primary border-0" onClick={()=> this.props.domain.wrappedOwner?.id === this.props.owner.toLowerCase() ? this.handleWrappedTransfer() : this.handleTransfer()}>
                         {this.state.pending ? <><Spinner variant="light" size="sm" /> Waiting Transaction</>: <>Confirm</>} 
                     </button> 
                 </Modal.Footer>

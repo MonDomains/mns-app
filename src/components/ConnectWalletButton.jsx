@@ -1,36 +1,70 @@
-import { useAccount, useEnsName as useMnsName } from 'wagmi';
+import { useAccount, useDisconnect, useEnsName as useMnsName } from 'wagmi';
 import { getNameHash, normalizeName, obscureAddress, obscureName } from "../helpers/String";
-import { ChevronDown } from 'react-bootstrap-icons';
-import { chains, universalResolver } from "../config";
+import { universalResolver } from "../config";
 import { useAccountModal, useConnectModal, useChainModal } from '@rainbow-me/rainbowkit';
-import { ExclamationCircle } from "react-bootstrap-icons";
+import { BoxArrowRight, Check, Copy, ExclamationCircle, Icon0Circle } from "react-bootstrap-icons";
 import { monadTestnet } from 'viem/chains';
+import { useState } from 'react';
+import { Button, ButtonGroup, Dropdown } from 'react-bootstrap';
+import { NavLink } from 'react-router';
+import avatar from "../assets/images/avatar.svg";
 
-export default function ConnectWalletButton({props}) {
+export default function ConnectWalletButton({ }) {
+  
+  const { disconnect } = useDisconnect()
   const { openConnectModal } = useConnectModal()
-  const { address, isConnected, chainId: cid  } = useAccount() 
-  const { openAccountModal } = useAccountModal()
-  const { openChainModal } = useChainModal() 
+  const { address, isConnected, chainId  } = useAccount() 
+  const { openChainModal } = useChainModal()
+
   const {data: mnsName} =  useMnsName({
     address: address,
     universalResolverAddress: universalResolver,
     chainId: monadTestnet.id
   }); 
+
+  const [copyStatus, setCopyStatus] = useState(false);
+  function copyAddress(address) {
+    navigator.clipboard.writeText(address);
+    setCopyStatus(true);
+    setTimeout(()=> {
+      setCopyStatus(false);
+    }, 2000);
+  }
   
-  if(isConnected) { 
-  
-    return (<>  { !chains.map(t=> t.id).includes(cid) ?
-          <button {...props} className="btn btn-danger fs-5 border-0" onClick={() => openChainModal()}> Wrong Network <ExclamationCircle /> </button>
-        : 
-        <button {...props} className="btn fw-bold fs-5 border-0" onClick={openAccountModal}>
-          <span> { mnsName ? obscureName(mnsName, 12) : obscureAddress(address) } </span> 
-          <ChevronDown className='fw-bold' />
-        </button> 
+  if(isConnected) {  
+
+    return (
+        <> { monadTestnet.id != chainId ? 
+          <Button className="btn btn-danger fs-5 border-0" onClick={() => openChainModal()}> 
+            Wrong Network <ExclamationCircle /> 
+          </Button>
+        :  
+        <Dropdown>
+          <Dropdown.Toggle className='border-0' variant='none' size='lg'>
+            <img src={avatar} width={32} className='me-2' />
+            { mnsName ? obscureName(mnsName, 12) : obscureAddress(address) }
+          </Dropdown.Toggle> 
+          <Dropdown.Menu>
+            <Dropdown.Item >
+              <NavLink className={"text-decoration-none link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"} to={`${mnsName}`}> Profile </NavLink>
+            </Dropdown.Item>
+            <Dropdown.Divider />
+            <Dropdown.Item  onClick={()=> copyAddress(address)}>
+              { !copyStatus ? <Copy /> : <Check /> } {obscureAddress(address)}
+            </Dropdown.Item>
+            <Dropdown.Item className='text-danger' onClick={() => disconnect()}>
+               <BoxArrowRight /> Disconnect 
+            </Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
     }</>)
+
   } else {
     return (
         <>
-          <button {...props} className="btn btn-primary fs-5 border-0" onClick={openConnectModal}><span>Connect Wallet</span></button>
+          <Button className="btn btn-primary fs-5 border-0" onClick={openConnectModal}>
+            Connect Wallet
+          </Button>
         </>
       )
   }

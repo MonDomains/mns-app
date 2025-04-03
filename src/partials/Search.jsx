@@ -12,13 +12,16 @@ import DomainPrice from '../components/DomainPrice';
 import { Link, useNavigate } from 'react-router'; 
 import { Spinner } from 'react-bootstrap';
 import {  ArrowRight, ArrowRightShort, XCircle } from 'react-bootstrap-icons';
-import { chainId, rainbowConfig, registrarController } from '../config';
+import { chainId, rainbowConfig, registrarController, universalResolver } from '../config';
+import { ensNormalize, ethers } from 'ethers';
+import { getEnsName } from '@wagmi/core';
 
 function Search({size}) {
      
     const navigate = useNavigate();
     const yearInSeconds = getOneYearDuration(); 
     const inputRef = useRef("")
+    const [isAddress, setIsAddress] = useState(false); 
     const [name, setName] = useState(""); 
     const [valid, setValid] = useState(false); 
     const [focused, setFocused] = useState(false); 
@@ -39,7 +42,18 @@ function Search({size}) {
 
     function handleSearch(e) { 
         e.preventDefault(); 
-        let label = inputRef.current.value.toLowerCase();         
+
+        const q = inputRef.current.value.toLowerCase();
+         
+        if(ethers.isAddress(q)) {
+            setIsAddress(true);
+            handleMnsName(q);
+        } else {
+            setIsAddress(false);
+            setName("");
+        }
+
+        let label = ensNormalize(q)
         if(isValidDomain(label)) {
             setValid(true);
             setName(label);
@@ -51,6 +65,15 @@ function Search({size}) {
             setName(label);
         }
     } 
+
+    async function handleMnsName(address) {
+        const mnsName = await getEnsName(rainbowConfig, {
+            address,
+            universalResolverAddress: universalResolver,
+            chainId: monadTestnet.id
+        }); 
+        if(mnsName) setName(mnsName);
+    }
 
     const monRegisterControllerConfig = {
         address: registrarController,
@@ -65,6 +88,8 @@ function Search({size}) {
     });
  
     if(error) toast.error("An error occured.");
+
+    
      
     return ( 
         
@@ -112,8 +137,20 @@ function Search({size}) {
                                     <>
                                         <Spinner variant="primary" size='sm' />
                                     </>
-                                } 
+                                }  
+                            </li>
+                        </ul>
+                    </Link>
+                    </>
+                : <></>
+                }
 
+                {name != "" && isAddress ? 
+                    <> 
+                    <Link to={ "/"+ name} className="link-body-emphasis link-offset-2 link-underline-opacity-25 text-decoration-none">
+                        <ul className='list-unstyled d-flex flex-row border rounded-4 align-items-center p-3 mt-2 justify-content-between bg-light-subtle position-absolute w-100'>
+                            <li className='text-truncate'>
+                                {obscureName(name, 15)} 
                             </li>
                         </ul>
                     </Link>

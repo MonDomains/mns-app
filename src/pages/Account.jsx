@@ -11,13 +11,13 @@ import { NavLink } from "react-router";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const Account = () => {
-  const { address: owner, isConnected } = useAccount();
-  const now = moment().utc().unix();
+  const { address: addr, isConnected } = useAccount();
+  const expiry = moment().utc().unix();
   const first = 10;
   const [page, setPage] = useState(0);
   const [skip, setSkip] = useState(0);
   
-  const { data, loading, error, refetch } = useQuery(GET_MY_DOMAINS, { variables: { owner, now, skip, first }, notifyOnNetworkStatusChange: true });
+  const { data, loading, error, refetch } = useQuery(GET_MY_DOMAINS, { variables: {  addr: addr?.toLocaleLowerCase(), expiry, skip, first }, notifyOnNetworkStatusChange: true });
   
   
   if (!isConnected)
@@ -51,7 +51,7 @@ const Account = () => {
                               
                               <div className="d-flex flex-column text-truncate">
                                 <h3>{domain.name}</h3>
-                                <small className="text-muted">Expires {getExpires(domain.expiryDate)}</small>
+                                <small className="text-muted">Expires {getExpires(domain.registration?.expiryDate)}</small>
                               </div>
                             </div>
                             <div className="d-flex flex-row justify-content-between gap-2">

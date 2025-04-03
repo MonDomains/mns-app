@@ -46,7 +46,7 @@ function Header({showSearch}) {
                                 <li>
                                     <a className="text-decoration-none fs-5 link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="/account">
                                         <Icon.ListUl className="me-2" /> 
-                                        My Domains
+                                        My Names
                                     </a>
                                 </li> 
                             </ul>
@@ -75,7 +75,7 @@ function Header({showSearch}) {
             <ul className="list-unstyled gap-3 pb-0 mb-0">
                 <li>
                     <a className="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="/account">
-                    My Domains
+                    My Names
                     </a>
                 </li> 
                 <li className="d-flex flex-row justify-content-end align-items-start">

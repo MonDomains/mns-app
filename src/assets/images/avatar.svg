@@ -1,0 +1,17 @@
+
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 110 110">
+    <defs>
+      <linearGradient id="gzr" x1="106.975" y1="136.156" x2="-12.9815" y2="13.5347" gradientUnits="userSpaceOnUse">
+        gradientTransform="translate(131.638 129.835) rotate(-141.194) scale(185.582)">
+        <stop offset="0.1562" stop-color="hsl(275, 82%, 91%)" />
+        <stop offset="0.3958" stop-color="hsl(275, 83%, 72%)" />
+        <stop offset="0.7292" stop-color="hsl(302, 85%, 52%)" />
+        <stop offset="0.9063" stop-color="hsl(305, 90%, 44%)" />
+        <stop offset="1" stop-color="hsl(305, 92%, 44%)" />
+      </linearGradient>
+    </defs>
+    <path
+      d="M110 55C110 24.6244 85.3756 0 55 0C24.6244 0 0 24.6244 0 55C0 85.3756 24.6244 110 55 110C85.3756 110 110 85.3756 110 55Z"
+      fill="url(#gzr)" />
+  </svg>
+    

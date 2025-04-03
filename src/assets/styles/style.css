@@ -43,3 +43,7 @@ body {
     min-width: 270px !important;
     min-height: 270px !important;  
 }
+
+.dropdown-toggle::after {
+    display:none !important;
+}

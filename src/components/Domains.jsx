@@ -173,7 +173,7 @@ https://dapp.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()}
                             </li>
                             <li className="d-flex flex-column flex-md-row justify-content-between gap-2">
                                 <strong>Expires: </strong>
-                                <span>{getExpires(this.state.domain.expiryDate)} - { getDateSimple(this.state.domain.expiryDate) }</span>
+                                <span>{getExpires(this.state.domain.registration.expiryDate)} - { getDateSimple(this.state.domain.registration.expiryDate) }</span>
                             </li>
                             <li className="d-flex flex-column flex-md-row justify-content-between gap-2">
                                 <strong>Created: </strong>
@@ -181,10 +181,12 @@ https://dapp.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()}
                             </li>
                             <li className="d-flex flex-column flex-md-row justify-content-between gap-2">
                                 <strong>Registered: </strong>
-                                <span>{getTimeAgo(this.state.domain.registeredAt)} - { getDateSimple(this.state.domain.registeredAt) } </span>
+                                <span>{getTimeAgo(this.state.domain.registration.registrationDate)} - { getDateSimple(this.state.domain.registration.registrationDate) } </span>
                             </li>
                             <li className="d-flex flex-column flex-md-row justify-content-end gap-3">
-                                { this.state.domain?.owner?.id?.toString().toLowerCase() === this.props.owner?.toString().toLowerCase() ? 
+                                { this.state.domain?.owner?.id?.toString().toLowerCase() === this.props.owner?.toString().toLowerCase()
+                                    || this.state.domain?.wrappedOwner?.id?.toString().toLowerCase() === this.props.owner?.toString().toLowerCase()
+                                ? 
                                     <>
                                         <TransferOwnership domain={this.state.domain} owner={this.props.owner} key={"transfer_ownership"+ this.state.domain.id} /> 
                                         <SetAsPrimary domain={this.state.domain} owner={this.props.owner} key={"set_as_primary_"+ this.state.domain.id} /> 

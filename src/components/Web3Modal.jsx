@@ -1,5 +1,5 @@
 import { WagmiProvider } from 'wagmi'
-import { chains, rainbowConfig } from "../config";
+import { rainbowConfig } from "../config";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { RainbowKitProvider, darkTheme, lightTheme } from '@rainbow-me/rainbowkit';
 import { useState } from 'react';
