@@ -157,8 +157,7 @@ function Search({size}) {
                     </>
                 : <></>
                 }
-            </form>
-            
+            </form> 
         </div>
      );
 }

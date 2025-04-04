@@ -44,6 +44,6 @@ body {
     min-height: 270px !important;  
 }
 
-.dropdown-toggle::after {
+.nav::after {
     display:none !important;
 }

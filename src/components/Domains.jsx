@@ -184,7 +184,7 @@ https://dapp.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()}
                                 <span>{getTimeAgo(this.state.domain.registration.registrationDate)} - { getDateSimple(this.state.domain.registration.registrationDate) } </span>
                             </li>
                             <li className="d-flex flex-column flex-md-row justify-content-end gap-3">
-                                { this.state.domain?.owner?.id?.toString().toLowerCase() === this.props.owner?.toString().toLowerCase()
+                                { this.state.domain?.registrant?.id?.toString().toLowerCase() === this.props.owner?.toString().toLowerCase()
                                     || this.state.domain?.wrappedOwner?.id?.toString().toLowerCase() === this.props.owner?.toString().toLowerCase()
                                 ? 
                                     <>

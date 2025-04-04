@@ -42,16 +42,16 @@ export default function ConnectWalletButton({ }) {
         <Dropdown>
           <Dropdown.Toggle className='border-0' variant='none' size='lg'>
             <img src={avatar} width={32} className='me-2' />
-            { mnsName ? obscureName(mnsName, 12) : obscureAddress(address) }
+            { mnsName ? obscureName(mnsName, 20) : obscureAddress(address) }
           </Dropdown.Toggle> 
           <Dropdown.Menu>
             <Dropdown.Item >
               <NavLink className={"text-decoration-none link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"} to={`${mnsName}`}> Profile </NavLink>
             </Dropdown.Item>
             <Dropdown.Divider />
-            <Dropdown.Item  onClick={()=> copyAddress(address)}>
+            <Dropdown.ItemText role='button' onClick={()=> copyAddress(address)}>
               { !copyStatus ? <Copy /> : <Check /> } {obscureAddress(address)}
-            </Dropdown.Item>
+            </Dropdown.ItemText>
             <Dropdown.Item className='text-danger' onClick={() => disconnect()}>
                <BoxArrowRight /> Disconnect 
             </Dropdown.Item>

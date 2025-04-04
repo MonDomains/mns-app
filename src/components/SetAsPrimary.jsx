@@ -5,10 +5,12 @@ import { Modal, Spinner } from "react-bootstrap";
 import { obscureAddress, obscureName } from "../helpers/String";
 import reverRegistrarABI from '../abi/ReverseRegistrar.json'
 import { toast } from 'react-toastify';
-import { writeContract } from '@wagmi/core'
-import { chainId, rainbowConfig } from '../config';
+import { getEnsResolver, writeContract } from '@wagmi/core'
+import { chainId, publicResolver, rainbowConfig, universalResolver } from '../config';
 import { waitForTransactionReceipt } from '@wagmi/core'
 import { Check, Check2Circle } from 'react-bootstrap-icons';
+import { monadTestnet } from 'viem/chains';
+import { namehash, normalize } from 'viem/ens'
 
 class SetAsPrimary extends Component {
 
@@ -36,15 +38,21 @@ class SetAsPrimary extends Component {
     async handleSetAsPrimary() {
         
         try {
-
-            
+ 
+            const mnsResolver = await getEnsResolver(rainbowConfig, {
+                name: normalize(this.props.domain.name),
+                universalResolverAddress: universalResolver, 
+                chainId: monadTestnet.id
+            });
+            console.log(mnsResolver);
+ 
             this.setState({ pending: true, completed: false });
   
             const _hash = await writeContract(rainbowConfig, {
                 abi: reverRegistrarABI,
                 address: import.meta.env.VITE_APP_REVERSE_REGISTRAR,
-                functionName: "setName",
-                args: [this.props.domain.name],
+                functionName: "setNameForAddr",
+                args: [this.props.owner, this.props.owner, mnsResolver ?? publicResolver, this.props.domain.name],
                 account: this.props.owner,
                 chainId: chainId
             });
