@@ -1,5 +1,4 @@
 import React from "react";
-import 'bootstrap/dist/css/bootstrap.min.css'; 
 import { isValidDomain, obscureName } from "../helpers/String";
 import { useNavigate, useParams } from "react-router";
 import { useAccount } from "wagmi";

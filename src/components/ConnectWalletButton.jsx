@@ -35,7 +35,7 @@ export default function ConnectWalletButton({ }) {
 
     return (
         <> { monadTestnet.id != chainId ? 
-          <Button className="btn btn-danger fs-5 border-0" onClick={() => openChainModal()}> 
+          <Button className="btn btn-danger fs-6 border-0" onClick={() => openChainModal()}> 
             Wrong Network <ExclamationCircle /> 
           </Button>
         :  
@@ -45,14 +45,17 @@ export default function ConnectWalletButton({ }) {
             { mnsName ? obscureName(mnsName, 20) : obscureAddress(address) }
           </Dropdown.Toggle> 
           <Dropdown.Menu>
-            <Dropdown.Item >
-              <NavLink className={"text-decoration-none link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"} to={`${mnsName}`}> Profile </NavLink>
-            </Dropdown.Item>
+            {mnsName ?
+              <Dropdown.Item className={"fs-5"} href={`/${mnsName}`}>
+                Profile
+              </Dropdown.Item>
+              :<></>
+            }
             <Dropdown.Divider />
-            <Dropdown.ItemText role='button' onClick={()=> copyAddress(address)}>
+            <Dropdown.ItemText className='pt-2 pb-2 fs-6 fw-bold' role='button' onClick={()=> copyAddress(address)}>
               { !copyStatus ? <Copy /> : <Check /> } {obscureAddress(address)}
             </Dropdown.ItemText>
-            <Dropdown.Item className='text-danger' onClick={() => disconnect()}>
+            <Dropdown.Item className='text-danger pt-2 pb-2 fs-6 fw-bold' onClick={() => disconnect()}>
                <BoxArrowRight /> Disconnect 
             </Dropdown.Item>
           </Dropdown.Menu>

@@ -43,16 +43,16 @@ function Header({showSearch}) {
                     <div className="d-flex flex-row align-items-center justify-content-between">
                         <ConnectWalletButton></ConnectWalletButton>
                         <Dropdown>
-                            <Dropdown.Toggle className='nav border-0 p-1' variant='none'>
+                            <Dropdown.Toggle size="lg" className='nav border-0 p-1' variant='none'>
                                 <Icon.List size={24} />
                             </Dropdown.Toggle> 
                             <Dropdown.Menu>
-                                <Dropdown.Item href="/account">My Names</Dropdown.Item>
-                                <Dropdown.Item href={"https://docs.monadns.com"} target="_blank">Docs</Dropdown.Item>
-                                <Dropdown.Item href={"https://monadns.com/terms"} target="_blank">Terms</Dropdown.Item>
-                                <Dropdown.Item href={"https://monadns.com/privacy"} target="_blank">Privacy</Dropdown.Item>
+                                {isConnected ?  <Dropdown.Item className="fs-6" href="/account">My Names</Dropdown.Item> : <></>}
+                                <Dropdown.Item className="fs-6" href={"https://docs.monadns.com"} target="_blank">Docs</Dropdown.Item>
+                                <Dropdown.Item className="fs-6" href={"https://monadns.com/terms"} target="_blank">Terms</Dropdown.Item>
+                                <Dropdown.Item className="fs-6" href={"https://monadns.com/privacy"} target="_blank">Privacy</Dropdown.Item>
                                 <Dropdown.Divider />
-                                <Dropdown.ItemText role="button" onClick={()=>  handleTheme()} className="d-flex flex-row align-items-center gap-2">
+                                <Dropdown.ItemText role="button" onClick={()=>  handleTheme()} className="d-flex flex-row align-items-center gap-2 fs-6">
                                     <strong>Theme:</strong>
                                     {theme === 'light' ? <> <Icon.BrightnessHighFill /> Light </> : <><Icon.MoonFill /> Dark </> }
                                 </Dropdown.ItemText>

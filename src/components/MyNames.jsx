@@ -8,6 +8,7 @@ import { GET_MY_DOMAINS } from '../graphql/Domain';
 import { NavLink } from 'react-bootstrap';
 import { getExpires } from '../helpers/String';
 import avatar from "../assets/images/avatar.svg";
+import { Link } from 'react-router';
 
 class MyNames extends Component {
  
@@ -151,7 +152,7 @@ class MyNames extends Component {
                 <div className="d-flex flex-column bg-body-tertiary border border-light-subtle rounded-2 p-2 gap-4 fs-5">
                     <div className="d-flex flex-column flex-md-row flex-column-reverse gap-2 justify-content-between">
                         <div className="d-flex flex-row gap-2 align-items-center">
-                            <input className="form-check-input rounded-circle me-3 ms-1" type="checkbox" role="button" />
+                            {/*<input className="form-check-input rounded-circle me-3 ms-1" type="checkbox" role="button" /> */}
                             <select defaultValue={"createdAt"} className="form-select form-select-lg" onChange={(e)=> this.setOrderBy(e.target.value)}>
                                 <option value="expiryDate">Expiry date</option>
                                 <option value="name">Name</option>
@@ -171,7 +172,7 @@ class MyNames extends Component {
                             </div>
                         </div>
                     </div>  
-                </div> 
+                
                 { this.state.isLoading ? <span>Loading...</span> : <> 
                     { this.state.domains == null || this.state.domains.length < 1 ? 
                         <div className="alert alert-info">No domain(s) found</div>:
@@ -180,19 +181,19 @@ class MyNames extends Component {
                                 { this.state.domains.map((domain) => (
                                     <>
                                     <li className="p-3 list-group-item " key={domain.id}>
-                                        <NavLink to={"/"+ domain.name } className="text-truncate text-decoration-none link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover d-flex flex-column flex-lg-row justify-content-between align-items-start align-items-lg-center gap-3">
-                                        <div className="d-flex flex-row gap-2 align-items-center">
-                                            <img src={avatar} width={42} />
-                                            <div className="d-flex flex-column text-truncate align-items-start">
-                                                <h3 className='m-0'>{domain.name}</h3>
-                                                <small className="text-muted">Expires {getExpires(domain.registration?.expiryDate)}</small>
+                                        <Link to={"/"+ domain.name } className="text-truncate text-decoration-none link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover d-flex flex-column flex-lg-row justify-content-between align-items-start align-items-lg-center gap-3">
+                                            <div className="d-flex flex-row gap-2 align-items-center">
+                                                <img src={avatar} width={42} />
+                                                <div className="d-flex flex-column text-truncate align-items-start">
+                                                    <h3 className='m-0'>{domain.name}</h3>
+                                                    <small className="text-muted">Expires {getExpires(domain.registration?.expiryDate)}</small>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className="d-flex flex-row justify-content-between gap-2">
-                                            <span className="badge bg-success-subtle text-success-emphasis">Owner</span>
-                                            <Icons.ArrowRightShort />
-                                        </div>
-                                        </NavLink>
+                                            <div className="d-flex flex-row justify-content-between gap-2">
+                                                <span className="badge bg-success-subtle text-success-emphasis">Owner</span>
+                                                <Icons.ArrowRightShort />
+                                            </div>
+                                        </Link>
                                     </li> 
                                     </>
                                 )) }  
@@ -201,6 +202,7 @@ class MyNames extends Component {
                     }
                 </>}
             </div>
+            </div> 
         </>)
     } 
 }

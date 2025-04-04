@@ -1,3 +1,5 @@
+
+import './App.scss';
 import './assets/styles/style.css';
 import 'react-toastify/dist/ReactToastify.css';
 import Home from './pages/Home';
@@ -10,8 +12,9 @@ import Account from "./pages/Account";
 import { Web3Modal } from './components/Web3Modal';
 import Layouts from "./layouts";
 import { ApolloProvider } from "@apollo/client";
-import { apolloClient } from "./config"
- 
+import { apolloClient } from "./config" 
+
+
 export default function App() {
   return ( 
         <Web3Modal>

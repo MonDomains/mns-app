@@ -2,7 +2,7 @@ import searchIcon from '../assets/images/search-icon.svg';
 import loadericon from '../assets/images/loader-icon.svg';
 import monRegisterControllerABI from '../abi/MONRegisterController.json'
 import { monadTestnet } from 'wagmi/chains'
-
+import avatar from "../assets/images/avatar.svg";
 import { useReadContract } from 'wagmi'
 import { useRef, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -123,6 +123,7 @@ function Search({size}) {
                     <Link to={ available ? "/register/"+ name +".mon": "/"+ name +".mon"} className="link-body-emphasis link-offset-2 link-underline-opacity-25 text-decoration-none">
                         <ul className='list-unstyled d-flex flex-row border rounded-4 align-items-center p-3 mt-2 justify-content-between bg-light-subtle position-absolute w-100'>
                             <li className='text-truncate'>
+                                <img src={avatar} width={32} className='me-2' />
                                 {obscureName(name, 15)}.mon 
                             </li> 
                             <li> 

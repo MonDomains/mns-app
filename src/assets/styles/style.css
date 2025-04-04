@@ -5,20 +5,7 @@
     font-family: 'Satoshi Variable';  
     src: url('../fonts/Satoshi-Variable.ttf');  
 }
-
-
-.btn-primary {
-    background-color: #836EF9 !important;
-}
-
-.color-primary {
-    color: #836EF9 !important;
-}
-
-.bg-primary {
-    background-color: #836EF9 !important;
-}
-
+ 
 input[type="checkbox"] {
     transform: scale(1.6);
 }
@@ -47,3 +34,5 @@ body {
 .nav::after {
     display:none !important;
 }
+
+ 
