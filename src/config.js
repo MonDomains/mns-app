@@ -11,6 +11,7 @@ export const mnsRegistry = import.meta.env.VITE_APP_REGISTRY;
 export const registrarController = import.meta.env.VITE_APP_REGISTER_CONTROLLER;
 export const publicResolver = import.meta.env.VITE_APP_PUBLIC_RESOLVER;
 export const universalResolver = import.meta.env.VITE_APP_UNIVERSAL_RESOLVER;
+export const bulkRenewal = import.meta.env.VITE_APP_BULK_RENEWAL;
 export const projectId = import.meta.env.VITE_APP_PROJECT_ID;
 export const NODE_PROVIDER_URL = import.meta.env.VITE_APP_NODE_PROVIDER_URL;
 
@@ -37,8 +38,20 @@ const authLink = setContext((_, { headers }) => {
   }
 });
 
+const options = {
+  watchQuery: {
+    fetchPolicy: 'no-cache',
+    errorPolicy: 'ignore',
+  },
+  query: {
+    fetchPolicy: 'no-cache',
+    errorPolicy: 'all',
+  },
+}
+
 export const apolloClient = new ApolloClient({
   link: authLink.concat(httpLink),
-  cache: new InMemoryCache()
+  cache: new InMemoryCache(),
+  defaultOptions: options
 });
 

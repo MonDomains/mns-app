@@ -82,6 +82,10 @@ export function getExpires(expires, suffix = false) {
     return moment.unix(expires).add(GRACE_PERIOD + PREMIUM_PERIOD, "days").fromNow(suffix)
 }
 
+export function getNewExpiry(duration = 1) {
+    return moment.unix(expires).add(GRACE_PERIOD + PREMIUM_PERIOD, "days").fromNow(suffix)
+}
+
 export function getExpireCondition() {
     return moment().add(-GRACE_PERIOD, "days").add(-PREMIUM_PERIOD, "days").utc().unix()
 }
@@ -177,5 +181,6 @@ export function isZero(hexNumberString) {
 export function getOneYearDuration() {
     return 1 * 60 * 60 * 24 * 365;
 }
+ 
  
  

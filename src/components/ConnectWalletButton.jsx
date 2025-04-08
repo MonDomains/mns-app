@@ -40,7 +40,7 @@ export default function ConnectWalletButton({ }) {
           </Button>
         :  
         <Dropdown>
-          <Dropdown.Toggle className='border-0' variant='none' size='lg'>
+          <Dropdown.Toggle className='border-0 p-1' variant='none' size='lg'>
             <img src={avatar} width={32} className='me-2' />
             { mnsName ? obscureName(mnsName, 20) : obscureAddress(address) }
           </Dropdown.Toggle> 
@@ -51,11 +51,14 @@ export default function ConnectWalletButton({ }) {
               </Dropdown.Item>
               :<></>
             }
+            <Dropdown.Item className={"fs-5"} href={`/account`}>
+              My Names
+            </Dropdown.Item>
             <Dropdown.Divider />
             <Dropdown.ItemText className='pt-2 pb-2 fs-6 fw-bold' role='button' onClick={()=> copyAddress(address)}>
               { !copyStatus ? <Copy /> : <Check /> } {obscureAddress(address)}
             </Dropdown.ItemText>
-            <Dropdown.Item className='text-danger pt-2 pb-2 fs-6 fw-bold' onClick={() => disconnect()}>
+            <Dropdown.Item href='#' className='text-danger pt-2 pb-2 fs-6 fw-bold' onClick={() => disconnect()}>
                <BoxArrowRight /> Disconnect 
             </Dropdown.Item>
           </Dropdown.Menu>
@@ -65,7 +68,7 @@ export default function ConnectWalletButton({ }) {
   } else {
     return (
         <>
-          <Button className="btn btn-primary fs-5 border-0" onClick={openConnectModal}>
+          <Button className="btn btn-primary fs-5 border-0 me-2" onClick={openConnectModal}>
             Connect Wallet
           </Button>
         </>

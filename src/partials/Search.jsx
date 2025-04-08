@@ -11,10 +11,11 @@ import { isValidDomain, obscureName, getOneYearDuration } from "../helpers/Strin
 import DomainPrice from '../components/DomainPrice';
 import { Link, useNavigate } from 'react-router'; 
 import { Spinner } from 'react-bootstrap';
-import {  ArrowRight, ArrowRightShort, XCircle } from 'react-bootstrap-icons';
+import {  ArrowRight, ArrowRightShort, SearchHeartFill, XCircle } from 'react-bootstrap-icons';
 import { chainId, rainbowConfig, registrarController, universalResolver } from '../config';
 import { ensNormalize, ethers } from 'ethers';
 import { getEnsName } from '@wagmi/core';
+import * as Icons from "react-bootstrap-icons";
 
 function Search({size}) {
      
@@ -88,16 +89,15 @@ function Search({size}) {
     });
  
     if(error) toast.error("An error occured.");
-
-    
-     
-    return ( 
-        
+ 
+    return (  
         <div className="col-12 col-lg-6 fs-5"> 
             <form className={focused ? "bg-light-subtle border border-2 border-primary rounded-4 position-relative": "bg-light-subtle border border-2 rounded-4 position-relative"} onSubmit={(e)=> handleSearch(e) }>
                 <div className="input-group flex-nowrap align-items-center pe-2">
                     <span className="input-group-prepend">
-                        <div className="input-group-text bg-light-subtle border-0"><img width={size=="sm"? 12 : 24} src={searchIcon} alt="" /></div>
+                        <div className="input-group-text bg-light-subtle border-0 text-body-emphasis">
+                            <Icons.Search size={24} />
+                        </div>
                     </span>
                     <input type="text" ref={inputRef} placeholder="Search for a name"  onKeyUp={(e)=> handleOnKeyUp(e) } onBlur={(e)=> setFocused(false)} onFocus={(e)=> setFocused(true)} className={size == "sm"? "bg-light-subtle shadow-none form-control fs-6 border-0 ps-0 pe-0": "bg-light-subtle shadow-none form-control form-control-lg fs-3 border-0 ps-0 pe-0"} />
                     { name != "" ? <> <XCircle size={24} role="button" className='p-1' onClick={(e)=> handleCloseResult(e)}  />  </> : "" }
@@ -105,7 +105,7 @@ function Search({size}) {
                 { name == "" & focused ?
                 <> 
                     <div className="d-flex flex-row border rounded-4 align-items-center p-3 mt-2 bg-light-subtle position-absolute w-100">
-                         <span className='text-secondary'>Type a name to search</span>
+                         <span className='text-secondary'>Type a name or address to search</span>
                     </div>
                 </>
                 : <></>

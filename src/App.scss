@@ -1,8 +1,12 @@
 
 $primary: #836EF9;
+$zindex-dropdown: 1060;
 
 .btn-primary {
     --bs-btn-color: #fff !important;
+    --bs-btn-active-color: #fff !important;
+    --bs-btn-hover-color: #fff !important;
+    --bs-btn-disabled-color: #fff !important;
 }
  
 // Import all of Bootstrap's CSS
