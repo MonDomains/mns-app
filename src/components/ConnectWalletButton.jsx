@@ -40,7 +40,7 @@ export default function ConnectWalletButton({ }) {
           </Button>
         :  
         <Dropdown>
-          <Dropdown.Toggle className='border-0 p-1' variant='none' size='lg'>
+          <Dropdown.Toggle className='bg-light-subtle border border-light-subtle rounded-5 ps-2 pe-2 pt-1 pb-1' variant='none' size='lg'>
             <img src={avatar} width={32} className='me-2' />
             { mnsName ? obscureName(mnsName, 20) : obscureAddress(address) }
           </Dropdown.Toggle> 

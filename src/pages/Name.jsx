@@ -1,69 +1,59 @@
-import { NavLink, useNavigate,  useParams } from "react-router";
-import { getTokenId, isValidDomain, obscureName } from "../helpers/String"; 
-import { useAccount, useReadContract } from 'wagmi'
-import React from "react";  
-import Domain from '../components/Domains';
-import { BoxArrowUpRight, Copy } from 'react-bootstrap-icons';
-import monRegisterControllerABI from '../abi/MONRegisterController.json'
-import { toast } from 'react-toastify';
-import { chainId, registrarController } from '../config';
+import { useLocation, useParams } from "react-router";
+import { isValidName, obscureName } from "../helpers/String"; 
+import { useAccount } from 'wagmi'
+import React, { useEffect, useState } from "react";  
+import Profile from "../components/Profile";
+import CopyText from "../components/Buttons/CopyText";
+import AddressLink from "../components/Buttons/AddressLink";
+import { Link } from "react-router"; 
+import Records from "../components/Records";
+import Ownership from "../components/Ownership";
+import More from "../components/More";
 
-
-const Name = () => { 
- 
-    const {name} = useParams(); 
-    const { address: owner }  = useAccount();
-    const navigate = useNavigate();
-      
-    function handleCopyClick(e) {
-        navigator.clipboard.writeText(name +".mon");
-        toast.success("Copied");
-    }
- 
-    const monRegisterControllerConfig = {
-        address: registrarController,
-        abi: monRegisterControllerABI
-    };
-
-    const { data: available, error, isPending } = useReadContract({
-        ...monRegisterControllerConfig,
-        functionName: 'available',
-        args: [name],
-        chainId: chainId
-    });
-  
-    if(error) toast.error("An error occured.");
-  
+const Name = () => {  
+    const { name } = useParams(); 
+    const search = useLocation().search;
+    const tab = new URLSearchParams(search).get("tab");
+    const { address }  = useAccount(); 
+    const [activeTab, setActiveTab] = useState();
+    
+    console.log(tab)
     return (
         <>    
-            {!isValidDomain(name) ?  
+            {!isValidName(name) ?  
                 <>  
                     <div className="alert alert-danger text-center container mt-3">
                         <b>{obscureName(name, 30)}</b> is invalid!
                     </div> 
                 </>
                 : 
-                <> 
-                    <div className='d-flex flex-column gap-3'>
-                        <div className='d-flex flex-column flex-md-row justify-content-between gap-3'>
-                            <div className='d-flex flex-column flex-lg-row align-items-start gap-3 '>
-                                <h2 className='p-0 m-0 text-truncate'>
-                                    <span> {obscureName(name, 18)}.mon </span> <button className='btn btn-sm btn-transparent' onClick={(e) => handleCopyClick(e)}><Copy /></button>
-                                </h2>
-                            </div>
-                            <div className='d-flex flex-row justify-content-end align-items-center gap-3'>
-                                {available ? <span className='badge text-bg-success'>Available</span>: <></>}
-                                {available ?  <NavLink to={"/register/"+ name +".mon"} className={"btn btn-lg  btn-primary rounded-2 border-0"} >Register Now</NavLink>: <></> }
-                            </div>
-                        </div> 
-                        <ul className='list-unstyled list-inline text-muted fs-4 d-flex flex-row gap-3 fw-bold'>
-                            <li> <NavLink className='text-decoration-none link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover' to={"/"+ name +".mon"}>Profile</NavLink> </li>
-                        </ul> 
+                <div className="d-flex flex-column gap-3 p-0"> 
+                    <div className='d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-1 ps-2 pe-2'>
+                        <h1 className="m-0 fw-bold p-0 m-0">
+                            {name}
+                            <span><CopyText className="btn btn-default p-0 ms-2" text={name} /></span>
+                        </h1>
+                        <AddressLink name={name} />
+                    </div> 
+                    <ul className='mb-0 ps-2 pe-2 list-unstyled list-inline text-muted fs-4 d-flex flex-row gap-3 fw-bold overflow-x-scroll'>
+                        <li> <Link className={'text-decoration-none '+ (tab == "profile" ? "link-primary": "link-secondary") } to={"/"+ name + "?tab=profile"}>Profile</Link> </li>
+                        <li> <Link className={'text-decoration-none '+ (tab == "records" ? "link-primary": "link-secondary")} to={"/"+ name + "?tab=records"}>Records</Link> </li>
+                        <li> <Link className={'text-decoration-none '+ (tab == "ownership" ? "link-primary": "link-secondary")} to={"/"+ name + "?tab=ownership"}>Ownership</Link> </li>
+                        <li> <Link className={'text-decoration-none '+ (tab == "more" ? "link-primary": "link-secondary")} to={"/"+ name +"?tab=more"}>More</Link> </li>
+                    </ul>
+                    <div className="d-flex flex-column">
+                        {
+                            { 
+                                "profile": <Profile name={name} address={address} />,
+                                "records": <Records name={name} address={address} />,
+                                "ownership": <Ownership name={name} address={address} />,
+                                "more": <More name={name} address={address} />,
+                                null: <Profile name={name} address={address} />
+                            }[tab]
+                        }
+                       
                     </div>
-                    <div className="d-flex flex-column bg-body-tertiary border border-light-subtle rounded-4 p-3 gap-4">
-                        <Domain name={name} owner={owner} />
-                    </div>
-                </> 
+                </div> 
             }
         </>
     ) 

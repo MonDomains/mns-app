@@ -197,6 +197,9 @@ class MyNames extends Component {
                 {
                     or: [ 
                         {
+                            owner: this.props.address.toLowerCase()
+                        },
+                        {
                             registrant: this.props.address.toLowerCase()
                         },
                         {
@@ -240,7 +243,7 @@ class MyNames extends Component {
           ]
         }
         if(this.state.q.length > 0) {
-          filter.and.push({ name_contains: this.state.q });
+          filter.and.push({ name_contains: this.state.q.toLocaleLowerCase() });
         } 
         return filter;
     }
@@ -371,7 +374,7 @@ class MyNames extends Component {
         return (<>  
         
             <div className="d-flex flex-column gap-3 p-0">
-                <h2>Names</h2>
+                <h2 className='fw-bold'>Names</h2>
                 <div className="d-flex flex-column bg-body-tertiary border border-light-subtle rounded-2 gap-2">
                     <div className="d-flex flex-column flex-md-row flex-column-reverse gap-3 justify-content-between p-3 border-bottom sticky-top bg-body-tertiary">
                         <div className="d-flex flex-row gap-3 align-items-center">
@@ -439,7 +442,7 @@ class MyNames extends Component {
                                                 <h3 className='m-0'>{domain.labelName}<small className='text-body-secondary fw-bold'>.mon</small></h3>
                                                 <small className="text-muted">Expires {getExpires(domain.registration?.expiryDate)}</small>
                                             </div>
-                                            <div className="d-flex flex-column flex-md-row justify-content-between gap-2 align-items-md-end">
+                                            <div className="d-flex flex-column flex-md-row justify-content-between gap-2 align-items-end">
                                                 { domain.name === this.props.name ?
                                                     <span><small className="badge bg-primary-subtle text-primary-emphasis">Primary</small></span>
                                                     : <></>

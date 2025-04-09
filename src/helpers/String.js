@@ -9,7 +9,7 @@ const PREMIUM_PERIOD =  Number(import.meta.env.VITE_APP_PREMIUM_PERIOD);
 export const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 
 export const obscureAddress = (address) => {
-    return address?.substring(0, 4) + '...' + address?.substring(address?.length - 4, address?.length);
+    return address?.substring(0, 5) + '...' + address?.substring(address?.length - 5, address?.length);
 }
  
 export const obscureEnsName = (name) => {

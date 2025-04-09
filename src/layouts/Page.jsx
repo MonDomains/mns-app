@@ -8,7 +8,7 @@ export default function Page() {
             <div className="container-fluid p-0 m-0">
                 <Header showSearch={true}/> 
             </div>
-            <div className='container align-items-center mt-lg-5 p-4 p-lg-0' style={ { maxWidth:980 }}>  
+            <div className='container align-items-center mt-lg-3 p-4 p-lg-0' style={ { maxWidth:768 }}>  
                 <div className="row">
                     <Outlet />
                 </div>
