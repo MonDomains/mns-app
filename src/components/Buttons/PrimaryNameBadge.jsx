@@ -1,0 +1,32 @@
+
+
+import monadIcon from '../../assets/images/monad.svg';
+import { Button } from "react-bootstrap";
+import CopyText from "./CopyText";
+import { namehash } from 'viem';
+import * as Icons from "react-bootstrap-icons";
+import { universalResolver } from '../../config';
+import { monadTestnet } from 'viem/chains';
+import { useEnsName } from 'wagmi';
+import { ensNormalize } from 'ethers';
+
+function PrimaryNameBadge (props) {   
+    const {data: mnsName } = useEnsName({
+        address: props.address,
+        universalResolverAddress: universalResolver,
+        chainId: monadTestnet.id
+    }); 
+    
+    return (   
+        <>
+            { mnsName && mnsName == props.name ? 
+                <span className='bg-success-subtle border border-success-subtle p-2 fw-bold text-success-emphasis rounded-3'>
+                    <Icons.PersonSquare /> <span>Your Primary Name</span>
+                </span>
+                : <></>
+            }
+        </>
+    );
+}
+
+export default PrimaryNameBadge;

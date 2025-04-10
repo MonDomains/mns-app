@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 
-export const GET_SUBGRAPH_RECORDS = `
+export const GET_SUBGRAPH_RECORDS = gql`
 query getSubgraphRecords($id: String!) {  
     domain(id: $id) {
         name    

@@ -10,11 +10,15 @@ export const chainId = import.meta.env.VITE_APP_NODE_ENV === "production" ? mona
 export const mnsRegistry = import.meta.env.VITE_APP_REGISTRY;
 export const registrarController = import.meta.env.VITE_APP_REGISTER_CONTROLLER;
 export const publicResolver = import.meta.env.VITE_APP_PUBLIC_RESOLVER;
+export const baseRegistrar = import.meta.env.VITE_APP_BASE_REGISTRAR;
+export const nameWrapper = import.meta.env.VITE_APP_NAME_WRAPPER;
 export const universalResolver = import.meta.env.VITE_APP_UNIVERSAL_RESOLVER;
 export const bulkRenewal = import.meta.env.VITE_APP_BULK_RENEWAL;
 export const projectId = import.meta.env.VITE_APP_PROJECT_ID;
 export const NODE_PROVIDER_URL = import.meta.env.VITE_APP_NODE_PROVIDER_URL;
-
+export const explorerUrl = import.meta.env.VITE_APP_EXPLORER_URL;
+export const gracePeriod = import.meta.env.VITE_APP_GRACE_PERIOD;
+export const zeroAddress = "0x0000000000000000000000000000000000000000"
 export const rainbowConfig = getDefaultConfig({
   appName: 'Mon Name Service',
   projectId: projectId,
