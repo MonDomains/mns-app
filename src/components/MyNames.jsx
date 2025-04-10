@@ -451,7 +451,7 @@ class MyNames extends Component {
                                                     <span><small className="badge bg-primary-subtle text-primary-emphasis">Manager</small></span>
                                                     : <></>
                                                 }
-                                                { domain.registrant.id === this.props.address.toLowerCase() || domain.wrappedOwner.id === this.props.address.toLowerCase() ?
+                                                { domain.registrant.id === this.props.address.toLowerCase() || domain.wrappedOwner?.id === this.props.address.toLowerCase() ?
                                                     <span><small className="badge bg-primary-subtle text-primary-emphasis">Owner</small></span>
                                                     : <></>
                                                 }

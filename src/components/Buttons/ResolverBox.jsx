@@ -21,11 +21,10 @@ function ResolverBox(props) {
     return ( 
         <>
         { mnsResolver ? 
-            <a role="button" className='btn btn-link text-decoration-none bg-secondary-subtle border border-light-subtle text-body-emphasis border rounded-3 d-flex flex-row align-items-start justify-content-between gap-2' 
-                {...props}>
+            <CopyText className="btn btn-default ms-2 bg-secondary-subtle border border-light-subtle border rounded-3 p-2 d-flex align-items-center flex-fill justify-content-between" 
+                text={mnsResolver}>
                 {mnsResolver}
-                <CopyText className="p-0 btn btn-default ms-2" text={mnsResolver} />
-            </a>
+            </CopyText>
            : <></>
         }
         </>

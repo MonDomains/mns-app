@@ -26,7 +26,7 @@ export default function App() {
                     </Route>
                     <Route path="/" element={<Layouts.Page />}>
                       <Route path="/account" element={<Account />} />
-                      <Route path="/:name" element={<Name />} />
+                      <Route path="/:name.mon" element={<Name />} />
                       <Route path="/register/:name.mon" element={<Register />} />
                       <Route path="/404" element={<Notfound />} />  
                       <Route path="*" element={<Navigate replace={true} to="/404" />} />

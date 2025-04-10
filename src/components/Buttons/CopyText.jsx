@@ -18,11 +18,23 @@ function CopyText (props) {
     } 
 
     return (  
-        <button
-            {...props}
-            onClick={(e) => copyText(props.text)}> 
-            { !copyStatus ? <Icons.Copy /> : <Icons.Check /> } {props.children}
-        </button>
+        <> 
+            {props.reverse == true ? 
+                <button
+                    {...props}
+                    onClick={(e) => copyText(props.text)}> 
+                    { !copyStatus ? <Icons.Copy /> : <Icons.Check /> } {props.children}
+                </button>
+                : 
+                <button
+                    {...props}
+                    onClick={(e) => copyText(props.text)}> 
+                    {props.children} { !copyStatus ? <Icons.Copy /> : <Icons.Check /> }
+                </button>
+            }
+        </>
+        
+        
     );
 }
 

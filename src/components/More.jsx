@@ -23,6 +23,7 @@ import HexButton from './Buttons/HexButton';
 import DecimalButton from './Buttons/DecimalButton';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import ResolverBox from './Buttons/ResolverBox';
+import ResolverEditButton from './Buttons/ResolverEditButton';
  
 class More extends Component {
     constructor(props) { 
@@ -63,20 +64,20 @@ class More extends Component {
             <div className='d-flex flex-column gap-3'> 
             <div className='bg-light-subtle border border-light-subtle rounded-4'>
                 <div className='d-flex flex-row p-4 justify-content-between border-bottom'>
-                    <h3>Token</h3>
+                    <h5 className='fw-bold'>Token</h5>
                     <ExplorerLink name={this.props.name} />
                 </div>
-                <div className='d-flex flex-column flex-md-row align-items-top justify-content-between'>
-                    <div className='d-flex flex-column p-4 gap-2 flex-grow-1'>
+                <div className='d-flex flex-column flex-md-row align-items-top justify-content-between gap-3 p-4'>
+                    <div className='d-flex flex-column gap-2'>
                         <HexButton name={this.props.name} />
                         <DecimalButton name={this.props.name} />
                     </div>
-                    <div className='d-flex flex-column p-4 '>
+                    <div className='d-flex flex-column'>
                         <LazyLoadImage 
                             src={`${import.meta.env.VITE_APP_METADATA_API }/preview/${this.props.name}`}
                             alt={this.props.name}
                             placeholder={<Spinner />}
-                            className="rounded-1 preview"
+                            className="rounded-1 image-preview"
                         /> 
                     </div>
                 </div>
@@ -84,10 +85,11 @@ class More extends Component {
 
             <div className='bg-light-subtle border border-light-subtle rounded-4'>
                 <div className='d-flex flex-row p-4 justify-content-between border-bottom'>
-                    <h4 className='fw-bold'>Resolver</h4>
+                    <h5 className='fw-bold'>Resolver</h5>
                 </div>
-                <div className='d-flex flex-column p-4'>
+                <div className='d-flex flex-row p-4 gap-3'>
                     <ResolverBox name={this.props.name} />
+                    <ResolverEditButton a="owner degilse cikmayacak" />
                 </div>
             </div>
             </div>

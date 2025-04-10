@@ -28,7 +28,11 @@ body {
 
 .preview { 
     min-width: 270px !important;
-    min-height: 270px !important;  
+    min-height: 270px !important;
+}
+
+.image-preview { 
+    min-width: 160px;
 }
 
 .nav::after {
@@ -46,4 +50,8 @@ body {
 
 .dropup::after {
     display:none;
+}
+
+.textbreak {
+    overflow-wrap: break-word !important;
 }

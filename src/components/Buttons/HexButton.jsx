@@ -7,14 +7,13 @@ function HexButton (props) {
     const hex = namehash(props.name); 
     return (   
         <>
-        <a role='button' className='btn btn-link text-decoration-none bg-secondary-subtle border border-light-subtle text-body-emphasis border rounded-3 d-flex flex-row align-items-start justify-content-between gap-2' 
-            {...props}>
-            <span className='fw-bold'>hex</span>
-            <span className='text-break text-end'>
-                {hex}
-            </span>
-            <CopyText className="p-0 btn btn-default ms-2" text={hex} />
-        </a>
+             <CopyText className="p-3 btn btn-default btn btn-default bg-secondary-subtle border border-light-subtle text-body-emphasis border rounded-3 d-flex flex-row align-items-start justify-content-between gap-2" 
+                text={hex} {...props}>
+                <span className='fw-bold text-start w-25'>hex</span>
+                <small className='text-wrap text-break text-start w-75'>
+                    {hex}
+                </small>
+            </CopyText>
         </>
     );
 }
