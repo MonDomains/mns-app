@@ -20,7 +20,7 @@ export default function ConnectWalletButton({ }) {
     address: address,
     universalResolverAddress: universalResolver,
     chainId: monadTestnet.id
-  }); 
+  });
 
   const [copyStatus, setCopyStatus] = useState(false);
   function copyAddress(address) {
@@ -40,9 +40,9 @@ export default function ConnectWalletButton({ }) {
           </Button>
         :  
         <Dropdown>
-          <Dropdown.Toggle className='bg-light-subtle border border-light-subtle rounded-5 ps-2 pe-2 pt-1 pb-1' variant='none' size='lg'>
+          <Dropdown.Toggle className='bg-light-subtle border border-light-subtle rounded-4 ps-2 pe-2 pt-1 pb-1' variant='none' size='lg'>
             <img src={avatar} width={32} className='me-2' />
-            { mnsName ? obscureName(mnsName, 20) : obscureAddress(address) }
+            { mnsName ? obscureName(mnsName, 14) : obscureAddress(address) }
           </Dropdown.Toggle> 
           <Dropdown.Menu>
             {mnsName ?
@@ -55,7 +55,7 @@ export default function ConnectWalletButton({ }) {
               My Names
             </Dropdown.Item>
             <Dropdown.Divider />
-            <Dropdown.ItemText className='pt-2 pb-2 fs-6 fw-bold' role='button' onClick={()=> copyAddress(address)}>
+            <Dropdown.ItemText className='pt-2 pb-2 fs-6 fw-bold text-truncate' role='button' onClick={()=> copyAddress(address)}>
               { !copyStatus ? <Copy /> : <Check /> } {obscureAddress(address)}
             </Dropdown.ItemText>
             <Dropdown.Item href='#' className='text-danger pt-2 pb-2 fs-6 fw-bold' onClick={() => disconnect()}>

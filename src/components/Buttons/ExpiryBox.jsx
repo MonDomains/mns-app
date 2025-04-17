@@ -22,7 +22,7 @@ function ExpiryBox(props) {
     });  
      
     return (  
-        <CopyText className="btn btn-default ms-2 bg-secondary-subtle border border-light-subtle border rounded-3 p-2 d-flex align-items-center justify-content-between gap-2" 
+        <CopyText className="btn btn-default bg-body-tertiary border border-light-subtle border rounded-3 d-flex align-items-center justify-content-between gap-2" 
             text={expiry}>
             <span className="fw-bold">expiry</span>
             { isLoading ? "Loading...": expiry ? moment.unix(Number(expiry)).format("ll") : "n/a" }

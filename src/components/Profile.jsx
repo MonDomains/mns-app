@@ -24,6 +24,12 @@ import ExpiryBox from './Buttons/ExpiryBox';
 import ParentBox from './Buttons/ParentBox';
 import ShareButton from './Buttons/ShareButton';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
+import More from './More';
+import AddressLink from './Buttons/AddressLink';
+import ViewResolvedAddressBox from './Buttons/ViewResolvedAddressBox';
+import SetAddrButton from './Buttons/SetAddrButton';
+import SetAsPrimaryButton from './Buttons/SetAsPrimaryButton';
+import { normalize } from 'viem/ens';
  
 class Profile extends Component {
     constructor(props) { 
@@ -32,7 +38,7 @@ class Profile extends Component {
         this.state = {
             error: null,
             domain: null,
-            isRecordFetching: false, 
+            isRecordFetching: false
         };  
     }
 
@@ -40,7 +46,7 @@ class Profile extends Component {
         
         try {
             this.setState({ isRecordFetching: true })
-            let id = namehash(this.props.name);
+            let id = namehash(normalize(this.props.name));
             const result = await apolloClient.query( {
                 query: GET_SUBGRAPH_RECORDS,
                 variables: {
@@ -72,58 +78,64 @@ class Profile extends Component {
                         <div className='position-absolute top-50 start-0 ms-4'>
                             <img src={avatar} width={128} role="button" />
                         </div>
+                         
+                    </div> 
+                    <div className='d-flex flex-row p-3 align-items-end justify-content-end gap-2'>
+                        <ViewResolvedAddressBox {...this.props} />
                     </div>
-                    <div className='d-flex flex-row p-3 align-items-end justify-content-end'>
-                        <ExtendButton />
-                    </div>
-                    <div className='d-flex flex-column p-4 pt-1 gap-3'>
-                        <h2 className='fw-bold'>{this.props.name}</h2>
-                        <div className=''>
-                            <PrimaryNameBadge address={this.props.address} name={this.props.name} />
+                    <div className='d-flex flex-column p-4 pt-1 gap-2'>
+                        <h1 className='fw-bold text-trunctate text-wrap text-break'>
+                            {this.props.name}
+                            <CopyText className="btn btn-default p-0 ms-2 mb-2" text={this.props.name} />
+                        </h1>
+                        
+                        <div className='d-flex flex-column flex-md-row align-items-start justify-content-between gap-2'>
+                            {this.props.isOwner ?  
+                                <PrimaryNameBadge {...this.props} />
+                                : <></>
+                            }
+                            <ShareButton {...this.props} />
                         </div>
                     </div>
-                </div>
-                <div className='bg-light-subtle border border-light-subtle rounded-4 p-4 d-flex flex-column gap-4'>
-                    <div className='d-flex flex-row justify-content-between'>
-                        <div className='d-flex flex-column gap-2'>
-                            <span className='text-muted fs-5 fw-bold'>
-                                Address
-                            </span>
-                            <span>
-                                <AddressBox name={this.props.name} />
-                            </span>
+                </div> 
+                <div className='bg-light-subtle border border-light-subtle rounded-4 d-flex flex-column gap-4'>
+                    <div className='p-4 d-flex flex-column gap-4'>
+                        <div className='d-flex flex-row justify-content-between'>
+                            <div className='d-flex flex-column gap-2'> 
+                                <div className='text-muted fs-5 fw-bold'>
+                                    Address
+                                </div>
+                                <div className='d-flex flex-row'>
+                                    <AddressBox {...this.props} />   
+                                </div>
+                            </div> 
                         </div>
-                        <div className='d-flex flex-column gap-2'>
-                            <LazyLoadImage 
-                                src={`${import.meta.env.VITE_APP_METADATA_API }/preview/${this.props.name}`}
-                                alt={this.props.name}
-                                placeholder={<Spinner />}
-                                className="rounded-1 image-preview"
-                            />
-                            <ShareButton name={this.props.name} />
+                        <div className='d-flex flex-column flex-md-row'>
+                            <div className='d-flex flex-column gap-2'>
+                                <span className='text-muted fs-5 fw-bold'>
+                                    Ownership
+                                </span>
+                                <div className='d-flex flex-wrap gap-3'>
+                                    <span>
+                                        <OwnerBox isWrapped={this.props.isWrapped} address={this.props.address} name={this.props.name} labelName={this.props.labelName} />
+                                    </span>
+                                    <span>
+                                        <ExpiryBox isWrapped={this.props.isWrapped} address={this.props.address} name={this.props.name} labelName={this.props.labelName} />
+                                    </span>
+                                    <span>
+                                        <ParentBox isWrapped={this.props.isWrapped} address={this.props.address} name={this.props.name} labelName={this.props.labelName} />
+                                    </span>
+                                </div>
+                            </div> 
                         </div>
                     </div>
-                    <div className='d-flex flex-column flex-md-row'>
-                        <div className='d-flex flex-column gap-2'>
-                            <span className='text-muted fs-5 fw-bold'>
-                                Ownership  
-                                <Link to={"/"+ this.props.name +"?tab=ownership"} variant='default' className='btn btn-default text-primary fw-bold'>
-                                    <Icons.ArrowRight /> View
-                                </Link>
-                            </span>
-                            <div className='d-flex flex-column flex-md-row gap-3'>
-                            <span>
-                                <OwnerBox isWrapped={this.props.isWrapped} address={this.props.address} name={this.props.name} />
-                            </span>
-                            <span>
-                                <ExpiryBox isWrapped={this.props.isWrapped} address={this.props.address} name={this.props.name} labelName={this.props.labelName} />
-                            </span>
-                            <span>
-                                <ParentBox isWrapped={this.props.isWrapped} address={this.props.address} name={this.props.name} labelName={this.props.labelName} />
-                            </span>
-                            </div>
-                        </div> 
-                    </div>
+                    { this.props.isOwner ?
+                        <div className='d-flex flex-row border-top border-light-subtle p-3 justify-content-start justify-content-lg-end gap-2'>
+                            <ExtendButton {...this.props} />
+                            <SetAsPrimaryButton {...this.props} />
+                        </div>
+                        : <></>
+                    }
                 </div>
              </div>
         )

@@ -3,7 +3,7 @@ import moment from 'moment';
 import React, {Component} from 'react';
 import { monadTestnet } from 'viem/chains';
 import * as Icons from "react-bootstrap-icons";
-import { apolloClient, bulkRenewal, rainbowConfig } from '../config';
+import { apolloClient, bulkRenewal, gracePeriod, rainbowConfig } from '../config';
 import { GET_MY_DOMAINS } from '../graphql/Domain';
 import { Modal, Spinner } from 'react-bootstrap';
 import { getExpires } from '../helpers/String';
@@ -12,6 +12,8 @@ import { Link } from 'react-router';
 import { getBalance, getGasPrice, readContract, waitForTransactionReceipt, writeContract } from '@wagmi/core'
 import { ethers, formatEther } from 'ethers';
 import staticBulkRenewalABI from "../abi/StaticBulkRenewal.json";
+import ExpiresText from './Buttons/ExpiresText';
+import GasInfoBox from './Buttons/GasInfoBox';
 
 class MyNames extends Component {
     constructor(props) { 
@@ -49,7 +51,7 @@ class MyNames extends Component {
             isFetchingBalance: false,
         };  
     }
-
+     
     async handleExtend() { 
         try {
             let names = this.state.selectedDomains.filter(t=> t.isSelected == true).map(t=> t.labelName);
@@ -196,9 +198,10 @@ class MyNames extends Component {
           
                 {
                     or: [ 
+                        /*
                         {
                             owner: this.props.address.toLowerCase()
-                        },
+                        },*/
                         {
                             registrant: this.props.address.toLowerCase()
                         },
@@ -440,17 +443,13 @@ class MyNames extends Component {
                                             className="w-100 text-truncate text-decoration-none link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover d-flex flex-row gap-2 align-items-center justify-content-between text-truncate">
                                             <div className="d-flex flex-column text-truncate align-items-start">
                                                 <h3 className='m-0'>{domain.labelName}<small className='text-body-secondary fw-bold'>.mon</small></h3>
-                                                <small className="text-muted">Expires {getExpires(domain.registration?.expiryDate)}</small>
+                                                <ExpiresText expires={domain.registration?.expiryDate} />
                                             </div>
                                             <div className="d-flex flex-column flex-md-row justify-content-between gap-2 align-items-end">
                                                 { domain.name === this.props.name ?
                                                     <span><small className="badge bg-primary-subtle text-primary-emphasis">Primary</small></span>
                                                     : <></>
-                                                }
-                                                { domain.owner.id === this.props.address.toLowerCase() ?
-                                                    <span><small className="badge bg-primary-subtle text-primary-emphasis">Manager</small></span>
-                                                    : <></>
-                                                }
+                                                } 
                                                 { domain.registrant.id === this.props.address.toLowerCase() || domain.wrappedOwner?.id === this.props.address.toLowerCase() ?
                                                     <span><small className="badge bg-primary-subtle text-primary-emphasis">Owner</small></span>
                                                     : <></>
@@ -533,7 +532,7 @@ class MyNames extends Component {
                                         </div>
                                         <div className="d-flex flex-column text-truncate align-items-start">
                                             <h3 className='m-0'>{domain.labelName}<small className='text-body-secondary fw-bold'>.mon</small></h3>
-                                            <small className="text-muted">Expires {getExpires(domain.registration?.expiryDate)}</small>
+                                            <ExpiresText expires={domain.registration?.expiryDate} />
                                         </div>
                                     </div>
                                 </li>
@@ -554,7 +553,7 @@ class MyNames extends Component {
                             </div>
                             <div className='d-flex flex-row align-items-center justify-content-between p-2'>
                                 <div className='flex-fill text-muted fw-bold'>
-                                    <Icons.EvStationFill/> { this.state.isGasPricePending ? <Spinner size="sm" variant="primary" /> : ethers.formatUnits(this.state.gasPrice, "gwei")} Gwei
+                                    <GasInfoBox handleError={this.handleError} />
                                 </div>
                                 <div className='rounded-3 bg-primary p-2 text-white'>
                                     {import.meta.env.VITE_APP_NATIVE_TOKEN}
@@ -654,7 +653,7 @@ class MyNames extends Component {
                         {this.state.step == 1 && this.state.txHash == null ?
                             <button className='btn btn-default bg-primary-subtle btn-lg w-100' onClick={() => this.closeExtendModal()}>
                                 Cancel
-                            </button>: <></>
+                            </button> : <></>
                         }
                     </div> : <></>
                     }

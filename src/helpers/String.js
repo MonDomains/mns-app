@@ -2,6 +2,7 @@ import { ethers } from 'ethers';
 import moment from 'moment';
 import {validate} from "@ensdomains/ens-validation"           
 import json5 from "json5";
+import { namehash, normalize } from 'viem/ens';
 
 const GRACE_PERIOD = Number(import.meta.env.VITE_APP_GRACE_PREIOD);
 const PREMIUM_PERIOD =  Number(import.meta.env.VITE_APP_PREMIUM_PERIOD);
@@ -51,7 +52,7 @@ export const getLabelHash = (label) => {
 }
 
 export const getNameHash = (name) => { 
-    return ethers.namehash(name);
+    return namehash( normalize( name ));
 }
   
 export const isAscii = (label) => { 
@@ -79,7 +80,9 @@ export function getTimeAgo(timestamp) {
 
 export function getExpires(expires, suffix = false) {
     if(expires === null) return "-";
-    return moment.unix(expires).add(GRACE_PERIOD + PREMIUM_PERIOD, "days").fromNow(suffix)
+   
+    return moment.unix(expires).add(GRACE_PERIOD, "days").fromNow(suffix);
+    
 }
 
 export function getNewExpiry(duration = 1) {

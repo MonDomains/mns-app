@@ -20,8 +20,8 @@ function PrimaryNameBadge (props) {
     return (   
         <>
             { mnsName && mnsName == props.name ? 
-                <span className='bg-success-subtle border border-success-subtle p-2 fw-bold text-success-emphasis rounded-3'>
-                    <Icons.PersonSquare /> <span>Your Primary Name</span>
+                <span className='btn bg-success-subtle border border-success-subtle text-success fw-bold rounded-3'>
+                    <Icons.PersonSquare className='mb-1' /> <span className=''>Your Primary Name</span>
                 </span>
                 : <></>
             }

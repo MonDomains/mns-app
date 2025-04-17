@@ -19,6 +19,7 @@ import CopyText from "./Buttons/CopyText";
 import ExtendButton from './Buttons/ExtendButton';
 import AddressBox from './Buttons/AddressBox';
 import OwnerBox from './Buttons/OwnerBox';
+import { normalize } from 'viem/ens';
  
 class Ownership extends Component {
     constructor(props) { 
@@ -35,7 +36,7 @@ class Ownership extends Component {
         
         try {
             this.setState({ isRecordFetching: true })
-            let id = namehash(this.props.name);
+            let id = namehash( normalize( this.props.name ));
              
             this.setState({ domain: result.data?.domain, isRecordFetching: false })
         } catch(e) {

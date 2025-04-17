@@ -1,23 +1,26 @@
 import { Link } from "react-bootstrap-icons";
 import { getTokenId } from "../../helpers/String";
 import * as Icons from "react-bootstrap-icons";
-import { namehash } from "viem";
+import { labelhash, namehash } from "viem";
 import { ethers } from "ethers";
+import { normalize } from "viem/ens";
 
-function ExplorerLink({name, isWrapped = true }) { 
+function ExplorerLink({name, labelName, isWrapped = true }) { 
     
     const explorerUrl = import.meta.env.VITE_APP_EXPLORER_URL;
     const nameWrapperAddress = import.meta.env.VITE_APP_NAME_WRAPPER;
-    const nameId = ethers.toBigInt(namehash(name));
-    const labelId = ethers.toBigInt(namehash(name));
-
+    const baseRegistrar = import.meta.env.VITE_APP_BASE_REGISTRAR;
+    const nameId = ethers.toBigInt(namehash(normalize(name)));
+    const labelId = ethers.toBigInt(labelhash(labelName));
+ 
     function getTokenUrl() {
         const tokenId = isWrapped ?  nameId: labelId;
-        const url = `${explorerUrl}/nft/${nameWrapperAddress}/${tokenId}`;
+        const contractAddress = isWrapped ?  nameWrapperAddress: baseRegistrar;
+        const url = `${explorerUrl}/nft/${contractAddress}/${tokenId}`;
         return url;
     }
     return ( 
-        <a className='link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover' 
+        <a className='btn btn-sm bg-info-subtle border border border-info text-info rounded-3 fw-bold' 
             target="_blank" 
             href={getTokenUrl()}>
                 <Icons.BoxArrowUpRight />

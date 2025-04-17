@@ -1,4 +1,4 @@
-import { ethers, formatEther, AbiCoder, Interface } from "ethers";
+import { ethers, formatEther, AbiCoder, Interface, namehash } from "ethers";
 import { apolloClient, chainId, rainbowConfig, registrarController } from "../config";
 import { getGasPrice, readContract, writeContract } from '@wagmi/core'
 import { toast } from "react-toastify";
@@ -15,6 +15,7 @@ import { BoxArrowUpRight, Check, DashCircleFill, EvStationFill, PlusCircleFill, 
 import ConnectWalletButton from "./ConnectWalletButton";
 import txProcessingGif from "../assets/images/tx_processing.gif"
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import { normalize } from "viem/ens";
 
 
 class RegisterName extends Component {
@@ -85,7 +86,7 @@ class RegisterName extends Component {
          
         try {
 
-            const nameHash = getNameHash(`${this.props.name}.mon`);
+            const nameHash = namehash(normalize(`${this.props.name}`));
             let iface = new Interface([
                 "function setAddr(bytes32 node,address a)"
             ]);
@@ -103,12 +104,11 @@ class RegisterName extends Component {
                 abi: monRegisterControllerABI,
                 address: registrarController,
                 functionName: "register",
-                args: [ String(this.props.name), this.props.owner, this.getDuration(), getNameHash(this.props.name), this.resolver, [calldata], this.state.reverseRecord, 0],
+                args: [ String(this.props.labelName), this.props.owner, this.getDuration(), namehash(normalize(this.props.name)), this.resolver, [calldata], this.state.reverseRecord, 0],
                 account: this.props.owner,
                 value: this.state.price,
                 chainId: chainId
-            });
-            console.log(_hash)
+            }); 
 
             this.setState({ txHash: _hash });
 
@@ -142,13 +142,13 @@ class RegisterName extends Component {
                 abi: monRegisterControllerABI,
                 address: registrarController,
                 functionName: 'available',
-                args: [this.props.name],
+                args: [this.props.labelName],
                 account: this.props.owner,
                 chainId: chainId
             });
 
             if(!_available) {
-                this.props.navigate("/"+ this.props.name + ".mon");
+                this.props.navigate("/"+ this.props.labelName + ".mon");
             }
 
             this.setState({ isAvailablePending: false });
@@ -165,7 +165,7 @@ class RegisterName extends Component {
     async handleQuery() {
 
         try {
-            let name = this.props.name + ".mon";
+            let name = this.props.labelName + ".mon";
             const result = await apolloClient.query( {
                 query: GET_DOMAIN,
                 variables: {
@@ -197,13 +197,13 @@ class RegisterName extends Component {
 
     getText() {
         return encodeURIComponent(
-`I've just minted ${obscureName(this.props.name, 20)}.mon 😎
+`I've just minted ${obscureName(this.props.labelName, 20)}.mon 😎
 
 Powered by @MonDomains, built on @monad_xyz
 
 Mint yours! 👇
 
-https://dapp.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()} 
+https://dapp.monadns.com/${this.props.labelName}.mon?v=${this.getUnixTime()} 
  
  `);
 
@@ -217,7 +217,7 @@ https://dapp.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()}
                 abi: monRegisterControllerABI,
                 address: registrarController,
                 functionName: 'rentPrice',
-                args: [this.props.name, this.getDuration()],
+                args: [this.props.labelName, this.getDuration()],
                 account: this.props.owner,
                 chainId: chainId
             });
@@ -268,7 +268,7 @@ https://dapp.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()}
 
     componentDidUpdate(prevProps, prevState) { 
          
-        if(prevProps.name != this.props.name) {
+        if(prevProps.labelName != this.props.labelName) {
             this.handleAvailable();
             this.handleQuery();
             this.handlePrice();
@@ -307,7 +307,7 @@ https://dapp.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()}
                     </div>
                     <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-start gap-5">
                         <LazyLoadImage 
-                            src={import.meta.env.VITE_APP_METADATA_API + "/preview/"+ this.props.name + ".mon"}
+                            src={import.meta.env.VITE_APP_METADATA_API + "/preview/"+ this.props.labelName + ".mon"}
                             alt={this.props.name}
                             placeholder={<Spinner />}
                             className="rounded-1 preview"
@@ -378,7 +378,7 @@ https://dapp.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()}
 
             {this.state.processing ? 
                 <div className="d-flex flex-column justify-content-center align-items-center gap-3 p-3">
-                    <h2>Registering <span>{obscureName( this.props.name , 20)}.mon</span> </h2>
+                    <h2>Registering <span>{obscureName( this.props.labelName , 20)}.mon</span> </h2>
 
                     <div className="d-flex flex-column justify-content-center align-items-center  gap-4">
                         <img width={240} src={txProcessingGif} />
@@ -400,7 +400,7 @@ https://dapp.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()}
                 <div className="d-flex flex-column flex-fill align-items-center gap-4 p-4">
                     <h2 className="text-center"><Check /> Successfully Registered</h2>       
                     <LazyLoadImage 
-                        src={`${import.meta.env.VITE_APP_METADATA_API }/preview/${this.props.name}.mon`}
+                        src={`${import.meta.env.VITE_APP_METADATA_API }/preview/${this.props.labelName}.mon`}
                         alt={this.props.name}
                         placeholder={<Spinner />}
                         className="rounded-1 preview"
@@ -409,14 +409,14 @@ https://dapp.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()}
                         Share on <TwitterX />
                     </Link>  
                     <p className="fs-5 fw-bold mb-0 text-center">
-                        Your are the owner of <span>{obscureName( this.props.name , 20)}.mon</span>
+                        Your are the owner of <span>{obscureName( this.props.labelName , 20)}.mon</span>
                     </p> 
                     <div className="d-flex flex-column flex-lg-row justify-content-between align-items-center gap-4">
-                        <Link to={`${import.meta.env.VITE_APP_TOKEN_URL}/${getTokenId(this.props.name)}`} target='_blank' className='link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover'>
+                        <Link to={`${import.meta.env.VITE_APP_TOKEN_URL}/${getTokenId(this.props.labelName)}`} target='_blank' className='link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover'>
                             <BoxArrowUpRight />
                             <span className='ms-2'>View on Explorer</span>
                         </Link>
-                        <Link to={`${import.meta.env.VITE_APP_MARKET_URL}/${getTokenId(this.props.name)}`} target='_blank' className='link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover'>
+                        <Link to={`${import.meta.env.VITE_APP_MARKET_URL}/${getTokenId(this.props.labelName)}`} target='_blank' className='link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover'>
                             <BoxArrowUpRight />
                             <span className='ms-2'>View on Marketplace</span>
                         </Link>
@@ -425,7 +425,7 @@ https://dapp.monadns.com/${this.props.name}.mon?v=${this.getUnixTime()}
                         <NavLink to={"/"} className="btn btn-lg btn-primary border rounded-2">
                             Mint Another
                         </NavLink>
-                        <NavLink to={`/${this.props.name}.mon`} className="btn btn-lg btn-primary border rounded-2">
+                        <NavLink to={`/${this.props.labelName}.mon`} className="btn btn-lg btn-primary border rounded-2">
                             Manage Domain
                         </NavLink>
                     </div>

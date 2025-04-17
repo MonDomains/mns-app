@@ -8,6 +8,10 @@ $zindex-dropdown: 1060;
     --bs-btn-hover-color: #fff !important;
     --bs-btn-disabled-color: #fff !important;
 }
+
+.dropdown-toggle::after {
+    display: none !important;
+}
  
 // Import all of Bootstrap's CSS
 @import "../node_modules/bootstrap/scss/bootstrap.scss";
