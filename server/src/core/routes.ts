@@ -13,9 +13,9 @@ router.get(["/name/:name.mon", "/name/:name"], (req: Request, res: Response, nex
 
 router.get("/:name.mon", (req: Request, res: Response, next: NextFunction ) => {
     res.render("index", { 
-        title: `${req.params.name}.mon - Web3 Profile`,
-        description: `View ${req.params.name}.mon web3 profile on Monad Blockchain.`,
-        canonicalUrl: `/${req.params.name}.mon`, 
+        title: `${encodeURIComponent(req.params.name)}.mon - Web3 Profile`,
+        description: `View ${encodeURIComponent(req.params.name)}.mon web3 profile on Monad Blockchain.`,
+        canonicalUrl: `/${encodeURIComponent(req.params.name)}.mon`, 
         name: encodeURIComponent(req.params.name) +".mon", 
         timestamp: Date.now() 
     });
@@ -30,7 +30,7 @@ router.get(["/account", "names"], (req: Request, res: Response, next: NextFuncti
 
 router.get(["/address/:address", "names"], (req: Request, res: Response, next: NextFunction ) => {
     res.render("index", {  
-        title: `View names of ${req.params.address} address`,
+        title: `View names of ${encodeURIComponent(req.params.address)} address`,
         timestamp: Date.now() 
     })
 });
@@ -41,8 +41,10 @@ router.get(["/register/:name"], (req: Request, res: Response, next: NextFunction
 
 router.get(["/register/:name.mon"], (req: Request, res: Response, next: NextFunction ) => {
     res.render("index", {  
-        title: `Register ${req.params.name}.mon`,
-        description: `Claim ${req.params.name}.mon on Monad blockchain`,
+        title: `Register ${encodeURIComponent(req.params.name)}.mon`,
+        description: `Claim ${encodeURIComponent(req.params.name)}.mon on Monad blockchain`,
+        canonicalUrl: `/register/${encodeURIComponent(req.params.name)}.mon`, 
+        name: encodeURIComponent(req.params.name) +".mon", 
         timestamp: Date.now() 
     })
 });
