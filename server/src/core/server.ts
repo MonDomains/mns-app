@@ -21,6 +21,7 @@ export class Server {
         this.app.locals.timestamp = null;
         this.app.locals.canonicalUrl = "";
         this.app.locals.title = null;
+        this.app.locals.description = null;
 
         this.app.use(Express.json())
         this.app.use(Express.urlencoded({ extended: true }))
@@ -44,6 +45,7 @@ export class Server {
         this.app.use("/:name.mon", (req: Request, res: Response, next: NextFunction ) => {
             res.render("index", { 
                 title: `${req.params.name}.mon - Web3 Profile`,
+                description: `View ${req.params.name}.mon web3 profile on Monad Blockchain.`,
                 canonicalUrl: `/${req.params.name}.mon`, 
                 name: encodeURIComponent(req.params.name) +".mon", 
                 timestamp: Date.now() 
