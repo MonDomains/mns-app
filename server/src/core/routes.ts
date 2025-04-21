@@ -21,10 +21,26 @@ router.get("/:name.mon", (req: Request, res: Response, next: NextFunction ) => {
     });
 }); 
 
-router.get(["/account", "/register/:name"], (req: Request, res: Response, next: NextFunction ) => {
+router.get(["/account", "names"], (req: Request, res: Response, next: NextFunction ) => {
     res.render("index", {  
+        title: `My Names - MNS`,
         timestamp: Date.now() 
     })
-});  
+});
+
+router.get(["/address/:address", "names"], (req: Request, res: Response, next: NextFunction ) => {
+    res.render("index", {  
+        title: `View names of ${req.params.address} address`,
+        timestamp: Date.now() 
+    })
+});
+
+router.get(["/register/:name"], (req: Request, res: Response, next: NextFunction ) => {
+    res.render("index", {  
+        title: `Register ${req.params.name}.mon`,
+        description: `Claim ${req.params.name}.mon on Monad blockchain`,
+        timestamp: Date.now() 
+    })
+});
 
 export default router;
