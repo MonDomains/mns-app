@@ -36,6 +36,10 @@ router.get(["/address/:address", "names"], (req: Request, res: Response, next: N
 });
 
 router.get(["/register/:name"], (req: Request, res: Response, next: NextFunction ) => {
+    res.redirect(301, `/register/${req.params.name.replace(".mon", "")}.mon`)
+});
+
+router.get(["/register/:name.mon"], (req: Request, res: Response, next: NextFunction ) => {
     res.render("index", {  
         title: `Register ${req.params.name}.mon`,
         description: `Claim ${req.params.name}.mon on Monad blockchain`,
