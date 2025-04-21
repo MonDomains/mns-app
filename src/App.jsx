@@ -8,7 +8,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router';
 import Notfound from "./pages/Notfound";
 import Register from "./pages/Register";
 import Name from "./pages/Name";
-import Account from "./pages/Account";
+import Names from "./pages/Names";
 import { Web3Modal } from './components/Web3Modal';
 import Layouts from "./layouts";
 import { ApolloProvider } from "@apollo/client";
@@ -25,7 +25,9 @@ export default function App() {
                       <Route index element={<Home />}  />
                     </Route>
                     <Route path="/" element={<Layouts.Page />}>
-                      <Route path="/account" element={<Account />} />
+                      <Route path="/account" element={<Names />} />
+                      <Route path="/names" element={<Names />} />
+                      <Route path="/address/:addr" element={<Names />} />
                       <Route path="/:name.mon" element={<Name />} />
                       <Route path="/register/:name.mon" element={<Register />} />
                       <Route path="/404" element={<Notfound />} />  

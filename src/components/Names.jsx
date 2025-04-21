@@ -3,7 +3,7 @@ import moment from 'moment';
 import React, {Component} from 'react';
 import { monadTestnet } from 'viem/chains';
 import * as Icons from "react-bootstrap-icons";
-import { apolloClient, bulkRenewal, gracePeriod, rainbowConfig } from '../config';
+import { apolloClient, bulkRenewal, explorerUrl, gracePeriod, rainbowConfig } from '../config';
 import { GET_MY_DOMAINS } from '../graphql/Domain';
 import { Modal, Spinner } from 'react-bootstrap';
 import { getExpires } from '../helpers/String';
@@ -14,8 +14,10 @@ import { ethers, formatEther } from 'ethers';
 import staticBulkRenewalABI from "../abi/StaticBulkRenewal.json";
 import ExpiresText from './Buttons/ExpiresText';
 import GasInfoBox from './Buttons/GasInfoBox';
+import CopyText from './Buttons/CopyText';
+import ShareButton from './Buttons/ShareButton';
 
-class MyNames extends Component {
+class Names extends Component {
     constructor(props) { 
         super(props); 
 
@@ -375,9 +377,40 @@ class MyNames extends Component {
 
     render() {  
         return (<>  
+
+            { this.props.addr ?  
+                <div className='bg-light-subtle border border-light-subtle rounded-4 p-0 mb-4'>
+                    <div className='bg-primary bg-gradient rounded-top-4 position-relative' style={{height: 150}}>
+                        <div className='position-absolute top-50 start-0 ms-4'>
+                            <img src={avatar} width={128} role="button" />
+                        </div>
+                         
+                    </div> 
+                    <div className='d-flex flex-row p-3 align-items-end justify-content-end gap-2'>
+                    { this.props.name ? 
+                        <a className='btn bg-primary-subtle' href={`/${this.props.name}`}>
+                            View Profile
+                        </a> :
+                        <a className='btn bg-primary-subtle' href={ `${explorerUrl}/address/${this.props.address}` } target='_blank' >
+                            View Address
+                        </a> 
+                    }
+                    </div>
+                    <div className='d-flex flex-column p-4 pt-1 gap-2'>
+                        <h1 className='fw-bold text-trunctate text-wrap text-break'>
+                            {this.props.name || this.props.address}
+                            <CopyText className="btn btn-default p-0 ms-2 mb-2" text={this.props.name || this.props.address} />
+                        </h1>
+                        
+                        <div className='d-flex flex-column flex-md-row align-items-start justify-content-between gap-2'>
+                            
+                        </div>
+                    </div>
+                </div>   : <></>
+            }
         
             <div className="d-flex flex-column gap-3 p-0">
-                <h2 className='fw-bold'>Names</h2>
+                { !this.props.addr ? <h2 className='fw-bold'>Names</h2> : <></> }
                 <div className="d-flex flex-column bg-light-subtle border border-light-subtle rounded-2 gap-2">
                     <div className="d-flex flex-column flex-md-row flex-column-reverse gap-3 justify-content-between p-3 border-bottom sticky-top bg-light-subtle">
                         <div className="d-flex flex-row gap-3 align-items-center">
@@ -678,4 +711,4 @@ class MyNames extends Component {
     }
 }
 
-export default MyNames;
+export default Names;

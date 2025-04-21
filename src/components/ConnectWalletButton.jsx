@@ -51,7 +51,7 @@ export default function ConnectWalletButton({ }) {
               </Dropdown.Item>
               :<></>
             }
-            <Dropdown.Item className={"fs-5"} href={`/account`}>
+            <Dropdown.Item className={"fs-5"} href={`/names`}>
               My Names
             </Dropdown.Item>
             <Dropdown.Divider />
