@@ -41,7 +41,7 @@ export class Server {
         });
 
         this.app.use("/:name.mon", (req: Request, res: Response, next: NextFunction ) => {
-            const canonicalUrl = `/${req.params.name}`;
+            const canonicalUrl = `/${req.params.name}.mon`;
             res.render("index", { canonicalUrl: canonicalUrl, name: encodeURIComponent(req.params.name) +".mon", timestamp: Date.now() })
         }); 
 
