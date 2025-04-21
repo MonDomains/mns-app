@@ -33,7 +33,7 @@ export class Server {
         this.app.locals.description = null;
 
         this.app.use("/", (req: Request, res: Response, next: NextFunction ) => {
-            //if(req.url != "/") return next();
+            if(req.url != "/") return next();
             res.render("index", {
                 timestamp: Date.now() 
             })
