@@ -124,7 +124,7 @@ class SetAsPrimaryButton extends Component {
                 </Modal.Header>
                 <Modal.Body>
                     <div className="d-flex flex-column"> 
-                    { this.state.txError != null ?  
+                        { this.state.txError != null ?  
                             <div className="alert alert-danger text-break">{this.state.txError}</div>
                             : <></>
                         }

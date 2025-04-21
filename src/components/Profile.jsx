@@ -130,7 +130,7 @@ class Profile extends Component {
                         </div>
                     </div>
                     { this.props.isOwner ?
-                        <div className='d-flex flex-row border-top border-light-subtle p-3 justify-content-start justify-content-lg-end gap-2'>
+                        <div className='d-flex flex-row border-top border-light-subtle p-4 justify-content-start justify-content-lg-end gap-2'>
                             <ExtendButton {...this.props} />
                             <SetAsPrimaryButton {...this.props} />
                         </div>

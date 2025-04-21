@@ -19,6 +19,7 @@ export class Server {
 
         this.app.locals.name = null;
         this.app.locals.timestamp = null;
+        this.app.locals.canonicalUrl = "";
 
         this.app.use(Express.json())
         this.app.use(Express.urlencoded({ extended: true }))
@@ -40,7 +41,8 @@ export class Server {
         });
 
         this.app.use("/:name.mon", (req: Request, res: Response, next: NextFunction ) => {
-            res.render("index", { name: encodeURIComponent(req.params.name) +".mon", timestamp: Date.now() })
+            const canonicalUrl = `/${req.params.name}`;
+            res.render("index", { canonicalUrl: canonicalUrl, name: encodeURIComponent(req.params.name) +".mon", timestamp: Date.now() })
         }); 
 
         this.app.use(["/account", "/register/:name"], (req: Request, res: Response, next: NextFunction ) => {

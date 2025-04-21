@@ -378,8 +378,8 @@ class MyNames extends Component {
         
             <div className="d-flex flex-column gap-3 p-0">
                 <h2 className='fw-bold'>Names</h2>
-                <div className="d-flex flex-column bg-body-tertiary border border-light-subtle rounded-2 gap-2">
-                    <div className="d-flex flex-column flex-md-row flex-column-reverse gap-3 justify-content-between p-3 border-bottom sticky-top bg-body-tertiary">
+                <div className="d-flex flex-column bg-light-subtle border border-light-subtle rounded-2 gap-2">
+                    <div className="d-flex flex-column flex-md-row flex-column-reverse gap-3 justify-content-between p-3 border-bottom sticky-top bg-light-subtle">
                         <div className="d-flex flex-row gap-3 align-items-center">
                             <a className={ "btn rounded-circle border-2 fw-bold "+ (this.state.selectionMode ? 'border-primary text-primary': 'border-secondary text-secondary') } onClick={()=> this.handleAllCheck()}>
                                 <Icons.CheckLg className='fw-bold' />
@@ -433,7 +433,7 @@ class MyNames extends Component {
                                 <li className={'border-bottom border-light-subtle p-3 '+ (this.state.selectedDomains.filter(t=> t.name == domain.name).pop().isSelected ? "bg-primary-subtle": "" ) } key={domain.id}>
                                     <div className="d-flex flex-row gap-2 align-items-start align-items-center">
                                         <div className='position-relative'>
-                                            <img src={avatar} width={42} role="button" onClick={ (e) => { return this.handleSelectItem(e, domain) } } /> 
+                                            <img src={avatar} width={36} role="button" onClick={ (e) => { return this.handleSelectItem(e, domain) } } /> 
                                             { this.state.selectedDomains.filter(t=> t.name == domain.name).pop().isSelected ?
                                                 <Icons.Check size={12} role='button' onClick={ (e) => { return this.handleSelectItem(e, domain) } } className='bg-primary bg-gradient bg-opacity-25 rounded-circle w-100 h-100 position-absolute top-50 start-50 translate-middle text-white' />
                                                 : <></>
@@ -442,7 +442,7 @@ class MyNames extends Component {
                                         <Link onClick={(e)=> { return this.handleItemClick(e, domain)} } to={"/"+ domain.name } 
                                             className="w-100 text-truncate text-decoration-none link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover d-flex flex-row gap-2 align-items-center justify-content-between text-truncate">
                                             <div className="d-flex flex-column text-truncate align-items-start">
-                                                <h3 className='m-0'>{domain.labelName}<small className='text-body-secondary fw-bold'>.mon</small></h3>
+                                                <h5 className='m-0 fw-bold'>{domain.labelName}<small className='text-body-secondary'>.mon</small></h5>
                                                 <ExpiresText expires={domain.registration?.expiryDate} />
                                             </div>
                                             <div className="d-flex flex-column flex-md-row justify-content-between gap-2 align-items-end">
@@ -542,15 +542,7 @@ class MyNames extends Component {
 
                     {this.state.step == 2 ? 
                         <div className='d-flex flex-column gap-3'>
-                            <div className="d-flex flex-row justify-content-between align-items-center fs-1 border bg-body-tertiary border border-light-subtle rounded-2">
-                                <button className="btn btn-lg" onClick={(e)=> this.handleDurationDown(e)}>
-                                    <Icons.DashCircleFill size={48} className={this.state.duration > 1 ? 'text-primary': 'text-secondary'} />
-                                </button>
-                                <small className='fs-5'>{this.state.duration} year(s) </small>
-                                <button className="btn btn-lg" onClick={(e)=> this.handleDurationUp(e)}>
-                                    <Icons.PlusCircleFill size={48} className='text-primary' />
-                                </button>
-                            </div>
+                            adf
                             <div className='d-flex flex-row align-items-center justify-content-between p-2'>
                                 <div className='flex-fill text-muted fw-bold'>
                                     <GasInfoBox handleError={this.handleError} />

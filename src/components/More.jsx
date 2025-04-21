@@ -63,7 +63,7 @@ class More extends Component {
                 <div className='d-flex flex-row p-4 justify-content-between border-bottom'>
                     <h5 className='fw-bold'>Resolver</h5>
                 </div>
-                <div className='d-flex flex-row p-3 gap-3'>
+                <div className='d-flex flex-column flex-lg-row p-3 gap-3'>
                     <ResolverBox {...this.props} />
                 </div>
             </div>

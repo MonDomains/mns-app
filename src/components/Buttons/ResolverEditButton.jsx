@@ -147,7 +147,9 @@ class ResolverEditButton extends Component {
                         } 
                         {this.state.txPending && this.state.txHash != null ? 
                             <div className='alert alert-info'>
-                                <Spinner className='lg' />
+                                <p className='text-center'>
+                                    <Spinner className='lg' />
+                                </p>
                                 <p className='text-center'>
                                     Waiting for transaction...
                                 </p>

@@ -1,8 +1,7 @@
 
-
 import Search from "../partials/Search";
 
-function Home() {
+function Home() { 
     return ( 
         <> 
             <div className="d-flex flex-column w-100 justify-content-center text-center gap-3 align-items-center">
@@ -12,7 +11,6 @@ function Home() {
                 </p>
                 <Search size="lg" />
             </div>
-            
         </>
      );
 }
