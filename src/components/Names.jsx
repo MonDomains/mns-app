@@ -421,7 +421,7 @@ class Names extends Component {
                                 <select defaultValue={"createdAt"} className="form-select form-select-lg bg-light-subtle" onChange={(e)=> this.setOrderBy(e.target.value)}>
                                     <option value="expiryDate">Expiry date</option>
                                     <option value="name">Name</option>
-                                    <option selected value="createdAt">Creation date</option>
+                                    <option value="createdAt">Creation date</option>
                                 </select>
                                 <button className={"bg-light-subtle btn btn-lg btn-outline " + (this.state.orderDirection == "desc" ? "border-light-subtle text-primary": "")} onClick={()=> this.setOrderDirection("desc")}>
                                     <Icons.SortDown />
@@ -460,10 +460,10 @@ class Names extends Component {
                     }
                     
                     { this.state.error == null && (this.state.domains != null || this.state.domains?.length > 0) ?
-                        <ul className='list-unstyled' key={"domains"}>
+                        <ul className='list-unstyled'>
                             { this.state.domains.map((domain) => (
                                 <>
-                                <li className={'border-bottom border-light-subtle p-3 '+ (this.state.selectedDomains.filter(t=> t.name == domain.name).pop().isSelected ? "bg-primary-subtle": "" ) } key={domain.id}>
+                                <li className={'border-bottom border-light-subtle p-3 '+ (this.state.selectedDomains.filter(t=> t.name == domain.name).pop().isSelected ? "bg-primary-subtle": "" ) } key={domain.name}>
                                     <div className="d-flex flex-row gap-2 align-items-start align-items-center">
                                         <div className='position-relative'>
                                             <img src={avatar} width={36} role="button" onClick={ (e) => { return this.handleSelectItem(e, domain) } } /> 
@@ -552,7 +552,7 @@ class Names extends Component {
                     } 
 
                     {this.state.step == 1 ?
-                        <ul className='list-unstyled' key={"domains"}>
+                        <ul className='list-unstyled' key={"step1"}>
                             { this.state.selectedDomains.filter(t=> t.isSelected == true).map((domain) => (
                                 <li className='bg-body-tertiary border border-light-subtle rounded-2 p-3 mb-2'>
                                     <div className="d-flex flex-row gap-2 align-items-center text-truncate">
@@ -585,7 +585,7 @@ class Names extends Component {
                                 </div>
                             </div>
                             <div className='bg-body-tertiary border border-light-subtle rounded-2 p-3'>
-                                <ul className='list-unstyled d-flex flex-column gap-2'>
+                                <ul className='list-unstyled d-flex flex-column gap-2' key="price">
                                     <li className='d-flex flex-column flex-md-row justify-content-between fw-bold'>
                                         <span className='text-muted'>
                                             <b>Estimated Total</b>
@@ -605,7 +605,7 @@ class Names extends Component {
                     
                     {this.state.step == 3 ?
                         <div className='d-flex flex-column align-items-center justify-content-center'>
-                            <ul className='list-unstyled w-100'>
+                            <ul className='list-unstyled w-100' key="step3">
                                 {this.state.txHash == null ? 
                                 <li>
                                     <p className='text-center'>

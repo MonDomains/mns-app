@@ -24,6 +24,7 @@ function Search({size}) {
     const inputRef = useRef("")
     const [isAddress, setIsAddress] = useState(false); 
     const [name, setName] = useState(""); 
+    const [address, setAddress] = useState(""); 
     const [valid, setValid] = useState(false); 
     const [focused, setFocused] = useState(false); 
 
@@ -44,27 +45,38 @@ function Search({size}) {
     function handleSearch(e) { 
         e.preventDefault(); 
 
-        const q = inputRef.current.value.toLowerCase();
-         
-        if(ethers.isAddress(q)) {
-            setIsAddress(true);
-            handleMnsName(q);
-        } else {
-            setIsAddress(false);
-            setName("");
-        }
+        try {
 
-        let label = ensNormalize(q)
-        if(isValidDomain(label)) {
-            setValid(true);
-            setName(label);
-            if (e.key === 'Enter' || e.keyCode === 13 ) {
-                navigate("/"+ label +".mon")
+            const q = inputRef.current.value.toLowerCase();
+            
+            if(ethers.isAddress(q)) {
+                setIsAddress(true);
+                setAddress(q);
+                handleMnsName(q);
+            } else {
+                setIsAddress(false);
+                setAddress("");
+                setName("");
             }
-        } else {
-            setValid(false);
-            setName(label);
+
+            let label = ensNormalize(q)
+
+            if(isValidDomain(label)) {
+                setValid(true);
+                setName(label);
+                if (e.key === 'Enter' || e.keyCode === 13 ) {
+                    navigate("/"+ label +".mon")
+                }
+            } else {
+                setValid(false);
+                setName(label);
+            }
+        } catch(e) {
+            setIsAddress(false);
+            setName("Input");
+            setValid(false)
         }
+        
     } 
 
     async function handleMnsName(address) {
@@ -110,7 +122,7 @@ function Search({size}) {
                 </>
                 : <></>
                 } 
-                { name != "" & !valid ?
+                { name != "" && !isAddress & !valid ?
                     <> 
                         <div className="d-flex flex-row border rounded-4 align-items-center p-3 mt-2 bg-light-subtle position-absolute w-100">
                             <span className='text-danger'>{obscureName(name, 50)} is invalid!</span>
@@ -118,7 +130,7 @@ function Search({size}) {
                     </>
                     : <></>
                 }
-                {name != "" && valid ? 
+                {name != "" && !isAddress && valid ? 
                     <> 
                     <Link to={ available ? "/register/"+ name +".mon": "/"+ name +".mon"} className="link-body-emphasis link-offset-2 link-underline-opacity-25 text-decoration-none">
                         <ul className='list-unstyled d-flex flex-row border rounded-4 align-items-center p-3 mt-2 justify-content-between bg-light-subtle position-absolute w-100'>
@@ -144,14 +156,27 @@ function Search({size}) {
                     </Link>
                     </>
                 : <></>
-                }
-
+                } 
                 {name != "" && isAddress ? 
                     <> 
-                    <Link to={ "/"+ name} className="link-body-emphasis link-offset-2 link-underline-opacity-25 text-decoration-none">
+                    <Link to={ "/address/"+ address} className="link-body-emphasis link-offset-2 link-underline-opacity-25 text-decoration-none">
                         <ul className='list-unstyled d-flex flex-row border rounded-4 align-items-center p-3 mt-2 justify-content-between bg-light-subtle position-absolute w-100'>
                             <li className='text-truncate'>
                                 {obscureName(name, 15)} 
+                            </li>
+                            <li> 
+                                {
+                                    !isPending ? 
+                                    <>
+                                        <small className={"bg-info-subtle p-1 border rounded-2 fw-bold text-info-emphasis"}>
+                                            Address
+                                        </small>
+                                        <ArrowRightShort className='ms-1'/>
+                                    </> : 
+                                    <>
+                                        <Spinner variant="primary" size='sm' />
+                                    </>
+                                }  
                             </li>
                         </ul>
                     </Link>
