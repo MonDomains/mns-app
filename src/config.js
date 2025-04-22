@@ -19,7 +19,11 @@ export const NODE_PROVIDER_URL = import.meta.env.VITE_APP_NODE_PROVIDER_URL;
 export const explorerUrl = import.meta.env.VITE_APP_EXPLORER_URL;
 export const gracePeriod = import.meta.env.VITE_APP_GRACE_PERIOD;
 export const reverseRegistrar = import.meta.env.VITE_APP_REVERSE_REGISTRAR;
-export const zeroAddress = "0x0000000000000000000000000000000000000000"
+export const zeroAddress = "0x0000000000000000000000000000000000000000";
+export const twitterUrl = import.meta.env.VITE_APP_TWITTER_URL;
+export const githubUrl = import.meta.env.VITE_APP_GITHUB_URL;
+export const discordUrl = import.meta.env.VITE_APP_DISCORD_URL;
+
 export const rainbowConfig = getDefaultConfig({
   appName: 'Mon Name Service',
   projectId: projectId,

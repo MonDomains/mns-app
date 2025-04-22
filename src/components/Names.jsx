@@ -50,7 +50,7 @@ class Names extends Component {
             isTxPending: false,
             txReceipt: null,
             balance: 0,
-            isFetchingBalance: false,
+            isFetchingBalance: false
         };  
     }
      
@@ -290,7 +290,7 @@ class Names extends Component {
     nextPage () { 
         let p = this.state.page+1;
         let f = this.state.first;
-        if(this.state.isLoading == false)
+        if(this.state.isLoading == false && this.state.moreDomains == true)
             this.setState({ page: p, skip: p * f })
     }
 
