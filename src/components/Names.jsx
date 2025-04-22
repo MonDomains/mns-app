@@ -268,17 +268,17 @@ class Names extends Component {
         } 
         const q = e.target.value;
         if(q != this.state.q)
-            this.setState({ q, domains: [], page: 0, skip: 0  });        
+            this.setState({ q, domains: [], page: 0, skip: 0, moreDomains: true  });        
     }
 
     setOrderBy (orderBy) {
         if(this.state.orderBy != orderBy)
-            this.setState({ orderBy, domains: [], selectedDomains: [], page: 0, skip: 0  });
+            this.setState({ orderBy, domains: [], selectedDomains: [], page: 0, skip: 0, moreDomains: true  });
     }
 
     setOrderDirection (orderDirection) {
         if(this.state.orderDirection != orderDirection)
-            this.setState({ orderDirection, domains: [], selectedDomains: [], page: 0, skip: 0 });
+            this.setState({ orderDirection, domains: [], selectedDomains: [], page: 0, skip: 0, moreDomains: true });
     }
   
     mergeUnique(arr1, arr2){
@@ -349,8 +349,7 @@ class Names extends Component {
             this.nextPage();
         }
     };
-
-
+ 
     componentDidMount () {     
         this.handleQuery();
         window.addEventListener('scroll', (e) => this.handleScroll());
@@ -361,8 +360,7 @@ class Names extends Component {
             (prevState.orderBy != this.state.orderBy) || 
             (prevState.orderDirection != this.state.orderDirection) || 
             (prevState.q != this.state.q) || 
-            (prevState.skip != this.state.skip) || 
-            (prevProps.address != this.props.address)
+            (prevState.skip != this.state.skip)
         ) {
             this.handleQuery();
         }  
@@ -382,6 +380,11 @@ class Names extends Component {
 
         if(prevState.step != this.state.step && this.state.step == 3) {
             this.handleBalance();
+        } 
+
+        if(prevProps != this.props) {
+            this.setState({ domains: [], selectedDomains: [], page: 0, skip: 0, moreDomains: true  });
+            this.handleQuery();
         }
         
     } 
