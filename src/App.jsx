@@ -13,6 +13,7 @@ import { Web3Modal } from './components/Web3Modal';
 import Layouts from "./layouts";
 import { ApolloProvider } from "@apollo/client";
 import { apolloClient } from "./config" 
+import Address from './pages/Address';
 
 
 export default function App() {
@@ -27,7 +28,7 @@ export default function App() {
                     <Route path="/" element={<Layouts.Page />}>
                       <Route path="/account" element={<Names />} />
                       <Route path="/names" element={<Names />} />
-                      <Route path="/address/:addr" element={<Names />} />
+                      <Route path="/address/:address" element={<Address />} />
                       <Route path="/:name.mon" element={<Name />} />
                       <Route path="/register/:name.mon" element={<Register />} />
                       <Route path="/404" element={<Notfound />} />  

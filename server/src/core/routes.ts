@@ -23,14 +23,12 @@ router.get("/:name.mon", (req: Request, res: Response, next: NextFunction ) => {
 
 router.get(["/account", "names"], (req: Request, res: Response, next: NextFunction ) => {
     res.render("index", {  
-        title: `My Names - MNS`,
         timestamp: Date.now() 
     })
 });
 
 router.get(["/address/:address", "names"], (req: Request, res: Response, next: NextFunction ) => {
     res.render("index", {  
-        title: `View names of ${encodeURIComponent(req.params.address)} address`,
         timestamp: Date.now() 
     })
 });

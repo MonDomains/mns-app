@@ -41,7 +41,6 @@ export class Server {
         
         this.app.use((req: Request, res: Response, next: NextFunction ) => {
             res.status(HttpCode.NOT_FOUND).render("index", {
-                title: `Page Not Found`,
                 timestamp: Date.now() 
             });
         })

@@ -290,7 +290,8 @@ class Names extends Component {
     nextPage () { 
         let p = this.state.page+1;
         let f = this.state.first;
-        this.setState({ page: p, skip: p * f })
+        if(this.state.isLoading == false)
+            this.setState({ page: p, skip: p * f })
     }
 
     handleAllCheck() {
@@ -341,8 +342,18 @@ class Names extends Component {
         if(selectedCount < 1) this.setState({ selectionMode: false });
     }
 
+    handleScroll () { 
+        if ( window.innerHeight + document.documentElement.scrollTop + 300
+            >= document.documentElement.offsetHeight
+        ) {
+            this.nextPage();
+        }
+    };
+
+
     componentDidMount () {     
         this.handleQuery();
+        window.addEventListener('scroll', (e) => this.handleScroll());
     }
 
     componentDidUpdate(prevProps, prevState) { 
@@ -378,7 +389,7 @@ class Names extends Component {
     render() {  
         return (<>  
 
-            { this.props.addr ?  
+            { this.props.mode == "view" ?  
                 <div className='bg-light-subtle border border-light-subtle rounded-4 p-0 mb-4'>
                     <div className='bg-primary bg-gradient rounded-top-4 position-relative' style={{height: 150}}>
                         <div className='position-absolute top-50 start-0 ms-4'>
@@ -410,7 +421,7 @@ class Names extends Component {
             }
         
             <div className="d-flex flex-column gap-3 p-0">
-                { !this.props.addr ? <h2 className='fw-bold'>Names</h2> : <></> }
+                { !this.props.mode == "view" ? <h2 className='fw-bold'>Names</h2> : <></> }
                 <div className="d-flex flex-column bg-light-subtle border border-light-subtle rounded-2 gap-2">
                     <div className="d-flex flex-column flex-md-row flex-column-reverse gap-3 justify-content-between p-3 border-bottom sticky-top bg-light-subtle">
                         <div className="d-flex flex-row gap-3 align-items-center">

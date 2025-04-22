@@ -3,18 +3,14 @@ import { useAccount, useEnsName } from "wagmi";
 import Names from "../components/Names";
 import { Alert } from "react-bootstrap";
 import ConnectWalletButton from "../components/ConnectWalletButton";
-import { isAddress, namehash } from "viem";
-import { getLabelHash } from "../helpers/String";
 import { monadTestnet } from "viem/chains";
-import { universalResolver } from "../config";
-import { useParams } from "react-router";
+import { universalResolver } from "../config"; 
 
 const Account = () => {
   const { address, isConnected } = useAccount();
-  const { addr } = useParams();
     
   const {data: mnsName} =  useEnsName({
-      address: isAddress(addr) ? addr : address,
+      address: address,
       universalResolverAddress: universalResolver,
       chainId: monadTestnet.id
     });
@@ -29,7 +25,7 @@ const Account = () => {
 
   return (
     <>    
-      <Names addr={addr} address={isAddress(addr) ? addr : address} name={mnsName} />
+      <Names address={address} name={mnsName} mode={"edit"} />
     </>
   )
 };
