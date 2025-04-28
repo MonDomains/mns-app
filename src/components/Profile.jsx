@@ -17,6 +17,7 @@ import { GET_SUBGRAPH_RECORDS } from "../graphql/Domain";
 import { namehash } from 'viem';
 import CopyText from "./Buttons/CopyText";
 import ExtendButton from './Buttons/ExtendButton';
+import TransferOwnership from './TransferOwnership';
 import AddressBox from './Buttons/AddressBox';
 import OwnerBox from './Buttons/OwnerBox';
 import PrimaryNameBadge from './Buttons/PrimaryNameBadge';

@@ -6,6 +6,10 @@
   --bs-btn-disabled-color: #fff !important;
 }
 
+.dropdown-toggle::after {
+  display: none !important;
+}
+
 /*!
  * Bootstrap  v5.3.4 (https://getbootstrap.com/)
  * Copyright 2011-2025 The Bootstrap Authors
