@@ -520,7 +520,7 @@ class Names extends Component {
                 </div>
             </div> 
             
-            <a href="https://docs.monadns.com/faq/why-is-my-mns-name-not-in-my-names/" target='_blank' className='position-relative text-decoration-none text-body-emphasis d-flex flex-row align-items-start gap-4 p-4 bg-body-tertiary border border-light-subtle rounded-2 mt-4'>
+            <a href="https://docs.monadns.com/faq#why-is-my-mns-name-not-appear-in-names-page" target='_blank' className='position-relative text-decoration-none text-body-emphasis d-flex flex-row align-items-start gap-4 p-4 bg-body-tertiary border border-light-subtle rounded-2 mt-4'>
                 <Icons.QuestionCircle size={32} className='mt-3' />
                 <div className='d-flex flex-column'>
                     <h4>Some names may not appear</h4>
