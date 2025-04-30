@@ -100,7 +100,7 @@ class SetAsPrimaryButton extends Component {
         return (
             <>
             <button className="btn bg-primary-subtle border-primary-subtle text-primary fw-bold rounded-2" onClick={() => this.handleShow()}> 
-                <Icons.PersonPlusFill />  Set as primary name
+                <Icons.PersonPlusFill className='mb-1'  />  Set as primary name
             </button>
 
             <Modal {...this.props} 

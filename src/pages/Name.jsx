@@ -7,11 +7,12 @@ import { Link } from "react-router";
 import More from "../components/More";
 import { monadTestnet } from "viem/chains";
 import registrarControllerAbi from '../abi/MONRegisterController.json'
-import { baseRegistrar, nameWrapper, registrarController } from "../config";
+import { baseRegistrar, mnsRegistry, nameWrapper, registrarController } from "../config";
 import { Alert, Spinner } from "react-bootstrap";
 import nameWrapperABI from '../abi/NameWrapper.json'
 import { labelhash, namehash, zeroAddress } from "viem";
 import baseRegistrarABI from '../abi/BaseRegistrarImplementation.json'
+import registryABI from '../abi/Registry.json'
 import { ethers, isValidName } from "ethers";
 import { normalize } from "viem/ens";
 
@@ -59,8 +60,15 @@ const Name = () => {
                 address: baseRegistrar,
                 abi: baseRegistrarABI,
                 functionName: 'ownerOf',
-                args: [ ethers.toBigInt(labelhash(labelName))],
+                args: [ ethers.toBigInt(labelhash(normalize(labelName)))],
                 account: address,
+                chainId: monadTestnet.id
+            },
+            {
+                address: mnsRegistry,
+                abi: registryABI,
+                functionName: 'owner',
+                args: [ namehash(normalize(name)) ],
                 chainId: monadTestnet.id
             }
     ]});
@@ -88,6 +96,8 @@ const Name = () => {
     const isWrapped = data[1].result;
     const ownerAddress1511 = data[2].result;
     const ownerAddressErc721 = data[3].result;
+    const managerAddress = data[4].result;
+    
 
     if(ownerAddress1511 != zeroAddress && isWrapped)
         ownerAddress = ownerAddress1511;
@@ -96,6 +106,8 @@ const Name = () => {
         ownerAddress = ownerAddressErc721;
          
     const isOwner = ownerAddress == address;
+    const isManager = managerAddress == address;
+    
 
     if(isAvailable) {
         navigate(`/register/${name}`);
@@ -110,9 +122,9 @@ const Name = () => {
             <div className="d-flex flex-column">
                 {
                     { 
-                        "profile":  <Profile isOwner={isOwner} isWrapped={isWrapped} isAvailable={isAvailable} labelName={labelName} name={name} address={address} />,
-                        "more":     <More isOwner={isOwner} isWrapped={isWrapped} isAvailable={isAvailable} labelName={labelName} name={name} address={address} />,
-                        null:       <Profile isOwner={isOwner} isWrapped={isWrapped} isAvailable={isAvailable} labelName={labelName} name={name} address={address} />
+                        "profile":  <Profile isOwner={isOwner} isManager={isManager} ownerAddress={ownerAddress} managerAddress={managerAddress} isWrapped={isWrapped} isAvailable={isAvailable} labelName={labelName} name={name} address={address} />,
+                        "more":     <More isOwner={isOwner} isManager={isManager} ownerAddress={ownerAddress} managerAddress={managerAddress} isWrapped={isWrapped} isAvailable={isAvailable} labelName={labelName} name={name} address={address} />,
+                        null:       <Profile isOwner={isOwner} isManager={isManager} ownerAddress={ownerAddress} managerAddress={managerAddress} isWrapped={isWrapped} isAvailable={isAvailable} labelName={labelName} name={name} address={address} />
                     }[tab]
                 }
             </div>

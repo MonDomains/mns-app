@@ -170,7 +170,7 @@ class ExtendButton extends Component {
                 <button onClick={(e)=> this.handleShow()}
                     className='btn bg-primary-subtle border border-primary-subtle fw-bold text-primary' 
                 >
-                    <Icons.FastForwardFill /> Extend
+                    <Icons.FastForwardFill className='mb-1'  /> Extend
                 </button>
             : <></>}
 

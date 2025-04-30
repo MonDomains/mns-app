@@ -1,11 +1,11 @@
 
 import React, {Component} from 'react';
 import { Modal, Spinner } from "react-bootstrap";
-import baseRegistrarImplementationABI from '../abi/BaseRegistrarImplementation.json'
+import baseRegistrarABI from '../abi/BaseRegistrarImplementation.json'
 import nameWrapperABI from '../abi/NameWrapper.json'
 import { toast } from 'react-toastify';
 import { writeContract } from '@wagmi/core'
-import { chainId, rainbowConfig } from '../config';
+import { baseRegistrar, chainId, rainbowConfig } from '../config';
 import { waitForTransactionReceipt } from '@wagmi/core' 
 import { getTokenId } from '../helpers/String';
 import { isAddress, labelhash, namehash } from 'viem';
@@ -14,7 +14,7 @@ import * as Icons from "react-bootstrap-icons";
 import monadIcon from '../assets/images/monad.svg';
 import { Link } from 'react-router';
 
-class TransferOwnership extends Component {
+class ChangeManager extends Component {
 
     constructor(props) {
   
@@ -30,7 +30,6 @@ class TransferOwnership extends Component {
         };
 
         this.inputRef = React.createRef();
- 
     }
     
     handleClose = () =>{
@@ -46,86 +45,46 @@ class TransferOwnership extends Component {
         this.setState({ showModal: true });
     } 
 
-    async handleTransfer() {
+    async handleReclaim() {
          
         try {
-
+ 
             this.setState({ txPending: true, txCompleted: false, txError: null });
-
-            if(!isAddress(this.inputRef.current.value.trim()))
-                throw new Error("Provided adress is not a valid address format.");
   
+            if(!isAddress(this.inputRef.current.value.trim()))
+                            throw new Error("Provided adress is not a valid address format.");
+
             const _hash = await writeContract(rainbowConfig, {
-                abi: baseRegistrarImplementationABI,
-                address: import.meta.env.VITE_APP_BASE_REGISTRAR,
-                functionName: "safeTransferFrom",
-                args: [ this.props.address, this.inputRef.current.value.trim(), toBigInt(labelhash(this.props.labelName))],
+                abi: baseRegistrarABI,
+                address: baseRegistrar,
+                functionName: "reclaim",
+                args: [ toBigInt(labelhash(this.props.labelName)), this.inputRef.current.value.trim()],
                 account: this.props.address,
                 chainId: chainId
             });
 
             this.setState({ txHash: _hash });
 
-            //toast.success("Your transaction has been sent.");
-
             const recepient = await waitForTransactionReceipt(rainbowConfig, {  hash: _hash });
  
-            //toast.success("Your transaction has been completed.");
 
             this.setState({ txPending: false, txCompleted: true, txError: null, txReceipt: recepient });
-            //this.closeModal();
         } catch(e) {
-            //toast.txError("An txError occured.");
+            
             console.log(e.message)
             this.setState({ txPending: false, txCompleted: false, txError: e.message, txHash: null, txReceipt: null });
-           // this.closeModal();
         } 
     }
 
-    async handleWrappedTransfer() {
-         
-        try {
- 
-            this.setState({ txPending: true, txCompleted: false, txError: null });
-
-            if(!isAddress(this.inputRef.current.value.trim()))
-                throw new Error("Provided adress is not a valid address format.")
-  
-            const _hash = await writeContract(rainbowConfig, {
-                abi: nameWrapperABI,
-                address: import.meta.env.VITE_APP_NAME_WRAPPER,
-                functionName: "safeTransferFrom",
-                args: [ this.props.address, this.inputRef.current.value.trim(), BigInt(namehash(this.props.name)), 1, "0x"],
-                account: this.props.address,
-                chainId: chainId
-            });
-
-            this.setState({ txHash: _hash });
-
-            //toast.success("Your transaction has been sent.");
-
-            const recepient = await waitForTransactionReceipt(rainbowConfig, {  hash: _hash });
- 
-            //toast.success("Your transaction has been completed.");
-
-            this.setState({ txPending: false, txCompleted: true, txReceipt: recepient });
-            //this.closeModal();
-        } catch(e) {
-            //toast.txError("An txError occured.");
-            console.log(e.message)
-            this.setState({ txPending: false, txCompleted: false, txError: e.message, txHash: null, txReceipt: null });
-            //this.closeModal();
-        } 
-    }
-  
+     
     render() {  
         return (
             <>
-            {this.props.isOwner ? 
-                <button onClick={() => this.handleShow()}
-                className='btn bg-primary-subtle border border-primary-subtle fw-bold text-primary' > 
-                <Icons.PersonCheckFill className='mb-1' /> Transfer Ownership
-                </button>
+            {(!this.props.isWrapped && this.props.isOwner) ? 
+            <button onClick={() => this.handleShow()}
+             className='btn bg-primary-subtle border border-primary-subtle fw-bold text-primary' > 
+                <Icons.PersonFill className='mb-1'  /> Change Manager
+            </button>
             : <></>
             }
  
@@ -142,7 +101,7 @@ class TransferOwnership extends Component {
                     && this.state.txReceipt == null 
                     && !this.state.txPending  
                     ? 
-                    <>Transfer Ownership</>: <></>} 
+                    <>Change Manager</>: <></>} 
                 {this.state.txPending && this.state.txHash == null ? "Waiting...": ""}
                 {this.state.txPending && this.state.txHash != null ? "Waiting For Transaction...": ""}
                 {!this.state.txPending && this.state.txReceipt ? "Transaction Complete": ""}
@@ -185,7 +144,7 @@ class TransferOwnership extends Component {
                             </li>: <></>
                         }
                         <li className='bg-body-tertiary border rounded-3 p-3 mt-2 d-flex flex-column gap-2 justify-content-between align-item-center'>
-                            <b>New owner address</b>
+                            <b>New manager address</b>
                             <div className='input-group'>
                                 <span className='input-group-text'>
                                     <img src={monadIcon} width={18} />
@@ -214,7 +173,7 @@ class TransferOwnership extends Component {
                             </button>: <></>
                         } 
                         { this.state.txHash == null  ?
-                            <button disabled={this.state.txPending} className="btn btn-lg btn-primary border-0 w-100" onClick={()=> this.props.isWrapped ? this.handleWrappedTransfer() : this.handleTransfer()}>
+                            <button disabled={this.state.txPending} className="btn btn-lg btn-primary border-0 w-100" onClick={()=> this.handleReclaim() }>
                                 {this.state.txPending ? <><Spinner variant="light" size="sm" /> Waiting Transaction</>: <>Open Wallet</>} 
                             </button>: <></>
                         }
@@ -227,4 +186,4 @@ class TransferOwnership extends Component {
   
 }
 
-export default TransferOwnership;
+export default ChangeManager;

@@ -76,7 +76,7 @@ class SetAddrButton extends Component {
                 name: normalize(this.props.name),
                 universalResolverAddress: universalResolver, 
                 chainId: monadTestnet.id
-            });  
+            }); 
              
             this.setState({ txError: null, txHash: null, txReceipt: null, txPending: true, txCompleted: false });
 
@@ -113,9 +113,12 @@ class SetAddrButton extends Component {
     render() {  
         return (
             <>
+            {(this.props.isWrapped && this.props.isOwner) || (!this.props.isWrapped && this.props.isManager) ? 
             <button className="btn text-primary-emphasis fw-bold rounded-2" onClick={() => this.handleShow()}> 
                 Change
             </button>
+            :<></>
+            }
 
             <Modal {...this.props} 
                 show={this.state.showModal} 

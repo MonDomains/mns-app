@@ -20,6 +20,7 @@ import ExtendButton from './Buttons/ExtendButton';
 import TransferOwnership from './TransferOwnership';
 import AddressBox from './Buttons/AddressBox';
 import OwnerBox from './Buttons/OwnerBox';
+import ManagerBox from './Buttons/ManagerBox';
 import PrimaryNameBadge from './Buttons/PrimaryNameBadge';
 import ExpiryBox from './Buttons/ExpiryBox';
 import ParentBox from './Buttons/ParentBox';
@@ -31,6 +32,7 @@ import ViewResolvedAddressBox from './Buttons/ViewResolvedAddressBox';
 import SetAddrButton from './Buttons/SetAddrButton';
 import SetAsPrimaryButton from './Buttons/SetAsPrimaryButton';
 import { normalize } from 'viem/ens';
+import ChangeManager from './ChangeManager';
  
 class Profile extends Component {
     constructor(props) { 
@@ -117,21 +119,18 @@ class Profile extends Component {
                                     Ownership
                                 </span>
                                 <div className='d-flex flex-wrap gap-3'>
-                                    <span>
-                                        <OwnerBox isWrapped={this.props.isWrapped} address={this.props.address} name={this.props.name} labelName={this.props.labelName} />
-                                    </span>
-                                    <span>
-                                        <ExpiryBox isWrapped={this.props.isWrapped} address={this.props.address} name={this.props.name} labelName={this.props.labelName} />
-                                    </span>
-                                    <span>
-                                        <ParentBox isWrapped={this.props.isWrapped} address={this.props.address} name={this.props.name} labelName={this.props.labelName} />
-                                    </span>
+                                    <OwnerBox {...this.props} />
+                                    <ManagerBox {...this.props} />
+                                    <ExpiryBox {...this.props} />
+                                    <ParentBox {...this.props} />
                                 </div>
                             </div> 
                         </div>
                     </div>
                     { this.props.isOwner ?
-                        <div className='d-flex flex-row border-top border-light-subtle p-4 justify-content-start justify-content-lg-end gap-2'>
+                        <div className='d-flex flex-wrap border-top border-light-subtle p-4 justify-content-start justify-content-lg-end gap-2'>
+                            <TransferOwnership {...this.props} />
+                            <ChangeManager {...this.props} />
                             <ExtendButton {...this.props} />
                             <SetAsPrimaryButton {...this.props} />
                         </div>

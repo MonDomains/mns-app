@@ -200,10 +200,9 @@ class Names extends Component {
           
                 {
                     or: [ 
-                        /*
                         {
                             owner: this.props.address.toLowerCase()
-                        },*/
+                        },
                         {
                             registrant: this.props.address.toLowerCase()
                         },
@@ -496,8 +495,13 @@ class Names extends Component {
                                                 { domain.name === this.props.name ?
                                                     <span><small className="badge bg-primary-subtle text-primary-emphasis">Primary</small></span>
                                                     : <></>
-                                                } 
-                                                { domain.registrant.id === this.props.address.toLowerCase() || domain.wrappedOwner?.id === this.props.address.toLowerCase() ?
+                                                }
+                                                { domain.owner?.id === this.props.address?.toLowerCase()  ?
+                                                    <span><small className="badge bg-primary-subtle text-primary-emphasis">Manager</small></span>
+                                                    : <></>
+                                                }
+                                                { domain.registrant?.id === this.props.address.toLowerCase() 
+                                                    || domain.wrappedOwner?.id === this.props.address.toLowerCase() ?
                                                     <span><small className="badge bg-primary-subtle text-primary-emphasis">Owner</small></span>
                                                     : <></>
                                                 }

@@ -93,7 +93,6 @@ class SetAsPrimary extends Component {
                 show={this.state.showModal === this.props.domain.id} 
                 onHide={() => this.handleClose()}  
                 size="lg"
-                backdrop="static"
                 dialogClassName="modal-90w"
                 centered
             >

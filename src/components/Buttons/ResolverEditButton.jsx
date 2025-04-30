@@ -1,13 +1,14 @@
 import React, { Component} from 'react';
 import { monadTestnet } from "viem/chains";
-import { explorerUrl, mnsRegistry, publicResolver, rainbowConfig } from "../../config";
+import { explorerUrl, mnsRegistry, nameWrapper, publicResolver, rainbowConfig, universalResolver } from "../../config";
 import mnsRegistryABI from "../../abi/Registry.json";
+import nameWrapperABI from "../../abi/NameWrapper.json";
 import { Form, Modal, Spinner } from 'react-bootstrap';
 import { isAddress, namehash, zeroAddress } from 'viem';
 import { Link } from 'react-router';
 import * as Icons from "react-bootstrap-icons";
 import { normalize } from 'viem/ens';
-import { waitForTransactionReceipt, writeContract } from '@wagmi/core'
+import { getEnsResolver, waitForTransactionReceipt, writeContract } from '@wagmi/core'
 
 class ResolverEditButton extends Component {
 
@@ -55,20 +56,44 @@ class ResolverEditButton extends Component {
     async handleEditResolver() {
         
         try {
+             
+            this.setState({ txError: null, txHash: null, txReceipt: null, txPending: true, txCompleted: false });
             
             if(!isAddress(this.state.resolverAddress))
                 throw new Error("Provided resolver adress is not a valid address format.")
  
-            this.setState({ txError: null, txHash: null, txReceipt: null, txPending: true, txCompleted: false });
-  
-            const txHash = await writeContract(rainbowConfig, {
-                abi: mnsRegistryABI,
-                address: mnsRegistry,
-                functionName: "setResolver",
-                args: [namehash(normalize(this.props.name)), this.state.resolverAddress],
-                account: this.props.address,
+             const mnsResolver = await getEnsResolver(rainbowConfig, {
+                name: normalize(this.props.name),
+                universalResolverAddress: universalResolver, 
                 chainId: monadTestnet.id
-            });
+            }); 
+ 
+            if(mnsResolver.toLowerCase() === this.state.resolverAddress.toLowerCase())
+                throw new Error("You are already using the latest resolver")
+            
+            let txHash = null;
+
+            if(this.props.isWrapped) {
+                txHash = await writeContract(rainbowConfig, {
+                    abi: nameWrapperABI,
+                    address: nameWrapper,
+                    functionName: "setResolver",
+                    args: [namehash(normalize(this.props.name)), this.state.resolverAddress],
+                    account: this.props.address,
+                    chainId: monadTestnet.id
+                });
+            } else {
+                txHash = await writeContract(rainbowConfig, {
+                    abi: mnsRegistryABI,
+                    address: mnsRegistry,
+                    functionName: "setResolver",
+                    args: [namehash(normalize(this.props.name)), this.state.resolverAddress],
+                    account: this.props.address,
+                    chainId: monadTestnet.id
+                });
+            }
+
+            
 
             this.setState({ txHash });
 
@@ -110,11 +135,14 @@ class ResolverEditButton extends Component {
     render() {
         return (   
             <>
+            { ( this.props.isWrapped && this.props.isOwner) || this.props.isManager ?
             <button className='btn bg-primary-subtle text-primary-emphasis fw-bold' 
                 onClick={(e)=> this.handleShow()}
                 {...this.props}>
                 Edit
             </button>
+            : <></>
+            }
 
             <Modal {...this.props} 
                     show={this.state.showModal} 
