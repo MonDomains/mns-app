@@ -87,6 +87,7 @@ class RegisterName extends Component {
         try {
 
             const nameHash = namehash(normalize(`${this.props.name}`));
+            
             let iface = new Interface([
                 "function setAddr(bytes32 node,address a)"
             ]);

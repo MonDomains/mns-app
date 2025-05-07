@@ -13,6 +13,6 @@ export async function onRequest(context) {
     html = html.replaceAll("{{description}}", "View "+ context.params.address + " namees on Monad Blockchain")
     html = html.replaceAll("{{timestamp}}", new Date().getTime());
     html = html.replaceAll("{{ogImage}}", "https://dapp.monadns.com/images/site-og-image.png")
- 
+    html = html.replaceAll("{{canonical_url}}", "/address/"+ context.params.address);
     return new Response(html, response)
 }

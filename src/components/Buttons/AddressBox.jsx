@@ -65,7 +65,7 @@ function AddressBox (props) {
             <Button className="btn btn-link text-decoration-none bg-body-tertiary text-body-emphasis border rounded-3 overflow-x-scroll">
                 <img src={monadIcon} width={18} className="me-2" />
                 N/A
-            </Button> 
+            </Button>
         }
         <SetAddrButton {...props} mnsAddress={mnsAddress} /> 
       </>

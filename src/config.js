@@ -23,6 +23,7 @@ export const zeroAddress = "0x0000000000000000000000000000000000000000";
 export const twitterUrl = import.meta.env.VITE_APP_TWITTER_URL;
 export const githubUrl = import.meta.env.VITE_APP_GITHUB_URL;
 export const discordUrl = import.meta.env.VITE_APP_DISCORD_URL;
+export const scanUrl = import.meta.env.VITE_APP_SCAN_URL;
 
 export const rainbowConfig = getDefaultConfig({
   appName: 'Mon Name Service',

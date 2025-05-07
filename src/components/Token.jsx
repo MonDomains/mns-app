@@ -13,7 +13,7 @@ import { obscureName } from '../helpers/String';
 import * as Icons from "react-bootstrap-icons";
 import ShareButton from './Buttons/ShareButton';
 
-class More extends Component {
+class Token extends Component {
     constructor(props) { 
         super(props); 
 
@@ -58,7 +58,7 @@ class More extends Component {
                     </div>
                 </div>
             </div>
-
+            { /*
             <div className='bg-light-subtle border border-light-subtle rounded-4'>
                 <div className='d-flex flex-row p-4 justify-content-between border-bottom'>
                     <h5 className='fw-bold'>Resolver</h5>
@@ -67,9 +67,10 @@ class More extends Component {
                     <ResolverBox {...this.props} />
                 </div>
             </div>
+            */}
             </div>
         )
     }
 }
 
-export default More;
+export default Token;

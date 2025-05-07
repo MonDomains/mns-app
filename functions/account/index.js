@@ -13,6 +13,6 @@ export async function onRequest(context) {
     html = html.replaceAll("{{description}}", "View your web3 names on Monad Blockchain")
     html = html.replaceAll("{{timestamp}}", new Date().getTime());
     html = html.replaceAll("{{ogImage}}", "/images/site-og-image.png")
- 
+    html = html.replaceAll("{{canonical_url}}", "/account");
     return new Response(html, response)
 }

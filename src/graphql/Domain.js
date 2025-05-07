@@ -9,7 +9,7 @@ query getSubgraphRecords($id: String!) {
         resolver {      
             texts      
             coinTypes    
-        }    
+        } 
         id  
     }
 }

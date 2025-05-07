@@ -12,6 +12,7 @@ export async function onRequest(context) {
     html = html.replaceAll("{{description}}", "View "+ context.params.name + ".mon web3 profile on Monad Blockchain")
     html = html.replaceAll("{{timestamp}}", new Date().getTime());
     html = html.replaceAll("{{ogImage}}", "https://metadata.monadns.com/card/"+ context.params.name +".mon?v="+ new Date().getTime())
- 
+    html = html.replaceAll("{{canonical_url}}", "/"+ context.params.name +".mon");
+
     return new Response(html, response)
 }

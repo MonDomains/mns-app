@@ -50,7 +50,7 @@ class SetAsPrimaryButton extends Component {
                 name: normalize(this.props.name),
                 universalResolverAddress: universalResolver, 
                 chainId: monadTestnet.id
-            });  
+            });
 
             this.setState({ txError: null, txHash: null, txReceipt: null, txPending: true, txCompleted: false });
 
