@@ -1,14 +1,9 @@
-import { Link } from "react-bootstrap-icons";
-import { getExpires, getTokenId } from "../../helpers/String";
-import * as Icons from "react-bootstrap-icons";
-import { labelhash, namehash } from "viem";
-import { ensNormalize, ethers } from "ethers";
-import { useEnsAddress, useEnsResolver, useReadContract } from "wagmi";
-import { baseRegistrar, gracePeriod, universalResolver } from "../../config";
+import { labelhash } from "viem";
+import { useReadContract } from "wagmi";
+import { baseRegistrar } from "../../config";
 import { monadTestnet } from "viem/chains";
-import { Button } from "react-bootstrap";
 import CopyText from "./CopyText";
-import baseRegistrarABI from "../../abi/BaseRegistrarImplementation.json";
+import baseRegistrarABI from "../../abi/BaseRegistrar.json";
 import moment from "moment";
 
 function ExpiryBox(props) { 

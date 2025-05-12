@@ -1,9 +1,23 @@
-import Home from "./Home";
-import Page from "./Page";
+import Footer from "../partials/Footer";
+import Header from "../partials/Header";
+import { Outlet } from "react-router";
+import TopAlert from "../partials/TopAlert";
 
-const Layouts = {
-    Home,
-    Page,
-};
-
-export default Layouts; 
+export default function Index() {
+    return (
+        <>
+            <TopAlert /> 
+            <div className="container-fluid p-0 m-0">
+                <Header showSearch={false} /> 
+            </div>
+            <div className="container-fluid">
+                <div className="row" style={ { minHeight: "calc(100vh - 13em)" }}>
+                    <Outlet />
+                </div>
+            </div>
+            <div className="container-fluid">
+                <Footer />
+            </div>
+        </>
+    )
+}

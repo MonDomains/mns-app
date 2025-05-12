@@ -1,5 +1,3 @@
-import { Link } from "react-bootstrap-icons";
-import { getTokenId } from "../../helpers/String";
 import * as Icons from "react-bootstrap-icons";
 import { labelhash, namehash } from "viem";
 import { ethers } from "ethers";

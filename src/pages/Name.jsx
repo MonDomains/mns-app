@@ -3,16 +3,16 @@ import { obscureName } from "../helpers/String";
 import { useAccount, useReadContracts } from 'wagmi'
 import React from "react";  
 import Profile from "../components/Profile";
-import More from "../partials/More";
+import More from "../components/More";
 import { Link } from "react-router"; 
 import Token from "../components/Token";
 import { monadTestnet } from "viem/chains";
 import registrarControllerAbi from '../abi/MONRegisterController.json'
-import { baseRegistrar, mnsRegistry, nameWrapper, publicResolver, rainbowConfig, registrarController, universalResolver } from "../config";
+import { baseRegistrar, mnsRegistry, nameWrapper, registrarController } from "../config";
 import { Alert, Spinner } from "react-bootstrap";
 import nameWrapperABI from '../abi/NameWrapper.json'
 import { labelhash, namehash, zeroAddress } from "viem";
-import baseRegistrarABI from '../abi/BaseRegistrarImplementation.json'
+import baseRegistrarABI from '../abi/BaseRegistrar.json'
 import registryABI from '../abi/Registry.json'
 import { ethers, isValidName } from "ethers";
 import { normalize } from "viem/ens"; 
@@ -25,13 +25,10 @@ const Name = () => {
     const navigate = useNavigate();
     const name = `${labelName}.mon`;
 
-    if(!isValidName(labelName)) {
-        return (    
-            <Alert variant="danger" className="text-center mt-3">
-                <b>{obscureName(labelName, 30)}</b> is invalid!
-            </Alert> 
-        )
-    }
+    if(!isValidName(labelName))
+        return (<Alert variant="danger" className="text-center mt-3">
+                    <b>{obscureName(labelName, 30)}</b> is invalid!
+                </Alert>) 
  
     const { data, isLoading, error } = useReadContracts(
        { contracts: [
@@ -82,7 +79,7 @@ const Name = () => {
                 </div>
             </div>
         ) 
-        
+
     if(error) 
         return (
             <div className="d-flex flex-column gap-4 p-0">
@@ -98,8 +95,7 @@ const Name = () => {
     const ownerAddress1511 = data[2].result;
     const ownerAddressErc721 = data[3].result;
     const managerAddress = data[4].result;
-    
-
+     
     if(ownerAddress1511 != zeroAddress && isWrapped)
         ownerAddress = ownerAddress1511;
 

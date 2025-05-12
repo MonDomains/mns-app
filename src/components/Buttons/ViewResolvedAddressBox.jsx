@@ -1,8 +1,5 @@
-import { Link } from "react-bootstrap-icons";
-import { getTokenId } from "../../helpers/String";
 import * as Icons from "react-bootstrap-icons";
-import { namehash } from "viem";
-import { ensNormalize, ethers } from "ethers";
+import { ensNormalize } from "ethers";
 import { useEnsAddress } from "wagmi";
 import { universalResolver } from "../../config";
 import { monadTestnet } from "viem/chains";

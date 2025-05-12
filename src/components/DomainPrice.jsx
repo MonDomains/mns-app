@@ -1,9 +1,7 @@
 import monRegisterControllerABI from '../abi/MONRegisterController.json'
-import loadericon from '../assets/images/loader-icon.svg';
 import { useReadContract } from 'wagmi'
 import { toast } from 'react-toastify'; 
-import { fromWei } from '../helpers/String';
-import { chainId, rainbowConfig, registrarController } from '../config';
+import { chainId, registrarController } from '../config';
 import { Spinner } from 'react-bootstrap';
 
 function DomainPrice({available, name, duration}) { 
@@ -30,7 +28,7 @@ function DomainPrice({available, name, duration}) {
     } else {
         return ( 
             <> 
-                <span className='me-3'>{ fromWei(  price.base.toString() ).toString() } {import.meta.env.VITE_APP_NATIVE_TOKEN} / Year</span>
+                <span className='me-3'>{ ethers.formatUnits(  price.base.toString() ).toString() } {import.meta.env.VITE_APP_NATIVE_TOKEN} / Year</span>
             </>
          );
     }

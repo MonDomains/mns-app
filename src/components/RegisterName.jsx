@@ -9,13 +9,15 @@ import moment from "moment";
 import { Form, Spinner } from "react-bootstrap";
 import { Link, NavLink } from "react-router";  
 import { GET_DOMAIN } from "../graphql/Domain";
-import { getNameHash, getOneYearDuration, getTokenId, obscureName } from "../helpers/String";
+import { obscureName } from "../helpers/String";
 import { getBalance } from '@wagmi/core'
 import { BoxArrowUpRight, Check, DashCircleFill, EvStationFill, PlusCircleFill, TwitterX } from "react-bootstrap-icons";
 import ConnectWalletButton from "./ConnectWalletButton";
 import txProcessingGif from "../assets/images/tx_processing.gif"
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { normalize } from "viem/ens";
+import ViewOnExplorer from "./Buttons/ViewOnExplorer";
+import ViewOnMarketPlace from "./Buttons/ViewOnMarketPlace";
 
 
 class RegisterName extends Component {
@@ -95,7 +97,7 @@ class RegisterName extends Component {
                 "setAddr", 
                 [
                     nameHash, 
-                    this.props.owner
+                    this.props.registrant
                 ]
             ); 
             
@@ -105,8 +107,8 @@ class RegisterName extends Component {
                 abi: monRegisterControllerABI,
                 address: registrarController,
                 functionName: "register",
-                args: [ String(this.props.labelName), this.props.owner, this.getDuration(), namehash(normalize(this.props.name)), this.resolver, [calldata], this.state.reverseRecord, 0],
-                account: this.props.owner,
+                args: [ String(this.props.labelName), this.props.registrant, this.getDuration(), namehash(normalize(this.props.name)), this.resolver, [calldata], this.state.reverseRecord, 0],
+                account: this.props.registrant,
                 value: this.state.price,
                 chainId: chainId
             }); 
@@ -144,7 +146,7 @@ class RegisterName extends Component {
                 address: registrarController,
                 functionName: 'available',
                 args: [this.props.labelName],
-                account: this.props.owner,
+                account: this.props.registrant,
                 chainId: chainId
             });
 
@@ -193,7 +195,7 @@ class RegisterName extends Component {
     }
 
     getDuration() {
-        return this.state.duration * getOneYearDuration();
+        return this.state.duration * (1 * 60 * 60 * 24 * 365);
     }
 
     getText() {
@@ -219,7 +221,7 @@ https://dapp.monadns.com/${this.props.labelName}.mon?v=${this.getUnixTime()}
                 address: registrarController,
                 functionName: 'rentPrice',
                 args: [this.props.labelName, this.getDuration()],
-                account: this.props.owner,
+                account: this.props.registrant,
                 chainId: chainId
             });
              
@@ -232,12 +234,12 @@ https://dapp.monadns.com/${this.props.labelName}.mon?v=${this.getUnixTime()}
 
     async handleBalance() {
         try {
-            if(this.props.owner == null) return;
+            if(this.props.registrant == null) return;
 
             this.setState({ isGettingBalance : true });
 
             const balance = await getBalance(rainbowConfig, {
-                address: this.props.owner, 
+                address: this.props.registrant, 
             });
 
             this.setState({ isGettingBalance : false, balance: balance.value });
@@ -413,14 +415,10 @@ https://dapp.monadns.com/${this.props.labelName}.mon?v=${this.getUnixTime()}
                         Your are the owner of <span>{obscureName( this.props.labelName , 20)}.mon</span>
                     </p> 
                     <div className="d-flex flex-column flex-lg-row justify-content-between align-items-center gap-4">
-                        <Link to={`${import.meta.env.VITE_APP_TOKEN_URL}/${getTokenId(this.props.labelName)}`} target='_blank' className='link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover'>
-                            <BoxArrowUpRight />
-                            <span className='ms-2'>View on Explorer</span>
-                        </Link>
-                        <Link to={`${import.meta.env.VITE_APP_MARKET_URL}/${getTokenId(this.props.labelName)}`} target='_blank' className='link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover'>
-                            <BoxArrowUpRight />
-                            <span className='ms-2'>View on Marketplace</span>
-                        </Link>
+                         
+                        <ViewOnExplorer name={this.props.name} isWrapped={this.props.isWrapped} labelName={this.props.labelName} />
+                        <ViewOnMarketPlace name={this.props.name} isWrapped={this.props.isWrapped} labelName={this.props.labelName} />
+                         
                     </div> 
                     <div className="d-flex flex-column flex-lg-row justify-content-between gap-3">
                         <NavLink to={"/"} className="btn btn-lg btn-primary border rounded-2">

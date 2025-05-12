@@ -1,19 +1,16 @@
 
-import { getTokenId, obscureAddress, obscureName } from "../../helpers/String";
+import { obscureAddress, obscureName } from "../../helpers/String";
 import * as Icons from "react-bootstrap-icons";
 import { labelhash, namehash, zeroAddress } from "viem";
 import { ethers } from "ethers";
 import { Dropdown } from "react-bootstrap";
 import CopyText from "./CopyText";
 import { Link } from "react-router";
-import { readContract } from "viem/actions";
-import { baseRegistrar, explorerUrl, mnsRegistry, nameWrapper, rainbowConfig, universalResolver } from "../../config";
-import mnsRegistryABI from '../../abi/Registry.json'
-import baseRegistrarABI from '../../abi/BaseRegistrarImplementation.json'
+import { baseRegistrar, explorerUrl, nameWrapper, universalResolver } from "../../config";
+import baseRegistrarABI from '../../abi/BaseRegistrar.json'
 import nameWrapperABI from '../../abi/NameWrapper.json'
 import { monadTestnet } from "viem/chains";
 import { useEnsName, useReadContract } from "wagmi";
-import { useState } from "react";
 import { normalize } from "viem/ens";
 
 function OwnerBox(props) { 

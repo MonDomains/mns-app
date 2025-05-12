@@ -1,14 +1,11 @@
 
 import React, {Component} from 'react';
 import { Modal, Spinner } from "react-bootstrap";
-import baseRegistrarABI from '../abi/BaseRegistrarImplementation.json'
-import nameWrapperABI from '../abi/NameWrapper.json'
-import { toast } from 'react-toastify';
+import baseRegistrarABI from '../abi/BaseRegistrar.json'
 import { writeContract } from '@wagmi/core'
 import { baseRegistrar, chainId, rainbowConfig } from '../config';
 import { waitForTransactionReceipt } from '@wagmi/core' 
-import { getTokenId } from '../helpers/String';
-import { isAddress, labelhash, namehash } from 'viem';
+import { isAddress, labelhash } from 'viem';
 import { toBigInt } from 'ethers';
 import * as Icons from "react-bootstrap-icons";
 import monadIcon from '../assets/images/monad.svg';

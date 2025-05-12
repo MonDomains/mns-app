@@ -1,12 +1,7 @@
-import { Link } from "react-bootstrap-icons";
-import { getTokenId } from "../../helpers/String";
-import * as Icons from "react-bootstrap-icons";
 import { namehash } from "viem";
-import { ensNormalize, ethers } from "ethers";
-import { useEnsAddress, useEnsResolver, useReadContract } from "wagmi";
-import { mnsRegistry, rainbowConfig, universalResolver } from "../../config";
+import { useReadContract } from "wagmi";
+import { mnsRegistry } from "../../config";
 import { monadTestnet } from "viem/chains";
-import { Button } from "react-bootstrap";
 import CopyText from "./CopyText";
 import { normalize } from "viem/ens";
 import mnsRegistryABI from "../../abi/Registry.json";

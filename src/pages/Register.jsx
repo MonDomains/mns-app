@@ -7,19 +7,16 @@ import { isValidName } from "ethers";
 import { Alert } from "react-bootstrap";
   
 const Register = () => { 
-  const {name: labelName } = useParams(); 
-  const { address: registrar }  = useAccount();
-  const { isConnected, isDisconnected } = useAccount();
+ 
+  const { name: labelName } = useParams(); 
+  const { address: registrant, isConnected, isDisconnected }  = useAccount();
   const navigate = useNavigate(); 
   const name = `${labelName}.mon`;
 
-  if(!isValidName(labelName)) {
-      return (    
-        <Alert variant="danger" className="text-center mt-3 text-break">
-            <b>{obscureName(labelName, 30)}</b> is invalid!
-        </Alert> 
-      )
-  }
+  if(!isValidName(labelName))
+      return (<Alert variant="danger" className="text-center mt-3 text-break">
+                <b>{obscureName(labelName, 30)}</b> is invalid!
+              </Alert>);
  
   return (
     <div className="d-flex flex-column gap-2 p-0">
@@ -31,9 +28,11 @@ const Register = () => {
           labelName={labelName} 
           name={name} 
           duration={3156600} 
-          owner={registrar} 
+          registrant={registrant} 
+          address={registrant}
           isConnected={isConnected} 
           isDisconnected={isDisconnected} 
+          isWrapped={true}
           navigate={navigate} />
       </div>
     </div>

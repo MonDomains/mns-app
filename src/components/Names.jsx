@@ -400,8 +400,8 @@ class Names extends Component {
                          
                     </div> 
                     <div className='d-flex flex-row p-3 align-items-end justify-content-end gap-2'>
-                    { this.props.name ? 
-                        <a className='btn bg-primary-subtle' href={`/${this.props.name}`}>
+                    { this.props.primaryName ? 
+                        <a className='btn bg-primary-subtle' href={`/${this.props.primaryName}`}>
                             View Profile
                         </a> :
                         <a className='btn bg-primary-subtle' href={ `${explorerUrl}/address/${this.props.address}` } target='_blank' >
@@ -411,8 +411,8 @@ class Names extends Component {
                     </div>
                     <div className='d-flex flex-column p-4 pt-1 gap-2'>
                         <h1 className='fw-bold text-trunctate text-wrap text-break'>
-                            {this.props.name || this.props.address}
-                            <CopyText className="btn btn-default p-0 ms-2 mb-2" text={this.props.name || this.props.address} />
+                            {this.props.primaryName || this.props.address}
+                            <CopyText className="btn btn-default p-0 ms-2 mb-2" text={this.props.primaryName || this.props.address} />
                         </h1>
                         
                         <div className='d-flex flex-column flex-md-row align-items-start justify-content-between gap-2'>
@@ -492,7 +492,7 @@ class Names extends Component {
                                                 <ExpiresText expires={domain.registration?.expiryDate} />
                                             </div>
                                             <div className="d-flex flex-column flex-md-row justify-content-between gap-2 align-items-end">
-                                                { domain.name === this.props.name ?
+                                                { domain.name === this.props.primaryName ?
                                                     <span><small className="badge bg-primary-subtle text-primary-emphasis">Primary</small></span>
                                                     : <></>
                                                 }
@@ -593,7 +593,6 @@ class Names extends Component {
 
                     {this.state.step == 2 ? 
                         <div className='d-flex flex-column gap-3'>
-                            adf
                             <div className='d-flex flex-row align-items-center justify-content-between p-2'>
                                 <div className='flex-fill text-muted fw-bold'>
                                     <GasInfoBox handleError={this.handleError} />

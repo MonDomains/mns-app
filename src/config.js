@@ -1,11 +1,13 @@
 import { http } from 'wagmi';
-import { monadTestnet } from 'wagmi/chains';
+import { mainnet, monadTestnet } from 'wagmi/chains';
 import { ApolloClient, InMemoryCache } from "@apollo/client"; 
 import { createHttpLink } from 'apollo-link-http';
 import { setContext } from 'apollo-link-context';
 import { getDefaultConfig } from '@rainbow-me/rainbowkit';
 import '@rainbow-me/rainbowkit/styles.css';
 
+export const premiumPeriod =  Number(import.meta.env.VITE_APP_PREMIUM_PERIOD);
+export const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 export const chainId = import.meta.env.VITE_APP_NODE_ENV === "production" ? monadTestnet.id: monadTestnet.id
 export const mnsRegistry = import.meta.env.VITE_APP_REGISTRY;
 export const registrarController = import.meta.env.VITE_APP_REGISTER_CONTROLLER;
@@ -24,10 +26,13 @@ export const twitterUrl = import.meta.env.VITE_APP_TWITTER_URL;
 export const githubUrl = import.meta.env.VITE_APP_GITHUB_URL;
 export const discordUrl = import.meta.env.VITE_APP_DISCORD_URL;
 export const scanUrl = import.meta.env.VITE_APP_SCAN_URL;
+export const marketPlaceUrlErc721 = import.meta.env.VITE_APP_MARKET_URL_ERC721;
+export const marketPlaceUrl = import.meta.env.VITE_APP_MARKET_URL;
 
 export const rainbowConfig = getDefaultConfig({
   appName: 'Mon Name Service',
   projectId: projectId,
+  syncConnectedChain: true, 
   chains: [monadTestnet],
   transports: {
     [monadTestnet.id]: http(NODE_PROVIDER_URL),

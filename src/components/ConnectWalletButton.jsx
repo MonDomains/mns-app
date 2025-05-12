@@ -1,12 +1,11 @@
 import { useAccount, useDisconnect, useEnsName as useMnsName } from 'wagmi';
-import { getNameHash, normalizeName, obscureAddress, obscureName } from "../helpers/String";
+import { obscureAddress, obscureName } from "../helpers/String";
 import { universalResolver } from "../config";
-import { useAccountModal, useConnectModal, useChainModal } from '@rainbow-me/rainbowkit';
-import { BoxArrowRight, Check, Copy, ExclamationCircle, Icon0Circle } from "react-bootstrap-icons";
+import { useConnectModal, useChainModal } from '@rainbow-me/rainbowkit';
+import { BoxArrowRight, Check, Copy, ExclamationCircle } from "react-bootstrap-icons";
 import { monadTestnet } from 'viem/chains';
 import { useState } from 'react';
-import { Button, ButtonGroup, Dropdown } from 'react-bootstrap';
-import { NavLink } from 'react-router';
+import { Button, Dropdown } from 'react-bootstrap';
 import avatar from "../assets/images/avatar.svg";
 
 export default function ConnectWalletButton({ }) {

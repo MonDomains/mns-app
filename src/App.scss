@@ -1,20 +1,17 @@
 
 $primary: #836EF9;
 $zindex-dropdown: 1060;
-
 $bs-body-bg: #836EF9;
 
+@font-face {
+    font-family: 'Satoshi' ;  
+    src: url('../fonts/Satoshi-Bold.ttf');  
+}
+
+body {
+    font-family: "Satoshi", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif !important;
+}
  
-[data-bs-theme=dark] {
-    --bs-body-bg: #141416 !important; 
-} 
-
-[data-bs-theme=light] {
-    --bs-body-bg: #F4F5F7 !important; 
-} 
-
-
-
 .btn-primary {
     --bs-btn-color: #fff !important;
     --bs-btn-active-color: #fff !important;
@@ -29,6 +26,48 @@ $bs-body-bg: #836EF9;
 button.active {
     background-color: var(--bs-tertiary-bg) !important;
     border-bottom-color: var(--bs-tertiary-bg) !important;
+}
+ 
+input[type="checkbox"] {
+    transform: scale(1.6);
+}
+
+.gradient {
+    background: linear-gradient(45deg, #836EF9,#916ff7 70%, #916ff7 80%, #916ff7 90%, #916ff7);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1.2;
+    padding-bottom: .1em;
+}
+
+.preview { 
+    min-width: 270px !important;
+    min-height: 270px !important;
+}
+
+.image-preview { 
+    min-width: 160px;
+}
+
+.nav::after {
+    display:none !important;
+}
+
+ 
+.dropdown-toggle::after {
+    display:none;
+}
+
+.dropdown-menu::after {
+    display:none;
+}
+
+.dropup::after {
+    display:none;
+}
+
+.textbreak {
+    overflow-wrap: break-word !important;
 }
  
 // Import all of Bootstrap's CSS

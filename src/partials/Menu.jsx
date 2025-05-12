@@ -35,8 +35,7 @@ function Menu() {
                 <Dropdown.Item className="fs-6" href={"https://monadns.com/privacy"} target="_blank">Privacy</Dropdown.Item>
                 <Dropdown.Divider />
                 <Dropdown.ItemText role="button" onClick={()=>  handleTheme()} className="d-flex flex-row align-items-center gap-2 fs-6">
-                    <strong>Theme:</strong>
-                    {theme === 'light' ? <> <Icon.BrightnessHighFill /> Light </> : <><Icon.MoonFill /> Dark </> }
+                    <strong>Theme:</strong> {theme === 'light' ? <> <Icon.BrightnessHighFill /> Light </> : <><Icon.MoonFill /> Dark </> }
                 </Dropdown.ItemText>
                 <Dropdown.Divider />
                 <Dropdown.ItemText className="d-flex flex-row gap-3">

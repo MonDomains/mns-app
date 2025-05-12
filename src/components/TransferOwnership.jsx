@@ -1,13 +1,11 @@
 
 import React, {Component} from 'react';
 import { Modal, Spinner } from "react-bootstrap";
-import baseRegistrarImplementationABI from '../abi/BaseRegistrarImplementation.json'
+import baseRegistrarABI from '../abi/BaseRegistrar.json'
 import nameWrapperABI from '../abi/NameWrapper.json'
-import { toast } from 'react-toastify';
 import { writeContract } from '@wagmi/core'
 import { chainId, rainbowConfig } from '../config';
 import { waitForTransactionReceipt } from '@wagmi/core' 
-import { getTokenId } from '../helpers/String';
 import { isAddress, labelhash, namehash } from 'viem';
 import { toBigInt } from 'ethers';
 import * as Icons from "react-bootstrap-icons";
@@ -56,7 +54,7 @@ class TransferOwnership extends Component {
                 throw new Error("Provided adress is not a valid address format.");
   
             const _hash = await writeContract(rainbowConfig, {
-                abi: baseRegistrarImplementationABI,
+                abi: baseRegistrarABI,
                 address: import.meta.env.VITE_APP_BASE_REGISTRAR,
                 functionName: "safeTransferFrom",
                 args: [ this.props.address, this.inputRef.current.value.trim(), toBigInt(labelhash(this.props.labelName))],

@@ -11,7 +11,7 @@ export async function onRequest(context) {
     html = html.replaceAll("{{title}}", "Register "+ context.params.name + ".mon");
     html = html.replaceAll("{{description}}", "Claim "+ context.params.name + ".mon web3 name on Monad Blockchain")
     html = html.replaceAll("{{timestamp}}", new Date().getTime());
-    html = html.replaceAll("{{ogImage}}", "https://dapp.monadns.com/images/site-og-image.png")
+    html = html.replaceAll("{{ogImage}}", "https://dapp.monadns.com/images/site-og-image-v2.png")
     html = html.replaceAll("{{canonical_url}}", "/register/"+ context.params.name +".mon");
     
     return new Response(html, response)

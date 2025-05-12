@@ -19,6 +19,7 @@
     "apollo-link-http": "^1.5.17",
     "bootstrap": "^5.3.4",
     "ethers": "^6.13.5",
+    "graphql-request": "^7.1.2",
     "ipfs-core": "^0.18.1",
     "ipfs-http-client": "^60.0.1",
     "moment": "^2.30.1",
