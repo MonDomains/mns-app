@@ -49,12 +49,10 @@ class Profile extends Component {
                     id
                 }
             });    
-            console.log(result.data?.domain);
             this.setState({ domain: result.data?.domain, isQuerying: false });
             this.handleRecords(result.data?.domain);
         } catch(e) {
             this.setState({ isQuerying: false, error: e.message });
-            console.log(e.message)
         }
     }
  

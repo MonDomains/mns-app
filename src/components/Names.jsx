@@ -595,7 +595,7 @@ class Names extends Component {
                         <div className='d-flex flex-column gap-3'>
                             <div className='d-flex flex-row align-items-center justify-content-between p-2'>
                                 <div className='flex-fill text-muted fw-bold'>
-                                    <GasInfoBox handleError={this.handleError} />
+                                    <GasInfoBox />
                                 </div>
                                 <div className='rounded-3 bg-primary p-2 text-white'>
                                     {import.meta.env.VITE_APP_NATIVE_TOKEN}

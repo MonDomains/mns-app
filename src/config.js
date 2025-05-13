@@ -28,6 +28,7 @@ export const discordUrl = import.meta.env.VITE_APP_DISCORD_URL;
 export const scanUrl = import.meta.env.VITE_APP_SCAN_URL;
 export const marketPlaceUrlErc721 = import.meta.env.VITE_APP_MARKET_URL_ERC721;
 export const marketPlaceUrl = import.meta.env.VITE_APP_MARKET_URL;
+export const metaApiUrl = import.meta.env.VITE_APP_METADATA_API;
 
 export const rainbowConfig = getDefaultConfig({
   appName: 'Mon Name Service',

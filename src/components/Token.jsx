@@ -12,6 +12,7 @@ import moment from 'moment';
 import { obscureName } from '../helpers/String';
 import * as Icons from "react-bootstrap-icons";
 import ShareButton from './Buttons/ShareButton';
+import NftImage from './Misc/NftImage';
 
 class Token extends Component {
     constructor(props) { 
@@ -48,12 +49,7 @@ class Token extends Component {
                         <DecimalButton name={this.props.name} isWrapped={this.props.isWrapped} labelName={this.props.labelName} />
                     </div>
                     <div className='d-flex flex-column gap-2'>
-                        <LazyLoadImage 
-                            src={`${import.meta.env.VITE_APP_METADATA_API }/preview/${this.props.name}`}
-                            alt={this.props.name}
-                            placeholder={<Spinner />}
-                            className="rounded-1 image-preview"
-                        /> 
+                        <NftImage {...this.props} />
                         <ShareButton {...this.props} />
                     </div>
                 </div>

@@ -7,21 +7,19 @@ import { monadTestnet } from 'viem/chains';
 import { useState } from 'react';
 import { Button, Dropdown } from 'react-bootstrap';
 import avatar from "../assets/images/avatar.svg";
+import Avatar from './Misc/Avatar';
+import PrimaryName from './Misc/PrimaryName';
+import ProfileBox from './Misc/ProfileBox';
 
 export default function ConnectWalletButton({ }) {
   
   const { disconnect } = useDisconnect()
   const { openConnectModal } = useConnectModal()
   const { address, isConnected, chainId  } = useAccount() 
-  const { openChainModal } = useChainModal()
-
-  const {data: mnsName} =  useMnsName({
-    address: address,
-    universalResolverAddress: universalResolver,
-    chainId: monadTestnet.id
-  });
-
+  const { openChainModal } = useChainModal() 
   const [copyStatus, setCopyStatus] = useState(false);
+  const [mnsName, setMnsName] = useState(null);
+
   function copyAddress(address) {
     navigator.clipboard.writeText(address);
     setCopyStatus(true);
@@ -39,9 +37,11 @@ export default function ConnectWalletButton({ }) {
           </Button>
         :  
         <Dropdown>
-          <Dropdown.Toggle className='bg-light-subtle border border-light-subtle rounded-5 ps-2 pe-2 fw-bold' variant='none' size='lg'>
-            <img src={avatar} width={40} className='me-1' />
-            { mnsName ? obscureName(mnsName, 14) : obscureAddress(address) }
+          <Dropdown.Toggle className='p-0' variant='none' size='lg'>
+            <ProfileBox 
+              address={address} 
+              name={mnsName} 
+              onPrimaryNameResolved={(primaryNme)=> setMnsName(primaryNme)} />
           </Dropdown.Toggle> 
           <Dropdown.Menu className='mt-1'>
             {mnsName ?

@@ -18,7 +18,7 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import { normalize } from "viem/ens";
 import ViewOnExplorer from "./Buttons/ViewOnExplorer";
 import ViewOnMarketPlace from "./Buttons/ViewOnMarketPlace";
-
+import GasInfoBox from "./Buttons/GasInfoBox";
 
 class RegisterName extends Component {
      
@@ -305,7 +305,7 @@ https://dapp.monadns.com/${this.props.labelName}.mon?v=${this.getUnixTime()}
                     <div className="d-flex flex-row align-items-center justify-content-between">
                         <h4>Register</h4>
                         <span className="gap-2">
-                            <EvStationFill/> { this.state.isGasPricePending ? <Spinner size="sm" variant="primary" /> : ethers.formatUnits(this.state.gasPrice, "gwei")} Gwei
+                            <GasInfoBox />
                         </span>
                     </div>
                     <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-start gap-5">
@@ -433,8 +433,7 @@ https://dapp.monadns.com/${this.props.labelName}.mon?v=${this.getUnixTime()}
                 <></>
             }
         </>
-        )  
-      
+        )   
     }
 }
 
