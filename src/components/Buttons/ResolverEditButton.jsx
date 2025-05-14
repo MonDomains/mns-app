@@ -56,8 +56,7 @@ class ResolverEditButton extends Component {
         try {
 
             const inputResolver = this.state.useLatestResolver ? publicResolver : this.inputRef.current.value;
-             
-            
+              
             this.setState({ txError: null, txHash: null, txReceipt: null, txPending: true, txCompleted: false });
 
             if(!isAddress(inputResolver))
@@ -68,8 +67,8 @@ class ResolverEditButton extends Component {
                 universalResolverAddress: universalResolver
             }); 
               
-            if(mnsResolver.toLowerCase() == inputResolver.toLowerCase())
-                throw new Error("You are already using the same resolver")
+            //if(mnsResolver.toLowerCase() == inputResolver.toLowerCase())
+                //throw new Error("You are already using the same resolver")
             
             let txHash = null;
 

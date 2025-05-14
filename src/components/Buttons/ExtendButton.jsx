@@ -164,16 +164,12 @@ class ExtendButton extends Component {
 
     render() {  
         return (
-            <>
-            
-            {this.props.isOwner == true ? 
-                <button onClick={(e)=> this.handleShow()}
-                    className='btn bg-primary-subtle border border-primary-subtle fw-bold text-primary' 
-                >
-                    <Icons.FastForwardFill className='mb-1'  /> Extend
-                </button>
-            : <></>}
-
+            <> 
+            <button onClick={(e)=> this.handleShow()}
+                className='btn bg-primary-subtle border border-primary-subtle fw-bold text-primary' 
+            >
+                <Icons.FastForwardFill className='mb-1'  /> Extend
+            </button> 
             <Modal {...this.props} 
                 show={this.state.showModal} 
                 onHide={() => this.handleClose()}  

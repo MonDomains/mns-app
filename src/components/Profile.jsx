@@ -174,7 +174,7 @@ class Profile extends Component {
                         {this.state.records.url ?
                             <span className='d-flex flex-wrap gap-1 align-items-center text-muted text-break tex-truncate text-wrap'>
                                 <Icons.Link45deg size={12} />
-                                <a target='_blank' className='text-decoration-none link-secondary' rel="nofollow" href={this.state.records.url}>
+                                <a target='_blank' className='text-decoration-none link-primary' rel="nofollow" href={this.state.records.url}>
                                 {this.state.records.url.substring(0, 256)}
                                 </a>
                             </span> : <></>
@@ -251,16 +251,14 @@ class Profile extends Component {
                             </div> 
                         </div>
                     </div>
-                    { this.props.isOwner ?
-                        <div className='d-flex flex-wrap border-top border-light-subtle p-4 justify-content-start justify-content-lg-end gap-2'>
-                            <TransferOwnership {...this.props} />
-                            <ChangeManager {...this.props} />
-                            <ExtendButton {...this.props} />
-                            <SetAsPrimaryButton {...this.props} />
-                            <EditProfile {...this.props} records={this.getRecords()} />
-                        </div>
-                        : <></>
-                    }
+                     
+                    <div className='d-flex flex-wrap border-top border-light-subtle p-4 justify-content-start justify-content-lg-end gap-2'>
+                        <ExtendButton {...this.props} />
+                        { this.props.isOwner &&  <TransferOwnership {...this.props} /> }
+                        { this.props.isOwner && <ChangeManager {...this.props} /> }
+                        { this.props.isOwner && <SetAsPrimaryButton {...this.props} /> }
+                        { (this.props.isOwner || this.props.isManager) && <EditProfile {...this.props} records={this.getRecords()} /> }
+                    </div> 
                 </div>
              </div>
         )
