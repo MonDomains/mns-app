@@ -1,22 +1,18 @@
-import { namehash } from "viem";
-import { useReadContract } from "wagmi";
-import { mnsRegistry } from "../../config";
-import { monadTestnet } from "viem/chains";
+
+import { useEnsResolver } from "wagmi";
+import { rainbowConfig, universalResolver } from "../../config";
 import CopyText from "./CopyText";
 import { normalize } from "viem/ens";
-import mnsRegistryABI from "../../abi/Registry.json";
 import ResolverEditButton from "./ResolverEditButton"
+import { monadTestnet } from "viem/chains";
 
 function ResolverBox(props) { 
     
-    const { data: mnsResolver } = useReadContract({
-        abi: mnsRegistryABI,
-        address: mnsRegistry,
-        functionName: "resolver",
-        args: [namehash(normalize(props.name))],
-        chainId: monadTestnet.id
+    const {data: mnsResolver} = useEnsResolver({
+        name: normalize(props.name),
+        universalResolverAddress: universalResolver,
     }); 
-  
+ 
     return ( 
         <>
         { mnsResolver ? 

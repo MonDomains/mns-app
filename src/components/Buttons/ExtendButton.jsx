@@ -180,8 +180,9 @@ class ExtendButton extends Component {
                 size="lg" 
                 dialogClassName="modal-90w"
                 centered
+                
             >
-                <Modal.Header>
+                <Modal.Header closeButton>
                 <Modal.Title className='text-break'>
                     {this.state.step == 1 ? 
                         <>Extend {this.props.name} </> : <></>

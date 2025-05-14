@@ -133,8 +133,9 @@ class TransferOwnership extends Component {
                 size="lg"
                 dialogClassName="modal-90w"
                 centered
+                
             >
-                <Modal.Header>
+                <Modal.Header closeButton>
                 <Modal.Title>
                 {this.state.txHash == null 
                     && this.state.txReceipt == null 

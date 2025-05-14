@@ -126,8 +126,9 @@ class SetAddrButton extends Component {
                 size="lg" 
                 dialogClassName="modal-90w"
                 centered
+                
             >
-                <Modal.Header>
+                <Modal.Header closeButton>
                 <Modal.Title>
                     {this.state.step == 1 ? 
                         <>Set A record for the name </> : <></>

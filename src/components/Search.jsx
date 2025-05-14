@@ -57,19 +57,20 @@ class Search extends Component {
 
             this.setState({ error: null, navigate: false, isAddress: false, name: "" })
 
-            const q = this.inputRef.current.value.toLowerCase();
-             
+            let q = this.inputRef.current.value.toLowerCase();
+              
             
-            if(ethers.isAddress(q)) {
-                console.log("isaddress")
+            if(ethers.isAddress(q)) { 
                 this.setState({ isAddress: true, address: q, name: "" })
                 this.handleMnsName(q);
                 return;
             }
 
-            let label = ensNormalize(q)
+            q = q.endsWith(".mon") ? q.substring(0, q.indexOf(".mon")): q;
+ 
+            if(isValidDomain(q)) {
 
-            if(isValidDomain(label)) {
+                let label = ensNormalize(q);
 
                 this.setState({ isValid: true, name: label })
 
@@ -80,7 +81,7 @@ class Search extends Component {
                 }
 
             } else {
-                this.setState({ isValid: false, name: label })
+                this.setState({ isValid: false, name: q })
             }
 
         } catch(e) {
@@ -168,7 +169,7 @@ class Search extends Component {
 
                     { this.state.error ?
                         <div className="d-flex flex-row border rounded-4 align-items-center p-3 mt-2 bg-light-subtle position-absolute w-100">
-                            <span className='text-danger'>There was an error. Please try again.</span>
+                            <span className='text-danger'>{this.state.error}</span>
                         </div> 
                         : <></>
                     }

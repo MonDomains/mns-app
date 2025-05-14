@@ -160,8 +160,9 @@ class RenewModal extends Component {
                 backdrop="static"
                 dialogClassName="modal-90w"
                 centered
+                
             >
-                <Modal.Header>
+                <Modal.Header closeButton>
                 <Modal.Title>Extend Your Name</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>

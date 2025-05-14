@@ -13,14 +13,11 @@ import placeholder2 from "../../assets/images/placeholder2.svg";
 
 class NftImage extends Component {
 
-    constructor(props) {
-
-        super(props); 
-        
+    constructor(props) { 
+        super(props);  
         this.nameId = ethers.toBigInt(namehash(normalize(this.props.name)));
         this.labelId = ethers.toBigInt(labelhash(this.props.labelName));
         this.isWrapped = this.props.isWrapped || true;
-
         this.state = { 
             avatar: null,
             error: null
@@ -31,7 +28,6 @@ class NftImage extends Component {
         const tokenId = this.isWrapped ? this.nameId: this.labelId;
         const contractAddress = this.isWrapped ? nameWrapper : baseRegistrar;
         const url = `${metaApiUrl}/monad-testnet/${contractAddress}/${tokenId}/image`;
-        console.log(url)
         return url;
     } 
 

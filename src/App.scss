@@ -47,7 +47,13 @@ input[type="checkbox"] {
 
 .image-preview { 
     min-width: 160px;
-    max-width: 400px;
+    max-width: 100%;
+    width: 100%;
+}
+
+.card-preview { 
+    max-width: 384px;
+    max-height: 202px;
     width: 100%;
 }
 

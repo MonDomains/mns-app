@@ -19,8 +19,8 @@ function ViewOnMarketPlace({name, labelName, isWrapped = true }) {
         <a className='link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover' 
             target="_blank" 
             href={getTokenUrl()}>
-                <Icons.BoxArrowUpRight />
-                <span className='ms-2'>View on Marketplace</span>
+                <span>View on Marketplace</span>
+                <Icons.ArrowUpRight className="ms-2" />
         </a>
     );
 }

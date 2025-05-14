@@ -549,8 +549,9 @@ class Names extends Component {
                 dialogClassName="modal-90w"
                 scrollable={true}
                 centered
+                
             >
-                <Modal.Header className='text-center'>
+                <Modal.Header className='text-center' closeButton>
                 <Modal.Title className='text-center'>
                     {this.state.txHash == null 
                         && this.state.txReceipt == null 

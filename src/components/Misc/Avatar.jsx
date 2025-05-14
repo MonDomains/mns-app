@@ -22,7 +22,6 @@ class Avatar extends Component {
 
     async resolveAvatar() { 
         try {
-            console.log(this.props.name);
             const avatar = await getEnsAvatar(rainbowConfig, { 
                 name: normalize(this.props.name),
                 universalResolverAddress: universalResolver

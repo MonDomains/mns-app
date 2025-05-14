@@ -95,8 +95,9 @@ class SetAsPrimary extends Component {
                 size="lg"
                 dialogClassName="modal-90w"
                 centered
+                closeButton
             >
-                <Modal.Header>
+                <Modal.Header closeButton>
                 <Modal.Title>Confirm Your Transaction</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>

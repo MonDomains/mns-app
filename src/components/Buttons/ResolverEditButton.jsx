@@ -23,17 +23,16 @@ class ResolverEditButton extends Component {
            txReceipt: null,
            txHash: null,
            txError: null,
-           resolverAddress: publicResolver,
            step: 1,
            useLatestResolver: true
-        }; 
+        };  
 
+        this.inputRef = React.createRef();
     } 
  
     handleClose = () =>{
         this.setState({ 
-            showModal: false,
-            resolverAddress: this.props.resolverAddress
+            showModal: false
         });
     } 
 
@@ -44,32 +43,33 @@ class ResolverEditButton extends Component {
             txPending: false, 
             txCompleted: false, 
             txHash: null, 
-            txReceipt: null,  
-            resolverAddress: publicResolver
+            txReceipt: null
         });
     } 
  
-    handleShow = (id) =>{
+    handleShow = () =>{
         this.setState({ showModal: true });
     } 
 
     async handleEditResolver() {
         
         try {
+
+            const inputResolver = this.state.useLatestResolver ? publicResolver : this.inputRef.current.value;
              
-            this.setState({ txError: null, txHash: null, txReceipt: null, txPending: true, txCompleted: false });
             
-            if(!isAddress(this.state.resolverAddress))
+            this.setState({ txError: null, txHash: null, txReceipt: null, txPending: true, txCompleted: false });
+
+            if(!isAddress(inputResolver))
                 throw new Error("Provided resolver adress is not a valid address format.")
  
              const mnsResolver = await getEnsResolver(rainbowConfig, {
                 name: normalize(this.props.name),
-                universalResolverAddress: universalResolver, 
-                chainId: monadTestnet.id
+                universalResolverAddress: universalResolver
             }); 
- 
-            if(mnsResolver.toLowerCase() === this.state.resolverAddress.toLowerCase())
-                throw new Error("You are already using the latest resolver")
+              
+            if(mnsResolver.toLowerCase() == inputResolver.toLowerCase())
+                throw new Error("You are already using the same resolver")
             
             let txHash = null;
 
@@ -78,7 +78,7 @@ class ResolverEditButton extends Component {
                     abi: nameWrapperABI,
                     address: nameWrapper,
                     functionName: "setResolver",
-                    args: [namehash(normalize(this.props.name)), this.state.resolverAddress],
+                    args: [namehash(normalize(this.props.name)), inputResolver],
                     account: this.props.address,
                     chainId: monadTestnet.id
                 });
@@ -87,13 +87,11 @@ class ResolverEditButton extends Component {
                     abi: mnsRegistryABI,
                     address: mnsRegistry,
                     functionName: "setResolver",
-                    args: [namehash(normalize(this.props.name)), this.state.resolverAddress],
+                    args: [namehash(normalize(this.props.name)), inputResolver],
                     account: this.props.address,
                     chainId: monadTestnet.id
                 });
-            }
-
-            
+            } 
 
             this.setState({ txHash });
 
@@ -102,23 +100,20 @@ class ResolverEditButton extends Component {
             this.setState({ txPending: false, txCompleted: true, txError: null, txReceipt });
 
         } catch(e) {
-            console.log(e)
             this.setState({ txPending: false, txCompleted: false, txHash: null, txReceipt: null, txError: e.message });
         } 
     }
 
     handleUseLatestResolver () {
         this.setState({ 
-            useLatestResolver: !this.state.useLatestResolver, 
-            resolverAddress: this.state.useLatestResolver ? publicResolver: "" 
+            useLatestResolver: !this.state.useLatestResolver
         });
-    }
 
-    handleResolverChange(e) {
-        this.setState({ resolverAddress: e.target.value, txError: null });
+        this.inputRef.current.value = this.state.useLatestResolver ? publicResolver : this.props.resolverAddress;
     }
- 
+  
     componentDidMount () {     
+        
        
     }
 
@@ -128,8 +123,16 @@ class ResolverEditButton extends Component {
         }
 
         if(prevState.useLatestResolver != this.state.useLatestResolver && !this.state.useLatestResolver) {
-            this.setState({ resolverAddress: "", txError: null });
+            this.setState({ resolverAddress: zeroAddress, txError: null });
         } 
+
+        if(this.props.resolverAddress != prevProps.resolverAddress 
+            && this.props.resolverAddress != zeroAddress 
+            && isAddress(this.props.resolverAddress)
+            && publicResolver != this.props.resolverAddress
+        ) {
+            this.setState({ useLatestResolver: false })
+       }
     }
 
     render() {
@@ -150,8 +153,9 @@ class ResolverEditButton extends Component {
                     size="lg" 
                     dialogClassName="modal-90w"
                     centered
+                    
                 >
-                    <Modal.Header>
+                    <Modal.Header closeButton>
                     <Modal.Title>
                          
                         {this.state.step == 1 ? 
@@ -221,7 +225,7 @@ class ResolverEditButton extends Component {
                                     <li  className='bg-body-tertiary border rounded-3 p-3 mt-2 d-flex flex-column gap-2 justify-content-between align-item-center'>
                                         <b>Custom Resolver</b>
                                         <div className='input-group'>
-                                            <input disabled={this.state.useLatestResolver} value={this.state.resolverAddress != zeroAddress ? this.state.resolverAddress: ""} type='text' className='form-control form-control-lg' placeholder='Enter on Monad address' onChange={(e)=> this.handleResolverChange(e)} />
+                                            <input disabled={this.state.useLatestResolver} defaultValue={this.props.resolverAddress} ref={this.inputRef} type='text' className='form-control form-control-lg' placeholder='Enter on Monad address' />
                                         </div>
                                     </li>: <></>
                                 }
