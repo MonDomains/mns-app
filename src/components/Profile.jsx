@@ -79,7 +79,7 @@ class Profile extends Component {
         let contracts = [];
         let records = [];
 
-        const texts = domain.resolver?.texts;
+        const texts = domain?.resolver?.texts;
    
         if(texts?.length > 0) {
  
