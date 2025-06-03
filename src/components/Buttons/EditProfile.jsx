@@ -41,9 +41,7 @@ class EditProfile extends Component {
 
     constructor(props) {
  
-        super(props);
-
-        
+        super(props); 
  
         this.state = { 
            showModal: false,
@@ -100,6 +98,10 @@ class EditProfile extends Component {
 
     getCallDataWithValidation = (node) => {
  
+        const avatar = this.avatarRef.current.value;
+        if(!avatar.startsWith("https"))
+            throw new Error("Avatar URL must be start with HTTPS");
+
         const avatarData = this.getTextCallData(node, "avatar", this.avatarRef.current.value);
         const nameData = this.getTextCallData(node, "name", this.nameRef.current.value);
         const descriptionData = this.getTextCallData(node, "description", this.descriptionRef.current.value);
